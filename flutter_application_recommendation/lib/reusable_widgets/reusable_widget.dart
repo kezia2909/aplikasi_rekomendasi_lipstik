@@ -39,8 +39,7 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
   );
 }
 
-Container reusableButtonLog(
-    BuildContext context, bool isLogin, Function onTap) {
+Container reusableButtonLog(BuildContext context, String type, Function onTap) {
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 50,
@@ -51,7 +50,7 @@ Container reusableButtonLog(
         onTap();
       },
       child: Text(
-        isLogin ? 'LOG IN' : 'SIGN UP',
+        type,
         style: const TextStyle(
             color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 16),
       ),

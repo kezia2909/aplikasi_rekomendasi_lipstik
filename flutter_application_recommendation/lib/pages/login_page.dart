@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_recommendation/pages/home_screen.dart';
+import 'package:flutter_application_recommendation/pages/home_page.dart';
 import 'package:flutter_application_recommendation/pages/registration_page.dart';
 import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
+import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/utils/color_utils.dart';
 
 class LoginPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+                20, MediaQuery.of(context).size.height * 0.1, 20, 0),
             child: Column(
               children: <Widget>[
                 logoWidget("assets/images/logo.png"),
@@ -49,18 +50,27 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(
                   height: 20,
                 ),
-                reusableButtonLog(context, true, () {
-                  FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                          email: _emailTextController.text,
-                          password: _passwordTextController.text)
-                      .then((value) {
-                    print("login");
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()));
-                  }).onError((error, stackTrace) {
-                    print("Error ${error.toString()}");
-                  });
+                // reusableButtonLog(context, "LOG IN", () {
+                //   FirebaseAuth.instance
+                //       .signInWithEmailAndPassword(
+                //           email: _emailTextController.text,
+                //           password: _passwordTextController.text)
+                //       .then((value) {
+                //     print("login");
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => HomePage(firebaseUser)));
+                //   }).onError((error, stackTrace) {
+                //     print("Error ${error.toString()}");
+                //   });
+                // }),
+                reusableButtonLog(context, "LOG IN", () async {
+                  await AuthServices.logInEmail(
+                      _emailTextController.text, _passwordTextController.text);
+                }),
+                reusableButtonLog(context, "SKIP", () async {
+                  await AuthServices.logInAnonymous();
                 }),
                 registrationOption()
               ],
