@@ -37,17 +37,17 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               children: <Widget>[
                 logoWidget("assets/images/logo.png"),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 reusableTextField("Enter Email", Icons.person_outline, false,
                     _emailTextController),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 reusableTextField("Enter Password", Icons.lock_outline, true,
                     _passwordTextController),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 // reusableButtonLog(context, "LOG IN", () {
@@ -72,6 +72,10 @@ class _LoginPageState extends State<LoginPage> {
                 reusableButtonLog(context, "SKIP", () async {
                   await AuthServices.logInAnonymous();
                 }),
+                // reusableButtonLog(context, "SUBMIT", () async {
+                //   await AuthServices.registAccount("coba", "coba",
+                //       _emailTextController.text, _passwordTextController.text);
+                // }),
                 registrationOption()
               ],
             ),

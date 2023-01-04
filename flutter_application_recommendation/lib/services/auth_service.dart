@@ -20,6 +20,7 @@ class AuthServices {
           email: email, password: password);
 
       User? firebaseUser = result.user;
+
       addUsersDetails(firstname, lastname, email);
       return firebaseUser;
     } catch (e) {
