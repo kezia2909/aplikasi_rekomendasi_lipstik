@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:flutter_application_recommendation/services/database_service.dart';
 import 'package:flutter_application_recommendation/services/painter_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -23,6 +24,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   late User user = widget.firebaseUser;
 
+// IMAGE
+  String imagePath = "";
+// PYTHON
 // Selected Image storing in a Variable
   File? _selectedImage;
   // Faces Coordinates List wrt x, y, w, h
@@ -35,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   late String pathNgrok;
 
   Future<http.Response> getFaceCoordinate(File file, String link) async {
-    ///MultiPart request
+    //MultiPart request
     String filename = file.path.split('/').last;
     var request = http.MultipartRequest(
       'POST',
@@ -63,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   Future<void> _addImage() async {
     facesCoordinates.clear();
     final image =
-        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+        await ImagePicker.platform.pickImage(source: ImageSource.camera);
     if (image != null) {
       _selectedImage = File(image.path);
     }
@@ -83,43 +87,47 @@ class _HomePageState extends State<HomePage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        // decoration: BoxDecoration(
-        //   gradient: LinearGradient(colors: [
-        //     hexStringToColor("CB2B93"),
-        //     hexStringToColor("9546C4"),
-        //     hexStringToColor("5E61F4"),
-        //   ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
-        // ),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
                 20, MediaQuery.of(context).size.height * 0.1, 20, 0),
             child: Column(
-              children: [
+              children: <Widget>[
                 Text(user.uid),
                 Text(user.isAnonymous ? "ANONIM" : "USER"),
-                // Center(
-                //   child: ElevatedButton(
-                //       child: Text("Logout"),
-                //       onPressed: () {
-                //         FirebaseAuth.instance.signOut().then(
-                //           (value) {
-                //             print("logout");
-                //             Navigator.push(
-                //               context,
-                //               MaterialPageRoute(
-                //                   builder: (context) => LoginPage()),
-                //             );
-                //           },
-                //         );
-                //       }),
-                // ),
                 ElevatedButton(
                     child: Text("LOG OUT"),
                     onPressed: () async {
                       await AuthServices.logOut();
                     }),
                 const Text("aaa"),
+                (imagePath != null)
+                    ? Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black),
+                            image: DecorationImage(
+                                image: NetworkImage(imagePath),
+                                fit: BoxFit.cover)),
+                      )
+                    : Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.black)),
+                      ),
+                ElevatedButton(
+                  child: Text("upload image"),
+                  onPressed: () async {
+                    File? file = await getImage();
+                    imagePath = await DatabaseService.uploadImage(file!);
+
+                    setState(() {});
+                  },
+                ),
                 Column(
                   children: <Widget>[
                     Padding(
@@ -215,4 +223,10 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+
+Future<File?> getImage() async {
+  PickedFile? selectedFile =
+      await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+  return File(selectedFile!.path);
 }
