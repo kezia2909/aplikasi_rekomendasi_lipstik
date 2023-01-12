@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui' as ui;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
 import 'package:flutter_application_recommendation/services/painter_service.dart';
 import 'package:http/http.dart' as http;
@@ -40,12 +41,16 @@ class _HomePageState extends State<HomePage> {
 
   Future<http.Response> getFaceCoordinate(File file, String link) async {
     //MultiPart request
+    print("coord1");
     String filename = file.path.split('/').last;
+    print("coord2");
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(link),
     );
+    print("coord3");
     Map<String, String> headers = {"Content-type": "multipart/form-data"};
+    print("coord4");
     request.files.add(
       http.MultipartFile(
         'image',
@@ -54,7 +59,9 @@ class _HomePageState extends State<HomePage> {
         filename: filename,
       ),
     );
+    print("coord5");
     request.headers.addAll(headers);
+    print("coord6");
     print("request: " + request.toString());
     var res = await request.send();
     var response = await http.Response.fromStream(res);
@@ -83,6 +90,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // check platform
+    final platform = Theme.of(context).platform;
+
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -107,7 +117,7 @@ class _HomePageState extends State<HomePage> {
                         height: 200,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.black),
+                            border: Border.all(color: Colors.red),
                             image: DecorationImage(
                                 image: NetworkImage(imagePath),
                                 fit: BoxFit.cover)),
@@ -122,8 +132,14 @@ class _HomePageState extends State<HomePage> {
                 ElevatedButton(
                   child: Text("upload image"),
                   onPressed: () async {
-                    File? file = await getImage();
-                    imagePath = await DatabaseService.uploadImage(file!);
+                    // if (kIsWeb) {
+                    // } else {}
+                    // File? file = await getImage();
+                    // imagePath = await DatabaseService.uploadImage(file!);
+
+                    // setState(() {});
+                    PickedFile? picked = await chooseImage();
+                    imagePath = await DatabaseService.uploadImage(picked!);
 
                     setState(() {});
                   },
@@ -163,14 +179,24 @@ class _HomePageState extends State<HomePage> {
                   )
                 else
                   Column(
-                    children: [
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.8,
-                          child: Image.file(File(_selectedImage!.path))),
+                    children: <Widget>[
+                      platform == TargetPlatform.android
+                          ? SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Image.file(File(_selectedImage!.path)))
+                          : SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              child: Image.network(_selectedImage!.path),
+                            ),
+                      // SizedBox(
+                      //     width: MediaQuery.of(context).size.width * 0.8,
+                      //     child: Image.file(File(_selectedImage!.path))),
                       ElevatedButton(
                         onPressed: () async {
+                          print("aaaaaaaaaaaaaaaaaa");
                           final res = await getFaceCoordinate(
                               File(_selectedImage!.path), pathNgrok);
+                          print("bbbbbbbbbbb");
                           debugPrint(res.body);
                           final val = jsonDecode(res.body);
                           List<List<int>> data = [];
@@ -186,7 +212,7 @@ class _HomePageState extends State<HomePage> {
 
                           setState(() {});
                         },
-                        child: const Text("aaaa"),
+                        child: const Text("check"),
                       ),
                       isFaceDetected
                           ? FutureBuilder<ui.Image>(
@@ -226,7 +252,19 @@ class _HomePageState extends State<HomePage> {
 }
 
 Future<File?> getImage() async {
+  print("start getimage");
   PickedFile? selectedFile =
       await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+  print(selectedFile);
+  print("get image oke");
   return File(selectedFile!.path);
+}
+
+Future<PickedFile?> chooseImage() async {
+  print("choosee");
+  PickedFile? pickedFile =
+      await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+  print(pickedFile);
+  print("choose oke");
+  return pickedFile;
 }
