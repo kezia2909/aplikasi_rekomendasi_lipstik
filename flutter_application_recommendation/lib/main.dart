@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_application_recommendation/pages/login_page.dart';
+// import 'package:flutter/rendering.dart';
+// import 'package:flutter_application_recommendation/pages/login_page.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/wrapper.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         // home: const LoginPage(),
-        home: Wrapper(),
+        home: const Wrapper(),
       ),
     );
   }

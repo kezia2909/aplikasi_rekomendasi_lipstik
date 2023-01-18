@@ -70,10 +70,8 @@ class DatabaseService {
     String imageUrl = "";
     print("start ref");
 
-    Reference reference = FirebaseStorage.instance
-        .ref()
-        .child("original image")
-        .child(basename(imageFile!.path));
+    Reference reference =
+        FirebaseStorage.instance.ref().child(basename(imageFile!.path));
     print("ref oke");
 
     print("upload");

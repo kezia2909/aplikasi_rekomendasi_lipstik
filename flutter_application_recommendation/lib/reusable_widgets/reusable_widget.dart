@@ -10,6 +10,18 @@ Image logoWidget(String imageName) {
   );
 }
 
+Container reusablePhotoFrame(Image image) {
+  return Container(
+    width: 200,
+    height: 200,
+    decoration: BoxDecoration(
+      shape: BoxShape.rectangle,
+      border: Border.all(color: Colors.black, width: 5),
+    ),
+    child: image,
+  );
+}
+
 TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     TextEditingController controller) {
   return TextField(

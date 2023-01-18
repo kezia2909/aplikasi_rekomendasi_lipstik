@@ -1,49 +1,57 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui' as ui;
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter_application_recommendation/services/database_service.dart';
-import 'package:flutter_application_recommendation/services/painter_service.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_recommendation/pages/login_page.dart';
+import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
-import 'package:flutter_application_recommendation/utils/color_utils.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   final User firebaseUser;
-  // const HomePage(User firebaseUser, {Key? key}) : super(key: key);
   const HomePage({Key? key, required this.firebaseUser}) : super(key: key);
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   late User user = widget.firebaseUser;
-
-// IMAGE
   String imagePath = "";
-// PYTHON
-// Selected Image storing in a Variable
-  File? _selectedImage;
-  // Faces Coordinates List wrt x, y, w, h
-  List<List<int>> facesCoordinates = <List<int>>[];
-  // Boolean value whether the face is detected or not
-  bool get isFaceDetected => facesCoordinates.isEmpty ? false : true;
+  // "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new3d8ae0ca-5956-4675-ad57-cecf57b83b6d5784227203977822763.jpg?alt=media";
 
   late String uniqueCode;
   final uniqueCodeController = TextEditingController();
   late String pathNgrok;
 
-  Future<http.Response> getFaceCoordinate(File file, String link) async {
-    //MultiPart request
+  File? _selectedImage;
+
+  Future<void> imageFromCamera() async {
+    final image =
+        await ImagePicker.platform.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      _selectedImage = File(image.path);
+    }
+    setState(() {});
+  }
+
+  Future<void> imageFromGallery() async {
+    final image =
+        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      _selectedImage = File(image.path);
+    }
+
+    setState(() {});
+  }
+
+  Future<http.Response> getRecommendation(File file, String link) async {
     print("coord1");
     String filename = file.path.split('/').last;
     print("coord2");
+    print(link);
+    print(filename);
+    print(file);
     var request = http.MultipartRequest(
       'POST',
       Uri.parse(link),
@@ -56,6 +64,8 @@ class _HomePageState extends State<HomePage> {
         'image',
         file.readAsBytes().asStream(),
         file.lengthSync(),
+        // // _selectedFile!.any(file),
+        // _selectedFile!.length,
         filename: filename,
       ),
     );
@@ -71,28 +81,10 @@ class _HomePageState extends State<HomePage> {
     return response;
   }
 
-  Future<void> _addImage() async {
-    facesCoordinates.clear();
-    final image =
-        await ImagePicker.platform.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      _selectedImage = File(image.path);
-    }
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    // Clean up the controller when the widget is disposed.
-    uniqueCodeController.dispose();
-    super.dispose();
-  }
+  // Future<http.Response> getRecommendationWeb(File file, String link) async {}
 
   @override
   Widget build(BuildContext context) {
-    // check platform
-    final platform = Theme.of(context).platform;
-
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -105,166 +97,135 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 Text(user.uid),
                 Text(user.isAnonymous ? "ANONIM" : "USER"),
+                const SizedBox(
+                  height: 30,
+                ),
+                (_selectedImage == null)
+                    ? (imagePath != "")
+                        ? Container(
+                            width: 200,
+                            height: 200,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                border:
+                                    Border.all(color: Colors.green, width: 5),
+                                image: DecorationImage(
+                                    image: NetworkImage(imagePath),
+                                    fit: BoxFit.cover)),
+                          )
+                        : reusablePhotoFrame(
+                            Image.asset(
+                              "assets/images/model.png",
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                    : kIsWeb
+                        ? reusablePhotoFrame(
+                            Image.network(
+                              _selectedImage!.path,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : reusablePhotoFrame(
+                            Image.file(
+                              File(_selectedImage!.path),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                const SizedBox(
+                  height: 30,
+                ),
+                const Text("Tentukan Foto"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        imageFromCamera();
+                        setState(() {});
+                      },
+                      child: const Icon(Icons.photo_camera_outlined),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        imageFromGallery();
+                        setState(() {});
+                      },
+                      child: const Icon(Icons.photo_library_outlined),
+                    ),
+                  ],
+                ),
+                TextField(
+                  controller: uniqueCodeController,
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    uniqueCode = uniqueCodeController.text;
+                    pathNgrok =
+                        "https://" + uniqueCode + ".ap.ngrok.io/face_detection";
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          // Retrieve the text the that user has entered by using the
+                          // TextEditingController.
+                          content: Text(uniqueCode),
+                        );
+                      },
+                    );
+                  },
+                  child: const Text("submit code"),
+                ),
+                const SizedBox(
+                  height: 30,
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    print("aaaaaaaaaaaaaaaaaa");
+                    final res = await getRecommendation(
+                        File(_selectedImage!.path), pathNgrok);
+                    print("bbbbbbbbbbb");
+                    debugPrint(res.body);
+                    final val = jsonDecode(res.body);
+                    imagePath = val['url'];
+                    print(val['url']);
+                    // List<List<int>> data = [];
+                    // for (var items in val['faces']) {
+                    //   List<int> s = [];
+                    //   for (var item in items as List) {
+                    //     s.add(int.parse("$item"));
+                    //   }
+                    //   data.add(s);
+                    // }
+                    // debugPrint("$data");
+                    // facesCoordinates = data;
+
+                    setState(() {});
+                  },
+                  child: const Text("Cari Rekomendasi"),
+                ),
                 ElevatedButton(
                     child: Text("LOG OUT"),
                     onPressed: () async {
                       await AuthServices.logOut();
                     }),
-                const Text("aaa"),
-                (imagePath != null)
-                    ? Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.red),
-                            image: DecorationImage(
-                                image: NetworkImage(imagePath),
-                                fit: BoxFit.cover)),
-                      )
-                    : Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.black)),
-                      ),
-                ElevatedButton(
-                  child: Text("upload image"),
-                  onPressed: () async {
-                    // if (kIsWeb) {
-                    // } else {}
-                    // File? file = await getImage();
-                    // imagePath = await DatabaseService.uploadImage(file!);
-
-                    // setState(() {});
-                    PickedFile? picked = await chooseImage();
-                    imagePath = await DatabaseService.uploadImage(picked!);
-
-                    setState(() {});
-                  },
-                ),
-                Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: TextField(
-                        controller: uniqueCodeController,
-                      ),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        uniqueCode = uniqueCodeController.text;
-                        pathNgrok = "https://" +
-                            uniqueCode +
-                            ".ap.ngrok.io/face_detection";
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              // Retrieve the text the that user has entered by using the
-                              // TextEditingController.
-                              content: Text(uniqueCode),
-                            );
-                          },
-                        );
-                      },
-                      child: Text("submit"),
-                    ),
-                  ],
-                ),
-                if (_selectedImage == null)
-                  const Text(
-                    'Please Select a Image',
-                  )
-                else
-                  Column(
-                    children: <Widget>[
-                      platform == TargetPlatform.android
-                          ? SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Image.file(File(_selectedImage!.path)))
-                          : SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              child: Image.network(_selectedImage!.path),
-                            ),
-                      // SizedBox(
-                      //     width: MediaQuery.of(context).size.width * 0.8,
-                      //     child: Image.file(File(_selectedImage!.path))),
-                      ElevatedButton(
-                        onPressed: () async {
-                          print("aaaaaaaaaaaaaaaaaa");
-                          final res = await getFaceCoordinate(
-                              File(_selectedImage!.path), pathNgrok);
-                          print("bbbbbbbbbbb");
-                          debugPrint(res.body);
-                          final val = jsonDecode(res.body);
-                          List<List<int>> data = [];
-                          for (var items in val['faces']) {
-                            List<int> s = [];
-                            for (var item in items as List) {
-                              s.add(int.parse("$item"));
-                            }
-                            data.add(s);
-                          }
-                          debugPrint("$data");
-                          facesCoordinates = data;
-
-                          setState(() {});
-                        },
-                        child: const Text("check"),
-                      ),
-                      isFaceDetected
-                          ? FutureBuilder<ui.Image>(
-                              future: decodeImageFromList(
-                                  File(_selectedImage!.path).readAsBytesSync()),
-                              builder: (context, snapshot) {
-                                if (!snapshot.hasData) {
-                                  return Container();
-                                }
-                                return SizedBox(
-                                  width: snapshot.data!.width.toDouble(),
-                                  height: snapshot.data!.height.toDouble(),
-                                  child: CustomPaint(
-                                    painter: FacePainter(
-                                      snapshot.data!,
-                                      facesCoordinates,
-                                    ),
-                                  ),
-                                );
-                              })
-                          : const Text(
-                              "No Face Detected or click Detect Face Button"),
-                    ],
-                  ),
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _addImage,
-        tooltip: 'Image',
-        child: const Icon(Icons.add),
-      ),
     );
   }
 }
 
-Future<File?> getImage() async {
-  print("start getimage");
-  PickedFile? selectedFile =
-      await ImagePicker.platform.pickImage(source: ImageSource.gallery);
-  print(selectedFile);
-  print("get image oke");
-  return File(selectedFile!.path);
-}
-
-Future<PickedFile?> chooseImage() async {
-  print("choosee");
-  PickedFile? pickedFile =
-      await ImagePicker.platform.pickImage(source: ImageSource.gallery);
-  print(pickedFile);
-  print("choose oke");
-  return pickedFile;
-}
+// Future<PickedFile?> chooseImage() async {
+//   print("choosee");
+//   PickedFile? pickedFile =
+//       await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+//   print(pickedFile);
+//   print("choose oke");
+//   return pickedFile;
+// }

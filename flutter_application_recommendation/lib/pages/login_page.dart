@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_recommendation/pages/home_page.dart';
+import 'package:flutter_application_recommendation/pages/home_page_try.dart';
 import 'package:flutter_application_recommendation/pages/registration_page.dart';
 import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
