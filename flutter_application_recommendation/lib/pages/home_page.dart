@@ -22,8 +22,9 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  String pathNgrok =
-      "https://8f28-114-125-87-159.ap.ngrok.io" + "/face_detection";
+  // String pathNgrok =
+  //     "https://8f2b-114-125-86-155.ap.ngrok.io" + "/face_detection";
+  String pathNgrok = "https://tugas20231.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
   PickedFile? pickedImage;
@@ -54,12 +55,16 @@ class _HomePageState extends State<HomePage> {
 
   Future<http.Response> getRecommendationWeb(
       String oriURL, String oriName) async {
+    print("start function");
+    print(pathNgrok);
     Map data = {'oriURL': oriURL, 'oriName': oriName};
+    print("map data");
     var body = json.encode(data);
-
+    print("encode data");
     var response = await http.post(Uri.parse(pathNgrok),
         headers: {"Content-Type": "application/json"}, body: body);
-
+    print("response done");
+    print(response);
     return response;
   }
 
@@ -161,6 +166,8 @@ class _HomePageState extends State<HomePage> {
                   final res = await getRecommendationWeb(
                       imageOriURL, _selectedImage!.path.split('/').last);
                   print("responseeee");
+                  // final val = jsonDecode(res.body);
+                  // print(val['urlNew'].toString());
                   final val = jsonDecode(res.body);
                   if (val['urlNew'] != "") {
                     recommendationStatus = true;

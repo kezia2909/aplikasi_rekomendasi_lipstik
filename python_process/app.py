@@ -29,6 +29,7 @@ def index():
     name = request.json['oriName']
     print(url)
     downloadImage(url, name)
+    # url="haiiiii haloooo"
     return json.dumps({"urlNew": url})
 
 
