@@ -20,52 +20,37 @@ class DatabaseService {
     });
   }
 
+  static CollectionReference listImagesOriCollection =
+      FirebaseFirestore.instance.collection('list_images_ori');
+
+  static Future<void> createOrUpdateListImagesOri(String id,
+      {required String imageURL}) async {
+    await listImagesOriCollection.doc().set({
+      'uid': id,
+      'imageURL': imageURL,
+    });
+  }
+
+  //   Future<String> uploadImageNew(PlatformFile? file) async {
+  //   try {
+
+  //     TaskSnapshot upload = await FirebaseStorage.instance
+  //         .ref(
+  //             'events/${file!.path}-${DateTime.now().toIso8601String()}.${file.extension}')
+  //         .putData(
+  //           file.bytes,
+  //           SettableMetadata(contentType: 'image/${file.extension}'),
+  //         );
+
+  //     String url = await upload.ref.getDownloadURL();
+  //     return url;
+  //   } catch (e) {
+  //     print('error in uploading image for : ${e.toString()}');
+  //     return '';
+  //   }
+  // }
+
   static Future<String> uploadImage(PickedFile? imageFile) async {
-    // print("masuk upload");
-    // String fileName = basename(imageFile.path);
-    // print("filename :");
-    // print(fileName);
-    // print("filename oke");
-    // Reference ref = FirebaseStorage.instance.ref().child(fileName);
-    // print("ref :");
-    // print(ref);
-    // print("ref oke");
-    // UploadTask task = ref.putFile(imageFile);
-    // print("task :");
-    // print(task);
-    // print("task oke");
-    // gagal youtube
-    // String urlString;
-    // TaskSnapshot snapshot = await task.whenComplete(() async {
-    //   urlString = await task.snapshot.ref.getDownloadURL();
-    // });
-    // TaskSnapshot snapshot = await task.whenComplete();
-    // print("url :");
-    // print(task.snapshot.ref.getDownloadURL().toString());
-    // print("url oke");
-    // // return await task.snapshot.ref.getDownloadURL();
-    // return await snapshot.ref.getDownloadURL();
-
-    // gagal stack
-    // String urlString = "";
-    // task.whenComplete(() async {
-    //   try {
-    //     print("try");
-    //     urlString = await ref.getDownloadURL();
-    //     print(urlString);
-    //     print("try oke");
-    //   } catch (onError) {
-    //     print("error");
-    //     urlString = "url error";
-    //     print("error oke");
-    //   }
-    // });
-
-    // print("urlstring");
-    // print(urlString);
-    // print("urlstring oke");
-    // return urlString;
-
     print("start firebase");
     String imageUrl = "";
     print("start ref");
@@ -80,7 +65,8 @@ class DatabaseService {
     UploadTask uploadTask;
     if (kIsWeb) {
       print("web");
-      uploadTask = reference.putData(await imageFile.readAsBytes());
+      uploadTask = reference.putData(await imageFile.readAsBytes(),
+          SettableMetadata(contentType: 'image/jpg'));
       print("web oke");
     } else {
       print("android");
@@ -105,6 +91,7 @@ class DatabaseService {
     print("await oke");
 
     print("return");
+
     return await imageUrl;
   }
 

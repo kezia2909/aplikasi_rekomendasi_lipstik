@@ -1,12 +1,10 @@
 # Imports
 import json
-from upload_images import uploadToFirebase
+from download_images import downloadImage
 import werkzeug
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-# Importing only giveFacesCoordinates from main.py
-from main import giveFacesCoordinates
 
 import base64
 
@@ -20,37 +18,18 @@ CORS(app)
 @app.route("/face_detection", methods=["POST"])
 def index():
     print("helloossss")
-    # Image
-    imagefile = request.files["image"]
-    # Getting file name of the image using werkzeug library
-    filename = werkzeug.utils.secure_filename(imagefile.filename)
-    print("\nReceived image File name : " + imagefile.filename)
-    # Saving the image in images Directory
-    imagefile.save("./python_process/images/" + filename)
-    # Passing the imagePath in this giveFacesCoordinates function and getting the list of faces coordinate
-    print("startt")
-
-    # upload to firebase
-    uploadToFirebase("./python_process/images/" + filename, filename)
-    print("upload oke")
-
-    faces = giveFacesCoordinates("./python_process/images/" + filename)
-    print("endd")
-
-    url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new"+filename+"?alt=media"
-
-
-    # file = open("./python_process/images/Any_name", 'rb')
-    # byte = file.read()
-    # file.close()
-    
-    # decodeit = open('hello_level.jpeg', 'wb')
-    # decodeit.write(base64.b64decode((byte)))
-    # decodeit.close()
-    # img_new.save("./python_process/new/" + filename)
-
-    # Returns faces Cordinate in the json Format
-    return json.dumps({"faces": faces, "url": url})
+    print(request.json['oriURL'])
+    print("aaaa")
+    url="haii"
+    # url = request.json("oriURL")
+    print(url)
+    # url = request.oriURL
+    # url = "halo halo halo"
+    url = request.json['oriURL']
+    name = request.json['oriName']
+    print(url)
+    downloadImage(url, name)
+    return json.dumps({"urlNew": url})
 
 
 # Running the app
