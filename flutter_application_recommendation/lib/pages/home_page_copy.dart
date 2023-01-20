@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:html' as html;
 import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
@@ -20,8 +21,8 @@ class HomePageCopy extends StatefulWidget {
 
 class _HomePageCopyState extends State<HomePageCopy> {
   late User user = widget.firebaseUser;
-  String imagePath =
-      "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new3d8ae0ca-5956-4675-ad57-cecf57b83b6d5784227203977822763.jpg?alt=media";
+  String imagePath = "";
+  // "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new3d8ae0ca-5956-4675-ad57-cecf57b83b6d5784227203977822763.jpg?alt=media";
 
   late String uniqueCode;
   final uniqueCodeController = TextEditingController();
@@ -31,6 +32,13 @@ class _HomePageCopyState extends State<HomePageCopy> {
 
   List<int>? _selectedFile;
   Uint8List? _bytesData;
+
+// coba stack over flow
+  Uint8List? fileBytes;
+
+  String? filePath;
+
+  String? fileName;
 
   startWebFilePicker() async {
     html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
@@ -56,7 +64,7 @@ class _HomePageCopyState extends State<HomePageCopy> {
 
   Future uploadImage() async {
     var url =
-        Uri.parse("https://8f28-114-125-87-159.ap.ngrok.io/face_detection");
+        Uri.parse("https://9c9b-114-125-86-155.ap.ngrok.io/face_detection");
     var request = http.MultipartRequest("POST", url);
     request.files.add(await http.MultipartFile.fromBytes(
         'image', _selectedFile!,
@@ -103,13 +111,54 @@ class _HomePageCopyState extends State<HomePageCopy> {
   }
 
   Future<void> imageFromGallery() async {
-    final image =
-        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    // final image =
+    //     await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+    // if (image != null) {
+    //   _selectedImage = File(image.path);
+    // }
+
+    final image = await FilePicker.platform
+        .pickFiles(type: FileType.image, allowCompression: true);
+
     if (image != null) {
-      _selectedImage = File(image.path);
+      // _selectedImage = image.files.first.bytes as File?;
+      if (kIsWeb) {
+        fileBytes = image.files.first.bytes;
+      } else {
+        filePath = image.files.first.path;
+      }
+      fileName = image.files.single.name;
     }
 
     setState(() {});
+  }
+
+  Future<http.Response> getRecommendationWeb(String link) async {
+    print("coord1");
+    print("coord2");
+    print(link);
+
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse(link),
+    );
+    print("coord3");
+    Map<String, String> headers = {"Content-type": "multipart/form-data"};
+    print("coord4");
+    request.files.add(
+      http.MultipartFile.fromBytes('image', fileBytes!,
+          contentType: new MediaType("image", "jpg"), filename: fileName),
+    );
+    print("coord5");
+    request.headers.addAll(headers);
+    print("coord6");
+    print("request: " + request.toString());
+    var res = await request.send();
+    var response = await http.Response.fromStream(res);
+    print("This is response:" + response.body);
+    print("This is response: ${res.statusCode} ");
+    print("This is response: ${res.statusCode} ");
+    return response;
   }
 
   Future<http.Response> getRecommendation(File file, String link) async {
@@ -126,16 +175,39 @@ class _HomePageCopyState extends State<HomePageCopy> {
     print("coord3");
     Map<String, String> headers = {"Content-type": "multipart/form-data"};
     print("coord4");
-    request.files.add(
-      http.MultipartFile(
-        'image',
-        file.readAsBytes().asStream(),
-        file.lengthSync(),
-        // // _selectedFile!.any(file),
-        // _selectedFile!.length,
-        filename: filename,
-      ),
-    );
+    // request.files.add(
+    //   http.MultipartFile(
+    //     'image',
+    //     file.readAsBytes().asStream(),
+    //     file.lengthSync(),
+    //     // // _selectedFile!.any(file),
+    //     // _selectedFile!.length,
+    //     filename: filename,
+    //   ),
+    // );
+
+    // request.files.add(await http.MultipartFile.fromBytes(
+    //     'image', _selectedFile!,
+    //     contentType: MediaType('image', 'jpg'), filename: "baru.jpg"));
+
+    if (kIsWeb) {
+      print("web");
+      request.files.add(
+        http.MultipartFile.fromBytes('image', fileBytes!,
+            contentType: new MediaType("image", "jpg"), filename: fileName),
+      );
+      print("request done");
+    } else {
+      request.files.add(
+        http.MultipartFile(
+          'image',
+          file.readAsBytes().asStream(),
+          file.lengthSync(),
+          filename: filename,
+        ),
+      );
+    }
+
     print("coord5");
     request.headers.addAll(headers);
     print("coord6");
@@ -178,7 +250,7 @@ class _HomePageCopyState extends State<HomePageCopy> {
                                 image: NetworkImage(imagePath),
                                 fit: BoxFit.cover)),
                       )
-                    : (_selectedImage == null)
+                    : (filePath == null)
                         ? reusablePhotoFrame(
                             Image.asset(
                               "assets/images/model.png",
@@ -186,12 +258,17 @@ class _HomePageCopyState extends State<HomePageCopy> {
                             ),
                           )
                         : kIsWeb
-                            ? reusablePhotoFrame(
-                                Image.network(
-                                  _selectedImage!.path,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
+                            ? reusablePhotoFrame(Image.file(
+                                File(filePath!),
+                                fit: BoxFit.cover,
+                                // width: double.infinity,
+                              ))
+                            // ? reusablePhotoFrame(
+                            //     Image.network(
+                            //       _selectedImage!.path,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   )
                             : reusablePhotoFrame(
                                 Image.file(
                                   File(_selectedImage!.path),
@@ -277,8 +354,9 @@ class _HomePageCopyState extends State<HomePageCopy> {
                 ElevatedButton(
                   onPressed: () async {
                     print("aaaaaaaaaaaaaaaaaa");
-                    final res = await getRecommendation(
-                        File(_selectedImage!.path), pathNgrok);
+                    final res = await getRecommendationWeb(pathNgrok);
+                    // final res = await getRecommendation(
+                    //     File(_selectedImage!.path), pathNgrok);
                     print("bbbbbbbbbbb");
                     debugPrint(res.body);
                     final val = jsonDecode(res.body);

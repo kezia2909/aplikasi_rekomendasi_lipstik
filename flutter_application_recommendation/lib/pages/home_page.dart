@@ -22,8 +22,7 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  // String pathNgrok =
-  //     "https://8f2b-114-125-86-155.ap.ngrok.io" + "/face_detection";
+  // String pathNgrok = "https://a1c8-114-125-126-73.ap.ngrok.io/face_detection";
   String pathNgrok = "https://tugas20231.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
@@ -172,6 +171,9 @@ class _HomePageState extends State<HomePage> {
                   if (val['urlNew'] != "") {
                     recommendationStatus = true;
                     imageRecomendationURL = val['urlNew'];
+                    print("list color :");
+                    print(val["listColor"]);
+                    print(val["totalColor"]);
                   }
                   print(res.toString());
                   print(imageRecomendationURL);

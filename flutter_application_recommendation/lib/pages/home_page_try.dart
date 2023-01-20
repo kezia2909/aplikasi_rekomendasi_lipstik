@@ -74,7 +74,7 @@ class _HomePageTryState extends State<HomePageTry> {
   Future<void> _addImage() async {
     facesCoordinates.clear();
     final image =
-        await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+        await ImagePicker.platform.pickImage(source: ImageSource.camera);
     if (image != null) {
       _selectedImage = File(image.path);
     }
