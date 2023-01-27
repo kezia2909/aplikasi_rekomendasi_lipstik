@@ -22,12 +22,13 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  // String pathNgrok = "https://120b-140-213-42-45.ap.ngrok.io/face_detection";
-  String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
+  String pathNgrok = "https://120b-140-213-42-45.ap.ngrok.io/face_detection";
+  // String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
   PickedFile? pickedImage;
   bool recommendationStatus = false;
+  bool isRecommendationLoading = false;
 
   Future<void> imageFromCamera() async {
     pickedImage =
@@ -52,8 +53,7 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  Future<http.Response> getRecommendationWeb(
-      String oriURL, String oriName) async {
+  Future<http.Response> getRecommendation(String oriURL, String oriName) async {
     print("start function");
     print(pathNgrok);
     Map data = {'oriURL': oriURL, 'oriName': oriName};
@@ -88,38 +88,41 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 30,
               ),
-              (_selectedImage == null || recommendationStatus)
-                  ? (imageRecomendationURL != "")
-                      ? Container(
-                          width: 200,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.rectangle,
-                            border: Border.all(color: Colors.green, width: 5),
-                            image: DecorationImage(
-                                image: NetworkImage(imageRecomendationURL),
-                                fit: BoxFit.cover),
-                          ),
-                        )
-                      : reusablePhotoFrame(
-                          Image.asset(
-                            "assets/images/model.png",
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                  : kIsWeb
-                      ? reusablePhotoFrame(
-                          Image.network(
-                            _selectedImage!.path,
-                            fit: BoxFit.cover,
-                          ),
-                        )
-                      : reusablePhotoFrame(
-                          Image.file(
-                            File(_selectedImage!.path),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+              (isRecommendationLoading)
+                  ? Center(child: CircularProgressIndicator())
+                  : (_selectedImage == null || recommendationStatus)
+                      ? (imageRecomendationURL != "")
+                          ? Container(
+                              width: 200,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.rectangle,
+                                border:
+                                    Border.all(color: Colors.green, width: 5),
+                                image: DecorationImage(
+                                    image: NetworkImage(imageRecomendationURL),
+                                    fit: BoxFit.cover),
+                              ),
+                            )
+                          : reusablePhotoFrame(
+                              Image.asset(
+                                "assets/images/model.png",
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                      : kIsWeb
+                          ? reusablePhotoFrame(
+                              Image.network(
+                                _selectedImage!.path,
+                                fit: BoxFit.cover,
+                              ),
+                            )
+                          : reusablePhotoFrame(
+                              Image.file(
+                                File(_selectedImage!.path),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
               const SizedBox(
                 height: 30,
               ),
@@ -162,12 +165,15 @@ class _HomePageState extends State<HomePage> {
               ElevatedButton(
                 onPressed: () async {
                   print("button start");
+                  setState(() {
+                    isRecommendationLoading = true;
+                  });
                   imageOriURL = await DatabaseService.uploadImage(pickedImage!);
                   print("upload");
                   DatabaseService.createOrUpdateListImagesOri(user.uid,
                       imageURL: imageOriURL);
                   print("aaaaaaaaaa");
-                  final res = await getRecommendationWeb(
+                  final res = await getRecommendation(
                       imageOriURL, _selectedImage!.path.split('/').last);
                   print("responseeee");
                   // final val = jsonDecode(res.body);
@@ -176,17 +182,24 @@ class _HomePageState extends State<HomePage> {
                   print("vallll");
                   print(val);
 
-                  if (val['urlNew'] != "") {
-                    print("masukk");
-                    recommendationStatus = true;
-                    imageRecomendationURL = val['urlNew'];
-                    // print("list color :");
-                    // print(val["listColor"]);
-                    // print(val["totalColor"]);
+                  if (val['faceDetected']) {
+                    if (val['urlNew'] != "") {
+                      print("masukk");
+                      recommendationStatus = true;
+                      imageRecomendationURL = val['urlNew'];
+                      // print("list color :");
+                      // print(val["listColor"]);
+                      // print(val["totalColor"]);
+                    }
+                  } else {
+                    print("no face detected");
                   }
+
                   print(res.toString());
                   print(imageRecomendationURL);
-                  setState(() {});
+                  setState(() {
+                    isRecommendationLoading = false;
+                  });
                 },
                 child: const Text("Cari Rekomendasi"),
               ),
