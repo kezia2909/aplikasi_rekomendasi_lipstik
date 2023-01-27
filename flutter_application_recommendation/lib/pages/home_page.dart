@@ -22,8 +22,8 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  // String pathNgrok = "https://a1c8-114-125-126-73.ap.ngrok.io/face_detection";
-  String pathNgrok = "https://tugas20231.pythonanywhere.com/face_detection";
+  // String pathNgrok = "https://120b-140-213-42-45.ap.ngrok.io/face_detection";
+  String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
   PickedFile? pickedImage;
@@ -61,7 +61,12 @@ class _HomePageState extends State<HomePage> {
     var body = json.encode(data);
     print("encode data");
     var response = await http.post(Uri.parse(pathNgrok),
-        headers: {"Content-Type": "application/json"}, body: body);
+        headers: {
+          "Content-Type": "application/json",
+          // "Access-Control-Allow-Origin": "*",
+          // 'Accept': '*/*'
+        },
+        body: body);
     print("response done");
     print(response);
     return response;
@@ -168,12 +173,16 @@ class _HomePageState extends State<HomePage> {
                   // final val = jsonDecode(res.body);
                   // print(val['urlNew'].toString());
                   final val = jsonDecode(res.body);
+                  print("vallll");
+                  print(val);
+
                   if (val['urlNew'] != "") {
+                    print("masukk");
                     recommendationStatus = true;
                     imageRecomendationURL = val['urlNew'];
-                    print("list color :");
-                    print(val["listColor"]);
-                    print(val["totalColor"]);
+                    // print("list color :");
+                    // print(val["listColor"]);
+                    // print(val["totalColor"]);
                   }
                   print(res.toString());
                   print(imageRecomendationURL);

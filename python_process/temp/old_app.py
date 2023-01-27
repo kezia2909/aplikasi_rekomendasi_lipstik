@@ -26,15 +26,15 @@ def index():
     filename = werkzeug.utils.secure_filename(imagefile.filename)
     print("\nReceived image File name : " + imagefile.filename)
     # Saving the image in images Directory
-    imagefile.save("./python_process/images/" + filename)
+    imagefile.save("./python_process/Images_Ori/" + filename)
     # Passing the imagePath in this giveFacesCoordinates function and getting the list of faces coordinate
     print("startt")
 
     # upload to firebase
-    uploadToFirebase("./python_process/images/" + filename, filename)
+    uploadToFirebase("./python_process/Images_Ori/" + filename, filename)
     print("upload oke")
 
-    faces = giveFacesCoordinates("./python_process/images/" + filename)
+    faces = giveFacesCoordinates("./python_process/Images_Ori/" + filename)
     print("endd")
 
     url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new"+filename+"?alt=media"

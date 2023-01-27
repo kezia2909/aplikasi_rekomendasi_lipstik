@@ -9,6 +9,7 @@ def giveFacesCoordinates(imagePath):
     # Loads the Image to a variable
     image = cv2.imread(str(imagePath))
     print("readdd")
+    print('Original Dimensions : ',image.shape)
     # image = cv2.imread(str("python_process\sample.jpeg"))
     # Convert the Color Image to Black & White Image
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
