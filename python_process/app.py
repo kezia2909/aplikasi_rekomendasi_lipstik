@@ -32,16 +32,24 @@ def index():
     downloadImage(url, name)
 
     face_detected = False
-
+    list_face_url = []
     # CROP IMAGE
-    if detectFace(name+".jpg") == True:
-        uploadToFirebase(name+".jpg")
-        url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new"+name+".jpg?alt=media"
+    counter = detectFace(name+".jpg")
+    if counter != 0:
+        for i in range(counter):
+            uploadToFirebase(str(i)+"_"+name+".jpg")
+            url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new"+str(i)+"_"+name+".jpg?alt=media"
+            list_face_url.append(url)
         face_detected = True
+    # if detectFace(name+".jpg") == True:
+    #     print("start upload")
+    #     # uploadToFirebase(name+".jpg")
+    #     url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new"+name+".jpg?alt=media"
+    #     face_detected = True
 
     
 
-
+    print(url)
     # LIST COLOR
     # listColor = ["red", "brown", "purple"]
     # print("listtt")
@@ -49,7 +57,7 @@ def index():
     # print("totalColor")
     # print(totalColor)
     # url="haiiiii haloooo"
-    return json.dumps({"urlNew": url, "faceDetected": face_detected})
+    return json.dumps({"urlNew": url, "faceDetected": face_detected, "listFaceUrl": list_face_url})
 
 
 # Running the app

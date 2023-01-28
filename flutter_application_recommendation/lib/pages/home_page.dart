@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -22,13 +23,15 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  String pathNgrok = "https://120b-140-213-42-45.ap.ngrok.io/face_detection";
-  // String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
+  // String pathNgrok = "https://bea6-114-125-126-22.ap.ngrok.io/face_detection";
+  String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
   PickedFile? pickedImage;
   bool recommendationStatus = false;
   bool isRecommendationLoading = false;
+  List listFaceUrl = [];
+  String testLink = "..............";
 
   Future<void> imageFromCamera() async {
     pickedImage =
@@ -88,21 +91,77 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 30,
               ),
+              // CarouselSlider(
+              //   options: CarouselOptions(height: 400.0),
+              //   items: [1, 2, 3, 4, 5].map((i) {
+              //     return Builder(
+              //       builder: (BuildContext context) {
+              //         return Container(
+              //             width: MediaQuery.of(context).size.width,
+              //             margin: EdgeInsets.symmetric(horizontal: 5.0),
+              //             decoration: BoxDecoration(color: Colors.amber),
+              //             child: Text(
+              //               'text $i',
+              //               style: TextStyle(fontSize: 16.0),
+              //             ));
+              //       },
+              //     );
+              //   }).toList(),
+              // ),
               (isRecommendationLoading)
                   ? Center(child: CircularProgressIndicator())
                   : (_selectedImage == null || recommendationStatus)
                       ? (imageRecomendationURL != "")
-                          ? Container(
-                              width: 200,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                border:
-                                    Border.all(color: Colors.green, width: 5),
-                                image: DecorationImage(
-                                    image: NetworkImage(imageRecomendationURL),
-                                    fit: BoxFit.cover),
+                          // ? Container(
+                          //     width: 200,
+                          //     height: 200,
+                          //     decoration: BoxDecoration(
+                          //       shape: BoxShape.rectangle,
+                          //       border:
+                          //           Border.all(color: Colors.green, width: 5),
+                          //       image: DecorationImage(
+                          //           image: NetworkImage(imageRecomendationURL),
+                          //           fit: BoxFit.cover),
+                          //     ),
+                          //   )
+                          ? CarouselSlider(
+                              options: CarouselOptions(
+                                height: 200.0,
+                                enableInfiniteScroll: false,
+                                onPageChanged: (index, reason) {
+                                  testLink = listFaceUrl[index];
+                                  setState(() {});
+                                },
                               ),
+                              items: listFaceUrl.map((url) {
+                                return Builder(
+                                  builder: (BuildContext context) {
+                                    // return Container(
+                                    //     width:
+                                    //         MediaQuery.of(context).size.width,
+                                    //     margin: EdgeInsets.symmetric(
+                                    //         horizontal: 5.0),
+                                    //     decoration:
+                                    //         BoxDecoration(color: Colors.amber),
+                                    //     child: Text(
+                                    //       'text $url',
+                                    //       style: TextStyle(fontSize: 16.0),
+                                    //     ));
+                                    return Container(
+                                      width: 200,
+                                      height: 200,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.rectangle,
+                                        border: Border.all(
+                                            color: Colors.green, width: 5),
+                                        image: DecorationImage(
+                                            image: NetworkImage(url),
+                                            fit: BoxFit.cover),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }).toList(),
                             )
                           : reusablePhotoFrame(
                               Image.asset(
@@ -123,6 +182,7 @@ class _HomePageState extends State<HomePage> {
                                 fit: BoxFit.cover,
                               ),
                             ),
+              Text(testLink),
               const SizedBox(
                 height: 30,
               ),
@@ -135,6 +195,8 @@ class _HomePageState extends State<HomePage> {
                       ElevatedButton(
                         onPressed: () {
                           imageFromCamera();
+                          String testLink = "..............";
+
                           setState(() {});
                         },
                         child: const Icon(Icons.photo_camera_outlined),
@@ -150,6 +212,8 @@ class _HomePageState extends State<HomePage> {
                       ElevatedButton(
                         onPressed: () {
                           imageFromGallery();
+                          String testLink = "..............";
+
                           setState(() {});
                         },
                         child: const Icon(Icons.photo_camera_outlined),
@@ -185,6 +249,11 @@ class _HomePageState extends State<HomePage> {
                   if (val['faceDetected']) {
                     if (val['urlNew'] != "") {
                       print("masukk");
+                      print(val['listFaceUrl']);
+                      listFaceUrl = val['listFaceUrl'];
+                      print(listFaceUrl);
+                      print(listFaceUrl.length);
+                      print(listFaceUrl[0]);
                       recommendationStatus = true;
                       imageRecomendationURL = val['urlNew'];
                       // print("list color :");
