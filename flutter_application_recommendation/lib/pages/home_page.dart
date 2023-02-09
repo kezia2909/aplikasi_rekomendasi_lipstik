@@ -23,7 +23,7 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  // String pathNgrok = "https://bea6-114-125-126-22.ap.ngrok.io/face_detection";
+  // String pathNgrok = "https://1579-203-78-117-247.ap.ngrok.io/face_detection";
   String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
@@ -31,7 +31,9 @@ class _HomePageState extends State<HomePage> {
   bool recommendationStatus = false;
   bool isRecommendationLoading = false;
   List listFaceUrl = [];
+  List listFaceCategory = [];
   String testLink = "..............";
+  String testCategory = "category";
 
   Future<void> imageFromCamera() async {
     pickedImage =
@@ -40,6 +42,10 @@ class _HomePageState extends State<HomePage> {
     if (pickedImage != null) {
       recommendationStatus = false;
       _selectedImage = File(pickedImage!.path);
+      listFaceUrl = [];
+      listFaceCategory = [];
+      testLink = "..............";
+      testCategory = "category";
     }
     setState(() {});
   }
@@ -51,6 +57,10 @@ class _HomePageState extends State<HomePage> {
     if (pickedImage != null) {
       recommendationStatus = false;
       _selectedImage = File(pickedImage!.path);
+      listFaceUrl = [];
+      listFaceCategory = [];
+      testLink = "..............";
+      testCategory = "category";
     }
 
     setState(() {});
@@ -130,6 +140,7 @@ class _HomePageState extends State<HomePage> {
                                 enableInfiniteScroll: false,
                                 onPageChanged: (index, reason) {
                                   testLink = listFaceUrl[index];
+                                  testCategory = listFaceCategory[index];
                                   setState(() {});
                                 },
                               ),
@@ -183,6 +194,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
               Text(testLink),
+              Text(testCategory),
               const SizedBox(
                 height: 30,
               ),
@@ -251,11 +263,15 @@ class _HomePageState extends State<HomePage> {
                       print("masukk");
                       print(val['listFaceUrl']);
                       listFaceUrl = val['listFaceUrl'];
+                      listFaceCategory = val['listFaceCategory'];
                       print(listFaceUrl);
                       print(listFaceUrl.length);
                       print(listFaceUrl[0]);
                       recommendationStatus = true;
                       imageRecomendationURL = val['urlNew'];
+
+                      testLink = listFaceUrl[0];
+                      testCategory = listFaceCategory[0];
                       // print("list color :");
                       // print(val["listColor"]);
                       // print(val["totalColor"]);
