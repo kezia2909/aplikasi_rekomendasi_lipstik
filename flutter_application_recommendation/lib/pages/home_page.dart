@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_recommendation/main.dart';
 import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
@@ -23,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  // String pathNgrok = "https://1579-203-78-117-247.ap.ngrok.io/face_detection";
+  // String pathNgrok = "https://c985-140-213-40-232.ap.ngrok.io/face_detection";
   String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
@@ -34,6 +36,13 @@ class _HomePageState extends State<HomePage> {
   List listFaceCategory = [];
   String testLink = "..............";
   String testCategory = "category";
+  String testWarna = "warna";
+
+  // static CollectionReference kategoriWarnaCollection =
+  //     FirebaseFirestore.instance.collection('kategori_warna');
+  // Future getDocs() async {
+
+  // }
 
   Future<void> imageFromCamera() async {
     pickedImage =
@@ -46,6 +55,7 @@ class _HomePageState extends State<HomePage> {
       listFaceCategory = [];
       testLink = "..............";
       testCategory = "category";
+      testWarna = "warna";
     }
     setState(() {});
   }
@@ -61,6 +71,7 @@ class _HomePageState extends State<HomePage> {
       listFaceCategory = [];
       testLink = "..............";
       testCategory = "category";
+      testWarna = "warna";
     }
 
     setState(() {});
@@ -138,9 +149,27 @@ class _HomePageState extends State<HomePage> {
                               options: CarouselOptions(
                                 height: 200.0,
                                 enableInfiniteScroll: false,
-                                onPageChanged: (index, reason) {
+                                onPageChanged: (index, reason) async {
                                   testLink = listFaceUrl[index];
                                   testCategory = listFaceCategory[index];
+                                  print("astagaaaaaa");
+                                  print(testCategory);
+                                  var tempMap = mapping_lists.where(
+                                    (element) {
+                                      print("masuk");
+                                      print(element);
+                                      print("element");
+                                      print(element['id']);
+                                      if (element['id'] == testCategory) {
+                                        print("berhasil");
+                                        return true;
+                                      }
+                                      print("gagal");
+                                      return false;
+                                    },
+                                  ).take(1);
+                                  print("dapat");
+                                  testWarna = tempMap.first['warna'].toString();
                                   setState(() {});
                                 },
                               ),
@@ -195,6 +224,7 @@ class _HomePageState extends State<HomePage> {
                             ),
               Text(testLink),
               Text(testCategory),
+              Text(testWarna),
               const SizedBox(
                 height: 30,
               ),
@@ -252,6 +282,7 @@ class _HomePageState extends State<HomePage> {
                   final res = await getRecommendation(
                       imageOriURL, _selectedImage!.path.split('/').last);
                   print("responseeee");
+                  print(res.runtimeType);
                   // final val = jsonDecode(res.body);
                   // print(val['urlNew'].toString());
                   final val = jsonDecode(res.body);
@@ -272,9 +303,23 @@ class _HomePageState extends State<HomePage> {
 
                       testLink = listFaceUrl[0];
                       testCategory = listFaceCategory[0];
-                      // print("list color :");
-                      // print(val["listColor"]);
-                      // print(val["totalColor"]);
+                      print(testCategory);
+                      var tempMap = mapping_lists.where(
+                        (element) {
+                          print("masuk");
+                          print(element);
+                          print("element");
+                          print(element['id']);
+                          if (element['id'] == testCategory) {
+                            print("berhasil");
+                            return true;
+                          }
+                          print("gagal");
+                          return false;
+                        },
+                      ).take(1);
+                      print("dapat");
+                      testWarna = tempMap.first['warna'].toString();
                     }
                   } else {
                     print("no face detected");

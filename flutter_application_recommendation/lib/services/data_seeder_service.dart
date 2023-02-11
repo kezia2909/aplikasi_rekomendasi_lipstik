@@ -253,4 +253,113 @@ class DataSeederService {
       'kode_warna': "DE8797",
     });
   }
+
+  static CollectionReference dataMapping =
+      FirebaseFirestore.instance.collection('data_mapping');
+
+  static createDataMapping() {
+    dataMapping.doc("fair_cool").set({
+      "skintone": "fair",
+      "undetone": "cool",
+      "warna": FieldValue.arrayUnion(
+          ['mauve', 'pale pink', 'beige', 'pink', 'fuschia', 'purple'])
+    });
+    dataMapping.doc("fair_warm").set({
+      "skintone": "fair",
+      "undetone": "warm",
+      "warna": FieldValue.arrayUnion(
+          ["light coral", "peachy nude", "peachy pink", "warm nude"])
+    });
+    dataMapping.doc("fair_neutral").set({
+      "skintone": "fair",
+      "undetone": "neutral",
+      "warna": FieldValue.arrayUnion([
+        "mauve",
+        "pale pink",
+        "beige",
+        "pink",
+        "light coral",
+        "peachy nude",
+        "peachy pink"
+      ])
+    });
+
+    dataMapping.doc("light_cool").set({
+      "skintone": "light",
+      "undetone": "cool",
+      "warna":
+          FieldValue.arrayUnion(["mauve", "rosy pink", "fuschia", "purple"])
+    });
+    dataMapping.doc("light_warm").set({
+      "skintone": "light",
+      "undetone": "warm",
+      "warna": FieldValue.arrayUnion(["warm pink", "rosy beige", "warm nude"])
+    });
+    dataMapping.doc("light_neutral").set({
+      "skintone": "light",
+      "undetone": "neutral",
+      "warna": FieldValue.arrayUnion(
+          ["mauve", "rosy pink", "warm pink", "rosy beige"])
+    });
+
+    dataMapping.doc("medium_cool").set({
+      "skintone": "medium",
+      "undetone": "cool",
+      "warna":
+          FieldValue.arrayUnion(["dark mauve", "blue-red", "fuschia", "purple"])
+    });
+    dataMapping.doc("medium_warm").set({
+      "skintone": "medium",
+      "undetone": "warm",
+      "warna": FieldValue.arrayUnion(["orange-red", "nude beige", "warm nude"])
+    });
+    dataMapping.doc("medium_neutral").set({
+      "skintone": "medium",
+      "undetone": "neutral",
+      "warna": FieldValue.arrayUnion(
+          ["dark mauve", "blue-red", "orange-red", "nude beige"])
+    });
+
+    dataMapping.doc("tan_cool").set({
+      "skintone": "tan",
+      "undetone": "cool",
+      "warna":
+          FieldValue.arrayUnion(["plum", "dark mauve", "fuschia", "purple"])
+    });
+    dataMapping.doc("tan_warm").set({
+      "skintone": "tan",
+      "undetone": "warm",
+      "warna": FieldValue.arrayUnion(["terracotta", "nude brown"])
+    });
+    dataMapping.doc("tan_neutral").set({
+      "skintone": "tan",
+      "undetone": "neutral",
+      "warna": FieldValue.arrayUnion(
+          ["plum", "dark mauve", "terracotta", "nude brown"])
+    });
+
+    dataMapping.doc("deep_cool").set({
+      "skintone": "deep",
+      "undetone": "cool",
+      "warna": FieldValue.arrayUnion(
+          ["deep plum", "wine red", "dark chocolate", "fuschia", "purple"])
+    });
+    dataMapping.doc("deep_warm").set({
+      "skintone": "deep",
+      "undetone": "warm",
+      "warna": FieldValue.arrayUnion(["orange", "orange-red", "brown"])
+    });
+    dataMapping.doc("deep_neutral").set({
+      "skintone": "deep",
+      "undetone": "neutral",
+      "warna": FieldValue.arrayUnion([
+        "deep plum",
+        "wine red",
+        "dark chocolate",
+        "orange",
+        "orange-red",
+        "brown"
+      ])
+    });
+  }
 }

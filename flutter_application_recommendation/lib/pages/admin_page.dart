@@ -29,6 +29,7 @@ class _AdminPageState extends State<AdminPage> {
                     print("start");
                     DataSeederService.createKategoriWarna();
                     DataSeederService.createListLipstik();
+                    DataSeederService.createDataMapping();
                     print("end");
                     // setState(() {});
                   },
