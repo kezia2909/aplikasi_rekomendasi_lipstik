@@ -27,7 +27,7 @@ class _AdminPageState extends State<AdminPage> {
                   onPressed: () {
                     // String testLink = "..............";
                     print("start");
-                    DataSeederService.createKategoriWarna();
+                    // DataSeederService.createKategoriWarna();
                     DataSeederService.createListLipstik();
                     DataSeederService.createDataMapping();
                     print("end");

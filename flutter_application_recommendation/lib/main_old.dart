@@ -10,8 +10,6 @@ import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 var mapping_lists = [];
-var list_lipstik = [];
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -20,35 +18,53 @@ void main() async {
 
   print("start run");
   runApp(const MyApp());
+
   print("done run");
 
-  // DATA MAPPING
+  // DEMO - PERCOBAAN BERHASIL
+  // var datas = {
+  //   'id': 'sky',
+  //   'skintone': 'fly',
+  //   'undertone': 'ribbon',
+  //   'warna': ['falcon', 'red', 'blue'],
+  // };
+  // var datas2 = {
+  //   'id': 'sky2',
+  //   'skintone': 'fly2',
+  //   'undertone': 'ribbon2',
+  //   'warna': ['falcon2', 'yellow', 'purple', 'green'],
+  // };
+  // var lists = [];
+  // var tempWarna = [];
+  // lists.add(datas);
+  // lists.add(datas2);
+  // print(lists);
+  // var getData = lists.where(
+  //   (element) {
+  //     if (element['id'] == "sky") {
+  //       return true;
+  //     }
+  //     return false;
+  //   },
+  // ).take(1);
+  // tempWarna = getData.first['warna'];
+  // print(tempWarna.toString());
+  // print(tempWarna[0]);
+
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  var results_data_mapping = await firestore.collection("data_mapping").get();
-  var results_list_lipstik = await firestore.collection("list_lipstik").get();
+  var results = await firestore
+      .collection("data_mapping")
+      // .where("skintone", isEqualTo: "tan")
+      // .where("warna", arrayContains: "dark mauve")
+      .get();
+  // print(results.docs);
+  // print("testing");
 
-  if (results_list_lipstik.docs.length > 0) {
-    results_list_lipstik.docs.forEach(
-      (element) {
-        var data = element.data();
-        Map<String, dynamic> hasil = Map<String, dynamic>();
-        for (dynamic type in data.keys) {
-          hasil[type.toString()] = data[type];
-        }
-        var id = element.id;
-        var tempdata = {
-          'id': id,
-          'kategori': hasil['kategori'],
-          'kode_warna': hasil['kode_warna'],
-          'nama_lipstik': hasil['nama_lipstik']
-        };
-        list_lipstik.add(tempdata);
-      },
-    );
-  }
+  // var hasilmapping = results;
 
-  if (results_data_mapping.docs.length > 0) {
-    results_data_mapping.docs.forEach(
+  // print(hasilmapping);
+  if (results.docs.length > 0) {
+    results.docs.forEach(
       (element) {
         var id = element.id;
         var data = element.data();
@@ -61,12 +77,7 @@ void main() async {
         }
         print(hasil['warna']);
         print(hasil['warna'][0]);
-        // results_list_lipstik = await firestore
-        //     .collection("list_lipstik")
-        //     .where("kategori", arrayContainsAny: hasil['warna'])
-        //     .get();
-        // print("RESULTS");
-        // print(results_list_lipstik);
+
         var tempdata = {'id': id, 'warna': hasil['warna']};
         mapping_lists.add(tempdata);
       },
@@ -74,10 +85,36 @@ void main() async {
   } else {
     print("NO DATA");
   }
-  print("LIPSTIK");
-  print(list_lipstik);
   print("MAPPING");
   print(mapping_lists);
+
+  // var tempMap = mapping_lists.where(
+  //   (element) {
+  //     print("masuk");
+  //     print(element);
+  //     print("element");
+  //     print(element['id']);
+  //     if (element['id'] == "tan_warm") {
+  //       print("berhasil");
+  //       return true;
+  //     }
+  //     print("gagal");
+  //     return false;
+  //   },
+  // ).take(1);
+  // print("dapat");
+  // String testWarna = tempMap.first['warna'].toString();
+  // print(testWarna);
+  // List<String> productName= [];
+
+  //   Stream<DocumentSnapshot<Map<String, dynamic>>> productRef = FirebaseFirestore.instance
+  //       .collection("data_mapping")
+  //       .doc("medium_netral")
+  //       .snapshots();
+  //   productRef.forEach((field) {
+  //     field.data().ma().forEach((index, data) {
+  //       productName.add(field.documents[index]["name"]);
+  //     });
 }
 
 class MyApp extends StatelessWidget {

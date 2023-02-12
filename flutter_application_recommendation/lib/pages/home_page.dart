@@ -37,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   String testLink = "..............";
   String testCategory = "category";
   String testWarna = "warna";
+  String testLipstik = "lipstik";
 
   // static CollectionReference kategoriWarnaCollection =
   //     FirebaseFirestore.instance.collection('kategori_warna');
@@ -56,6 +57,7 @@ class _HomePageState extends State<HomePage> {
       testLink = "..............";
       testCategory = "category";
       testWarna = "warna";
+      testLipstik = "lipstik";
     }
     setState(() {});
   }
@@ -72,6 +74,7 @@ class _HomePageState extends State<HomePage> {
       testLink = "..............";
       testCategory = "category";
       testWarna = "warna";
+      testLipstik = "lipstik";
     }
 
     setState(() {});
@@ -94,6 +97,40 @@ class _HomePageState extends State<HomePage> {
     print("response done");
     print(response);
     return response;
+  }
+
+  void getLipstik(String kategoriKulit) {
+    var tempMap = mapping_lists.where(
+      (element) {
+        print("masuk");
+        print(element);
+        print("element");
+        print(element['id']);
+        if (element['id'] == kategoriKulit) {
+          print("berhasil");
+          return true;
+        }
+        print("gagal");
+        return false;
+      },
+    ).take(1);
+    print("dapat");
+    testWarna = tempMap.first['warna'].toString();
+
+    print(tempMap.first['warna'].runtimeType);
+    print("panjang : " + tempMap.first['warna'].length.toString());
+
+    var tempLipstik = [];
+    tempMap.first['warna'].forEach((warna) {
+      list_lipstik.forEach(
+        (element) {
+          if (element['kategori'] == warna) {
+            tempLipstik.add(element['nama_lipstik']);
+          }
+        },
+      );
+    });
+    testLipstik = tempLipstik.toString();
   }
 
   @override
@@ -152,24 +189,25 @@ class _HomePageState extends State<HomePage> {
                                 onPageChanged: (index, reason) async {
                                   testLink = listFaceUrl[index];
                                   testCategory = listFaceCategory[index];
-                                  print("astagaaaaaa");
-                                  print(testCategory);
-                                  var tempMap = mapping_lists.where(
-                                    (element) {
-                                      print("masuk");
-                                      print(element);
-                                      print("element");
-                                      print(element['id']);
-                                      if (element['id'] == testCategory) {
-                                        print("berhasil");
-                                        return true;
-                                      }
-                                      print("gagal");
-                                      return false;
-                                    },
-                                  ).take(1);
-                                  print("dapat");
-                                  testWarna = tempMap.first['warna'].toString();
+                                  getLipstik(testCategory);
+                                  // print("astagaaaaaa");
+                                  // print(testCategory);
+                                  // var tempMap = mapping_lists.where(
+                                  //   (element) {
+                                  //     print("masuk");
+                                  //     print(element);
+                                  //     print("element");
+                                  //     print(element['id']);
+                                  //     if (element['id'] == testCategory) {
+                                  //       print("berhasil");
+                                  //       return true;
+                                  //     }
+                                  //     print("gagal");
+                                  //     return false;
+                                  //   },
+                                  // ).take(1);
+                                  // print("dapat");
+                                  // testWarna = tempMap.first['warna'].toString();
                                   setState(() {});
                                 },
                               ),
@@ -225,6 +263,7 @@ class _HomePageState extends State<HomePage> {
               Text(testLink),
               Text(testCategory),
               Text(testWarna),
+              Text(testLipstik),
               const SizedBox(
                 height: 30,
               ),
@@ -304,22 +343,8 @@ class _HomePageState extends State<HomePage> {
                       testLink = listFaceUrl[0];
                       testCategory = listFaceCategory[0];
                       print(testCategory);
-                      var tempMap = mapping_lists.where(
-                        (element) {
-                          print("masuk");
-                          print(element);
-                          print("element");
-                          print(element['id']);
-                          if (element['id'] == testCategory) {
-                            print("berhasil");
-                            return true;
-                          }
-                          print("gagal");
-                          return false;
-                        },
-                      ).take(1);
-                      print("dapat");
-                      testWarna = tempMap.first['warna'].toString();
+
+                      getLipstik(testCategory);
                     }
                   } else {
                     print("no face detected");
