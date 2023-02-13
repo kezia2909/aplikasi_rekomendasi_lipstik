@@ -38,6 +38,9 @@ class _HomePageState extends State<HomePage> {
   String testCategory = "category";
   String testWarna = "warna";
   String testLipstik = "lipstik";
+  List listLipstikFace = [];
+  String testChosenLipstik = "chosen";
+  int currentIndex = 0;
 
   // static CollectionReference kategoriWarnaCollection =
   //     FirebaseFirestore.instance.collection('kategori_warna');
@@ -58,6 +61,7 @@ class _HomePageState extends State<HomePage> {
       testCategory = "category";
       testWarna = "warna";
       testLipstik = "lipstik";
+      testChosenLipstik = "choosen";
     }
     setState(() {});
   }
@@ -75,6 +79,8 @@ class _HomePageState extends State<HomePage> {
       testCategory = "category";
       testWarna = "warna";
       testLipstik = "lipstik";
+      listLipstikFace = [];
+      testChosenLipstik = "choosen";
     }
 
     setState(() {});
@@ -121,16 +127,21 @@ class _HomePageState extends State<HomePage> {
     print("panjang : " + tempMap.first['warna'].length.toString());
 
     var tempLipstik = [];
+    listLipstikFace = [];
     tempMap.first['warna'].forEach((warna) {
       list_lipstik.forEach(
         (element) {
           if (element['kategori'] == warna) {
-            tempLipstik.add(element['nama_lipstik']);
+            listLipstikFace.add(element);
+            // tempLipstik.add(element['nama_lipstik']);
           }
         },
       );
     });
-    testLipstik = tempLipstik.toString();
+    testLipstik = listLipstikFace.toString();
+    testChosenLipstik = listLipstikFace.first['nama_lipstik'];
+    currentIndex = 0;
+    // testLipstik = tempLipstik.toString();
   }
 
   @override
@@ -263,7 +274,83 @@ class _HomePageState extends State<HomePage> {
               Text(testLink),
               Text(testCategory),
               Text(testWarna),
-              Text(testLipstik),
+              // Text(listLipstikFace.toString()),
+              // (listLipstikFace.isNotEmpty)
+              //     ? CarouselSlider(
+              //         options: CarouselOptions(
+              //           height: 50.0,
+              //           enableInfiniteScroll: false,
+              //           viewportFraction: 0.1,
+              //           initialPage: (listLipstikFace.length / 2).toInt(),
+              //           onPageChanged: (index, reason) async {
+              //             setState(() {});
+              //           },
+              //         ),
+              //         items: listLipstikFace.map((element) {
+              //           // var tempColor = "0xff";
+              //           // tempColor += element['kode_warna'];
+              //           String hexString = element['kode_warna'];
+              //           // tempColor = "#b76384";
+              //           final buffer = StringBuffer();
+              //           if (hexString.length == 6 || hexString.length == 7)
+              //             buffer.write('ff');
+              //           buffer.write(hexString.replaceFirst('#', ''));
+              //           // buffer.write(tempColor);
+              //           // buffer.write(tempColor.replaceFirst('#', ''));
+              //           // Color(int.parse(buffer.toString(), radix: 16));
+
+              //           return Builder(
+              //             builder: (BuildContext context) {
+              //               return Container(
+              //                 width: 50,
+              //                 height: 50,
+              //                 decoration: BoxDecoration(
+              //                   shape: BoxShape.circle,
+              //                   color: Color(
+              //                       int.parse(buffer.toString(), radix: 16)),
+              //                   // border: Border.all(
+              //                   //     color: Color(int.parse(buffer.toString(),
+              //                   //         radix: 16)),
+              //                   //     width: 5),
+              //                 ),
+              //               );
+              //             },
+              //           );
+              //         }).toList(),
+              //       )
+              //     : Text("NO LIPSTIK AVAILABLE"),
+              Text(testChosenLipstik),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: listLipstikFace.map((element) {
+                  int index = listLipstikFace.indexOf(element);
+                  String hexString = element['kode_warna'];
+                  final buffer = StringBuffer();
+                  if (hexString.length == 6 || hexString.length == 7)
+                    buffer.write('ff');
+                  buffer.write(hexString.replaceFirst('#', ''));
+                  return GestureDetector(
+                    onTap: () {
+                      testChosenLipstik = element['nama_lipstik'];
+                      currentIndex = index;
+                      setState(() {});
+                    },
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(int.parse(buffer.toString(), radix: 16)),
+                        border: currentIndex == index
+                            ? Border.all(color: Colors.black, width: 5)
+                            : Border(),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
               const SizedBox(
                 height: 30,
               ),
