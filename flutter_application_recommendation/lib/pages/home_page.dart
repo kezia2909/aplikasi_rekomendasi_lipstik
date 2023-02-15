@@ -320,36 +320,39 @@ class _HomePageState extends State<HomePage> {
               //       )
               //     : Text("NO LIPSTIK AVAILABLE"),
               Text(testChosenLipstik),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: listLipstikFace.map((element) {
-                  int index = listLipstikFace.indexOf(element);
-                  String hexString = element['kode_warna'];
-                  final buffer = StringBuffer();
-                  if (hexString.length == 6 || hexString.length == 7)
-                    buffer.write('ff');
-                  buffer.write(hexString.replaceFirst('#', ''));
-                  return GestureDetector(
-                    onTap: () {
-                      testChosenLipstik = element['nama_lipstik'];
-                      currentIndex = index;
-                      setState(() {});
-                    },
-                    child: Container(
-                      width: 50,
-                      height: 50,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(int.parse(buffer.toString(), radix: 16)),
-                        border: currentIndex == index
-                            ? Border.all(color: Colors.black, width: 5)
-                            : Border(),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: listLipstikFace.map((element) {
+                    int index = listLipstikFace.indexOf(element);
+                    String hexString = element['kode_warna'];
+                    final buffer = StringBuffer();
+                    if (hexString.length == 6 || hexString.length == 7)
+                      buffer.write('ff');
+                    buffer.write(hexString.replaceFirst('#', ''));
+                    return GestureDetector(
+                      onTap: () {
+                        testChosenLipstik = element['nama_lipstik'];
+                        currentIndex = index;
+                        setState(() {});
+                      },
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        margin: EdgeInsets.symmetric(
+                            vertical: 10.0, horizontal: 2.0),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Color(int.parse(buffer.toString(), radix: 16)),
+                          border: currentIndex == index
+                              ? Border.all(color: Colors.black, width: 5)
+                              : Border(),
+                        ),
                       ),
-                    ),
-                  );
-                }).toList(),
+                    );
+                  }).toList(),
+                ),
               ),
               const SizedBox(
                 height: 30,
