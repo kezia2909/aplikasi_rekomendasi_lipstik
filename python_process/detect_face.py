@@ -20,14 +20,18 @@ def detectFace(fileName):
     )
 
     counter = 0
+    faces = []
     for x, y, w, h in face_detect:
         crop_faces = image[y:y + h, x:x + w]
         if detectEye(crop_faces) > 0 :
             cv2.imwrite('./python_process/Images_New/'+str(counter)+'_'+fileName, crop_faces)
             counter += 1
-    
+            temp = [x, y, w, h]
+            faces.append(temp)
+        
     print("faces :")
     print(len(face_detect))
+    print(len(faces))
 
-    return counter
+    return faces
     
