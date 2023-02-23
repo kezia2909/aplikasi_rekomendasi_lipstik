@@ -13,7 +13,13 @@ import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
 import 'package:flutter_application_recommendation/services/painter_lips_service.dart';
 import 'package:flutter_application_recommendation/services/painter_service.dart';
+import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
@@ -50,12 +56,94 @@ class _HomePageState extends State<HomePage> {
   List listFaceArea = [];
   List<dynamic> faceArea = [];
   late Color lipColor;
-  // List<List<int>> lipsArea = <List<int>>[];
-  // static CollectionReference kategoriWarnaCollection =
-  //     FirebaseFirestore.instance.collection('kategori_warna');
-  // Future getDocs() async {
 
-  // }
+// mlkit
+  final FaceDetector _faceDetector = FaceDetector(
+      options: FaceDetectorOptions(
+    enableContours: true,
+    enableClassification: true,
+  ));
+  CustomPaint? _customPaint;
+  String? _textMLKIT = "MLKIT";
+  File? _displayImage;
+  String _displayPath = "path";
+  List listDownloadPath = [];
+  List listFaceMLKit = [];
+  List<Face> faceMLKit = [];
+  late final painter;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _faceDetector.close();
+    super.dispose();
+  }
+
+  Future<void> processImage(
+      final InputImage inputImage, List<dynamic> face) async {
+    print("START PROSEESSS DETECTTTT");
+    final faces = await _faceDetector.processImage(inputImage);
+    print("- FACES");
+    String text = "faces found: ${faces.length}\n\n";
+    print("- TEXT");
+    for (final face in await faces) {
+      text += "face: ${face.boundingBox}\n\n";
+    }
+    print("- FOR");
+    listFaceMLKit.add(await faces);
+    _textMLKIT = text;
+
+    // print("MASUK PAINTER");
+    // final painter = FaceDetectorPainter(faces, face
+    //     // inputImage.inputImageData!.size,
+    //     // inputImage.inputImageData!.imageRotation,
+    //     );
+    // _customPaint = CustomPaint(
+    //   painter: painter,
+    // );
+    // if (inputImage.inputImageData?.size != null) {
+    //   print("MASUK PAINTER");
+    //   final painter = FaceDetectorPainter(faces, face
+    //       // inputImage.inputImageData!.size,
+    //       // inputImage.inputImageData!.imageRotation,
+    //       );
+    //   _customPaint = CustomPaint(
+    //     painter: painter,
+    //   );
+    // } else {
+    //   print("GAGAL MASUK");
+    // }
+    print(await "END PROSEESSS DETECTTTT");
+  }
+
+  Future<void> _download(String _url) async {
+    print("START DOWNLOADDD");
+    final response = await http.get(Uri.parse(_url));
+
+    // Get the image name
+    final imageName = path.basename(_url);
+    // Get the document directory path
+    final appDir = await path_provider.getApplicationDocumentsDirectory();
+
+    // This is the saved image path
+    // You can use it to display the saved image later
+    final localPath = await path.join(appDir.path, imageName);
+
+    // Downloading
+    // final imageFile = File(localPath);
+    // await imageFile.writeAsBytes(response.bodyBytes);
+
+    listDownloadPath.add(await localPath);
+    setState(() {});
+    // setState(() {
+    //   _displayImage = imageFile;
+    //   _displayPath = localPath;
+    // });
+    // print("SELESAII");
+    // print(_displayImage);
+    // print(_displayPath);
+    print(await "END DOWNLOADDDD");
+  }
 
   Future<void> imageFromCamera() async {
     pickedImage =
@@ -221,7 +309,16 @@ class _HomePageState extends State<HomePage> {
                                       listFaceLipsArea[index].toString();
                                   lipsArea = listFaceLipsArea[index];
                                   faceArea = listFaceArea[index];
+                                  var url = listFaceUrl[index];
 
+                                  print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+                                  // _download(url);
+                                  print("DOWNLAD DONEE");
+
+                                  // processImage(
+                                  //     InputImage.fromFilePath(_displayPath),
+                                  //     faceArea);
+                                  print("PROSES SELESAII");
                                   getLipstik(testCategory);
                                   // print("astagaaaaaa");
                                   // print(testCategory);
@@ -241,6 +338,11 @@ class _HomePageState extends State<HomePage> {
                                   // ).take(1);
                                   // print("dapat");
                                   // testWarna = tempMap.first['warna'].toString();
+                                  faceMLKit = listFaceMLKit[index];
+                                  print("MASUK PAINTER");
+                                  painter =
+                                      FaceDetectorPainter(faceMLKit, faceArea);
+
                                   setState(() {});
                                 },
                               ),
@@ -259,11 +361,14 @@ class _HomePageState extends State<HomePage> {
                                             fit: BoxFit.cover),
                                       ),
                                       child: CustomPaint(
-                                        painter: LipsPainter(
-                                            lips: lipsArea,
-                                            face: faceArea,
-                                            color: lipColor),
+                                        painter: painter,
                                       ),
+                                      // child: CustomPaint(
+                                      //   painter: LipsPainter(
+                                      //       lips: lipsArea,
+                                      //       face: faceArea,
+                                      //       color: lipColor),
+                                      // ),
                                     );
                                     // return FutureBuilder<ui.Image>(
                                     //     future: url,
@@ -310,6 +415,7 @@ class _HomePageState extends State<HomePage> {
               Text(testLink),
               Text(testCategory),
               Text(testWarna),
+              Text(_textMLKIT!),
               // Text(listLipstikFace.toString()),
               // (listLipstikFace.isNotEmpty)
               //     ? CarouselSlider(
@@ -471,6 +577,7 @@ class _HomePageState extends State<HomePage> {
                       print("masukk");
                       print(val['listFaceUrl']);
                       listFaceUrl = val['listFaceUrl'];
+
                       listFaceCategory = val['listFaceCategory'];
                       print(listFaceUrl);
                       print(listFaceUrl.length);
@@ -492,7 +599,41 @@ class _HomePageState extends State<HomePage> {
                       print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                       print(val['listAreaFaces'].toString());
                       listFaceArea = val['listAreaFaces'];
+
+                      // download image
+
+                      print("downloaddd");
+                      for (String url in listFaceUrl) {
+                        await _download(url);
+                      }
+                      print("selesaii downloadd");
+                      print(listDownloadPath);
+
+                      print("detecttt");
+                      var counterIndex = 0;
+                      for (String path in listDownloadPath) {
+                        counterIndex++;
+                      }
+                      counterIndex--;
+                      for (String path in listDownloadPath) {
+                        print("path");
+                        print(path);
+                        String tempPath = listDownloadPath[counterIndex];
+                        print("temp path");
+                        print(tempPath);
+                        faceArea = listFaceArea[counterIndex];
+
+                        await processImage(
+                            InputImage.fromFilePath(File(tempPath).path),
+                            faceArea);
+                      }
+                      print("selesaii detecttttt");
+
+                      // SET FIRST
                       faceArea = listFaceArea[0];
+                      faceMLKit = listFaceMLKit[0];
+                      print("MASUK PAINTER");
+                      painter = FaceDetectorPainter(faceMLKit, faceArea);
                     }
                   } else {
                     print("no face detected");

@@ -15,10 +15,10 @@ class LipsPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print("PAINTERRRR");
-    print("face: ");
-    print(face);
-    print(lips);
+    // print("PAINTERRRR");
+    // print("face: ");
+    // print(face);
+    // print(lips);
 
     scaleW = 200 / face[2];
     scaleH = 200 / face[3];
@@ -29,19 +29,19 @@ class LipsPainter extends CustomPainter {
       final h = lips[i][3].toDouble() * scaleH;
       final rect = Rect.fromPoints(Offset(x, y), Offset(x + w, y + h));
       rects.add(rect);
-      print("ADD RECTT");
+      // print("ADD RECTT");
     }
     final Paint paint = Paint()
       ..style = PaintingStyle.fill
       ..strokeWidth = 2.0
       ..color = color;
 
-    print("CANVASSSS");
+    // print("CANVASSSS");
     for (var i = 0; i < lips.length; i++) {
       canvas.drawRect(rects[i], paint);
     }
-    print("CANVASSS ENDD");
-    print("ENDD PAINTERRR");
+    // print("CANVASSS ENDD");
+    // print("ENDD PAINTERRR");
 
     // Paint paint_0 = Paint()
     //   ..color = Color.fromARGB(255, 33, 150, 243)
