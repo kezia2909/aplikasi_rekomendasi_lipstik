@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
   List listDownloadPath = [];
   List listFaceMLKit = [];
   List<Face> faceMLKit = [];
-  late final painter;
+  var painter;
 
   @override
   void dispose() {
@@ -86,11 +86,11 @@ class _HomePageState extends State<HomePage> {
     print("- FACES");
     String text = "faces found: ${faces.length}\n\n";
     print("- TEXT");
-    for (final face in await faces) {
+    for (final face in faces) {
       text += "face: ${face.boundingBox}\n\n";
     }
     print("- FOR");
-    listFaceMLKit.add(await faces);
+    listFaceMLKit.add(faces);
     _textMLKIT = text;
 
     // print("MASUK PAINTER");
@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
     print(await "END PROSEESSS DETECTTTT");
   }
 
-  Future<void> _download(String _url, List<dynamic> face) async {
+  Future<void> _download(String _url) async {
     print("START DOWNLOADDD");
     final response = await http.get(Uri.parse(_url));
 
@@ -127,31 +127,14 @@ class _HomePageState extends State<HomePage> {
 
     // This is the saved image path
     // You can use it to display the saved image later
-    final localPath = path.join(appDir.path, imageName);
-    print(localPath);
-    print("END DOWNLOADDDD");
+    final localPath = await path.join(appDir.path, imageName);
+
     // Downloading
-    // final imageFile = File(localPath);
-    // await imageFile.writeAsBytes(response.bodyBytes);
+    final imageFile = File(localPath);
+    await imageFile.writeAsBytes(response.bodyBytes);
 
-    // listDownloadPath.add(await localPath);
-    setState(() {
-      _displayPath = localPath;
-    });
-
-    print("START PROSEESSS DETECTTTT");
-    final faces =
-        await _faceDetector.processImage(InputImage.fromFilePath(_displayPath));
-    print("- FACES");
-    String text = "faces found: ${faces.length}\n\n";
-    print("- TEXT");
-
-    for (final face in faces) {
-      text += "face: ${face.boundingBox}\n\n";
-    }
-    print("- FOR");
-    listFaceMLKit.add(faces);
-    _textMLKIT = text;
+    listDownloadPath.add(await localPath);
+    setState(() {});
     // setState(() {
     //   _displayImage = imageFile;
     //   _displayPath = localPath;
@@ -159,6 +142,7 @@ class _HomePageState extends State<HomePage> {
     // print("SELESAII");
     // print(_displayImage);
     // print(_displayPath);
+    print(await "END DOWNLOADDDD");
   }
 
   Future<void> imageFromCamera() async {
@@ -619,33 +603,33 @@ class _HomePageState extends State<HomePage> {
                       // download image
 
                       print("downloaddd");
-                      var counterIndex = 0;
                       for (String url in listFaceUrl) {
-                        faceArea = listFaceArea[counterIndex];
-                        await _download(url, faceArea);
-                        counterIndex++;
+                        await _download(url);
                       }
                       print("selesaii downloadd");
                       print(listDownloadPath);
 
                       print("detecttt");
-
+                      var counterIndex = 0;
                       // for (String path in listDownloadPath) {
-                      //   counterIndex++;
+
                       // }
                       // counterIndex--;
-                      // for (String path in listDownloadPath) {
-                      //   print("path");
-                      //   print(path);
-                      //   String tempPath = listDownloadPath[counterIndex];
-                      //   print("temp path");
-                      //   print(tempPath);
-                      //   faceArea = listFaceArea[counterIndex];
+                      for (String path in listDownloadPath) {
+                        print("path");
+                        print(path);
+                        String tempPath = listDownloadPath[counterIndex];
+                        print("temp path");
+                        print(tempPath);
+                        faceArea = listFaceArea[counterIndex];
 
-                      //   await processImage(
-                      //       InputImage.fromFilePath(File(tempPath).path),
-                      //       faceArea);
-                      // }
+                        await processImage(
+                            InputImage.fromFilePath(File(tempPath).path),
+                            faceArea);
+                        counterIndex++;
+                      }
+                      print(counterIndex.toString());
+                      print(listFaceMLKit.toString());
                       print("selesaii detecttttt");
 
                       // SET FIRST
