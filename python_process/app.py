@@ -51,6 +51,11 @@ def index():
     # CROP IMAGE
     list_area_faces = detectFace(name+".jpg")
     counter = len(list_area_faces)
+
+    if request.json['check_using_lips'] :
+        print("CEK LIPS")
+    else :
+        print("NO CEKKK")
     
     if counter != 0:
         for i in range(counter):
@@ -59,9 +64,10 @@ def index():
             list_face_url.append(url)
             list_face_category.append(kmeansFace(str(i)+"_"+name+".jpg"))
             # temp_list_area_lips.append(detectLips(str(i)+"_"+name+".jpg"))
-            detectLips(str(i)+"_"+name+".jpg")
-            # temp_list_area_lips.append()
-            print("OUT LIPS", i)
+            if request.json['check_using_lips'] :
+                detectLips(str(i)+"_"+name+".jpg")
+                # temp_list_area_lips.append()
+                print("OUT LIPS", i)
         face_detected = True
     print("DONEEEEE")
     print(temp_list_area_lips)
@@ -83,7 +89,10 @@ def index():
     list_area_faces = [[int(e) for e in f] for f in list_area_faces]
 
     # return json.dumps({"urlNew": url, "faceDetected": face_detected, "listFaceUrl": list_face_url, "listFaceCategory": list_face_category, "listAreaLips": list_area_lips})  
-    return json.dumps({"faceDetected": face_detected, "listFaceUrl": list_face_url, "listFaceCategory": list_face_category, "listAreaLips": list_area_lips, "listAreaFaces": list_area_faces, "listLabels": list_label_lips, "listChoosenCluster": list_cluster_lips})
+    if request.json['check_using_lips'] :
+        return json.dumps({"faceDetected": face_detected, "listFaceUrl": list_face_url, "listFaceCategory": list_face_category, "listAreaLips": list_area_lips, "listAreaFaces": list_area_faces, "listLabels": list_label_lips, "listChoosenCluster": list_cluster_lips})
+    else :
+        return json.dumps({"faceDetected": face_detected, "listFaceUrl": list_face_url, "listFaceCategory": list_face_category, "listAreaFaces": list_area_faces})
 
 
 # Running the app

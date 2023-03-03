@@ -202,14 +202,14 @@ class FaceDetectorPainter extends CustomPainter {
         // path.lineTo(0, size.height);
       }
 
-      paintLine(FaceContourType.face);
-      paintContour(FaceContourType.face);
-      paintContour(FaceContourType.leftEyebrowTop);
-      paintContour(FaceContourType.leftEyebrowBottom);
-      paintContour(FaceContourType.rightEyebrowTop);
-      paintContour(FaceContourType.rightEyebrowBottom);
-      paintContour(FaceContourType.leftEye);
-      paintContour(FaceContourType.rightEye);
+      // paintLine(FaceContourType.face);
+      // paintContour(FaceContourType.face);
+      // paintContour(FaceContourType.leftEyebrowTop);
+      // paintContour(FaceContourType.leftEyebrowBottom);
+      // paintContour(FaceContourType.rightEyebrowTop);
+      // paintContour(FaceContourType.rightEyebrowBottom);
+      // paintContour(FaceContourType.leftEye);
+      // paintContour(FaceContourType.rightEye);
 
       // paintFill(FaceContourType.upperLipTop, FaceContourType.lowerLipTop,
       //     FaceContourType.upperLipBottom, FaceContourType.lowerLipBottom);
@@ -220,17 +220,17 @@ class FaceDetectorPainter extends CustomPainter {
       // paintLine(FaceContourType.upperLipBottom);
       // paintLine(FaceContourType.lowerLipTop);
       // paintLine(FaceContourType.lowerLipBottom);
-      paintContour(FaceContourType.upperLipTop);
-      paintContour(FaceContourType.upperLipBottom);
-      paintContour(FaceContourType.lowerLipTop);
-      paintContour(FaceContourType.lowerLipBottom);
+      // paintContour(FaceContourType.upperLipTop);
+      // paintContour(FaceContourType.upperLipBottom);
+      // paintContour(FaceContourType.lowerLipTop);
+      // paintContour(FaceContourType.lowerLipBottom);
 
-      paintContour(FaceContourType.noseBridge);
-      paintContour(FaceContourType.noseBottom);
-      paintContour(FaceContourType.leftCheek);
-      paintContour(FaceContourType.rightCheek);
+      // paintContour(FaceContourType.noseBridge);
+      // paintContour(FaceContourType.noseBottom);
+      // paintContour(FaceContourType.leftCheek);
+      // paintContour(FaceContourType.rightCheek);
 
-      paintLandmark(FaceLandmarkType.leftCheek);
+      // paintLandmark(FaceLandmarkType.leftCheek);
     }
   }
 
@@ -239,9 +239,9 @@ class FaceDetectorPainter extends CustomPainter {
     // TODO: implement shouldRepaint
     // return oldDelegate.absoluteImageSize != absoluteImageSize ||
     //     oldDelegate.faces != faces;
-    return oldDelegate.faces != faces || oldDelegate.color != color;
-    // return oldDelegate.faces != faces ||
-    //     oldDelegate.color != color ||
-    //     oldDelegate.face != face;
+    // return oldDelegate.faces != faces || oldDelegate.color != color;
+    return oldDelegate.faces != faces ||
+        oldDelegate.color != color ||
+        oldDelegate.face != face;
   }
 }
