@@ -7,24 +7,37 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 class FaceDetectorPainter extends CustomPainter {
   final List<Face> faces;
   final List<dynamic> face;
+  final Color color;
+  // final Size absoluteImageSize;
+
   var scaleW;
   var scaleH;
   // final Size absoluteImageSize;
   // final InputImageRotation rotation;
 
   // FaceDetectorPainter(this.faces, this.absoluteImageSize, this.rotation);
-  FaceDetectorPainter(this.faces, this.face);
+  FaceDetectorPainter(this.faces, this.face, this.color);
 
   @override
   void paint(final Canvas canvas, final Size size) {
-    scaleW = 200 / face[2];
-    scaleH = 200 / face[3];
+    scaleW = 200.0 / face[2];
+    scaleH = 200.0 / face[3];
+    // scaleW = size.width / face[2];
+    // scaleH = size.height / face[3];
+    // scaleW = (200.0 / size.width) * 200.0 / face[2];
+    // scaleH = (200.0 / size.height) * 200.0 / face[3];
 
     // TODO: implement paint
     final Paint paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0
       ..color = Colors.blue;
+
+    final Paint paint2 = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 10.0
+      ..color = Colors.red;
+
     for (final Face face in faces) {
       canvas.drawRect(
         Rect.fromLTRB(
@@ -57,6 +70,24 @@ class FaceDetectorPainter extends CustomPainter {
         }
       }
 
+      void paintLandmark(final FaceLandmarkType type) {
+        final faceContour = face.contours[type];
+        if (faceContour?.points != null) {
+          for (final Point point in faceContour!.points) {
+            canvas.drawCircle(
+                Offset(
+                  point.x.toDouble() * scaleW, point.y.toDouble() * scaleH,
+                  // translateX(
+                  //     point.x.toDouble(), rotation, size, absoluteImageSize),
+                  // translateY(
+                  //     point.y.toDouble(), rotation, size, absoluteImageSize),
+                ),
+                10.0,
+                paint2);
+          }
+        }
+      }
+
       void paintLine(final FaceContourType type) {
         final pointMode = ui.PointMode.polygon;
         final List<Offset> points = [];
@@ -69,6 +100,8 @@ class FaceDetectorPainter extends CustomPainter {
         final faceContour = face.contours[type];
         if (faceContour?.points != null) {
           for (final Point point in faceContour!.points) {
+            print(
+                "x : ${point.x.toDouble() * scaleW}, y : ${point.y.toDouble() * scaleH}");
             points.add(Offset(
               point.x.toDouble() * scaleW,
               point.y.toDouble() * scaleH,
@@ -89,7 +122,7 @@ class FaceDetectorPainter extends CustomPainter {
       ) {
         var path = Path();
         var paint = Paint()
-          ..color = Colors.teal
+          ..color = color
           ..strokeWidth = 1;
         final faceContour1 = face.contours[type1];
         final faceContour2 = face.contours[type2];
@@ -169,6 +202,7 @@ class FaceDetectorPainter extends CustomPainter {
         // path.lineTo(0, size.height);
       }
 
+      paintLine(FaceContourType.face);
       paintContour(FaceContourType.face);
       paintContour(FaceContourType.leftEyebrowTop);
       paintContour(FaceContourType.leftEyebrowBottom);
@@ -182,10 +216,10 @@ class FaceDetectorPainter extends CustomPainter {
       paintFill(FaceContourType.upperLipTop, FaceContourType.upperLipBottom);
       paintFill(FaceContourType.lowerLipTop, FaceContourType.lowerLipBottom);
 
-      paintLine(FaceContourType.upperLipTop);
-      paintLine(FaceContourType.upperLipBottom);
-      paintLine(FaceContourType.lowerLipTop);
-      paintLine(FaceContourType.lowerLipBottom);
+      // paintLine(FaceContourType.upperLipTop);
+      // paintLine(FaceContourType.upperLipBottom);
+      // paintLine(FaceContourType.lowerLipTop);
+      // paintLine(FaceContourType.lowerLipBottom);
       paintContour(FaceContourType.upperLipTop);
       paintContour(FaceContourType.upperLipBottom);
       paintContour(FaceContourType.lowerLipTop);
@@ -195,6 +229,8 @@ class FaceDetectorPainter extends CustomPainter {
       paintContour(FaceContourType.noseBottom);
       paintContour(FaceContourType.leftCheek);
       paintContour(FaceContourType.rightCheek);
+
+      paintLandmark(FaceLandmarkType.leftCheek);
     }
   }
 
@@ -203,6 +239,9 @@ class FaceDetectorPainter extends CustomPainter {
     // TODO: implement shouldRepaint
     // return oldDelegate.absoluteImageSize != absoluteImageSize ||
     //     oldDelegate.faces != faces;
-    return oldDelegate.faces != faces;
+    return oldDelegate.faces != faces || oldDelegate.color != color;
+    // return oldDelegate.faces != faces ||
+    //     oldDelegate.color != color ||
+    //     oldDelegate.face != face;
   }
 }

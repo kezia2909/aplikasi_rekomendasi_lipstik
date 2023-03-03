@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 class LipsPainter extends CustomPainter {
   // final Color color;
   final List<dynamic> lips;
+  final List<dynamic> lipsLabel;
+  final List<dynamic> lipsCluster;
   final List<Rect> rects = [];
 
   final List<dynamic> face;
@@ -11,7 +13,12 @@ class LipsPainter extends CustomPainter {
 
   final Color color;
 
-  LipsPainter({required this.lips, required this.face, required this.color});
+  LipsPainter(
+      {required this.lips,
+      required this.lipsLabel,
+      required this.lipsCluster,
+      required this.face,
+      required this.color});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -22,14 +29,44 @@ class LipsPainter extends CustomPainter {
 
     scaleW = 200 / face[2];
     scaleH = 200 / face[3];
+
+    final Paint paint_new = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1.0
+      ..color = color;
+
+    var temp_count;
+
     for (var i = 0; i < lips.length; i++) {
       final x = lips[i][0].toDouble() * scaleW;
       final y = lips[i][1].toDouble() * scaleH;
       final w = lips[i][2].toDouble() * scaleW;
       final h = lips[i][3].toDouble() * scaleH;
       final rect = Rect.fromPoints(Offset(x, y), Offset(x + w, y + h));
-      rects.add(rect);
+      // rects.add(rect);
       // print("ADD RECTT");
+      print(
+          "detail : ${x}, ${y}, ${w}, ${h}, ${lips[i][2].toDouble()}, ${lips[i][3].toDouble()}");
+      print("aaaaaa");
+      print(lipsLabel[i].length);
+      temp_count = 0;
+      final real_x = lips[i][0];
+      final real_y = lips[i][1];
+      final real_w = lips[i][2];
+      final real_h = lips[i][3];
+      for (var j = real_y; j < real_y + real_h; j++) {
+        for (var k = real_x; k < real_x + real_w; k++) {
+          if (lipsLabel[i][temp_count] != lipsCluster[0]) {
+            canvas.drawCircle(
+                Offset(k.toDouble() * scaleW, j.toDouble() * scaleH),
+                1.0,
+                paint_new);
+          }
+          temp_count += 1;
+        }
+      }
+      print("aaaaaaaaaaaaaaaa");
+      print("count, ${temp_count}");
     }
     final Paint paint = Paint()
       ..style = PaintingStyle.fill

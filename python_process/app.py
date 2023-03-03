@@ -12,6 +12,11 @@ from detect_face import detectFace
 from upload_images import uploadToFirebase
 from kmeans_face import kmeansFace
 from detect_lips import detectLips
+from global_variable import temp_list_area_lips
+from global_variable import temp_list_labels
+from global_variable import temp_list_choosen_cluster
+
+
 # Flask
 app = Flask(__name__)
 CORS(app)
@@ -37,7 +42,11 @@ def index():
     face_detected = False
     list_face_url = []
     list_face_category = []
-    temp_list_area_lips = []
+    
+    list_area_lips = []
+    list_label_lips = []
+    list_cluster_lips = []
+    list_area_faces = []
 
     # CROP IMAGE
     list_area_faces = detectFace(name+".jpg")
@@ -49,24 +58,32 @@ def index():
             url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new"+str(i)+"_"+name+".jpg?alt=media"
             list_face_url.append(url)
             list_face_category.append(kmeansFace(str(i)+"_"+name+".jpg"))
-            temp_list_area_lips.append(detectLips(str(i)+"_"+name+".jpg"))
+            # temp_list_area_lips.append(detectLips(str(i)+"_"+name+".jpg"))
+            detectLips(str(i)+"_"+name+".jpg")
+            # temp_list_area_lips.append()
             print("OUT LIPS", i)
         face_detected = True
     print("DONEEEEE")
     print(temp_list_area_lips)
     print(url)
-    list_area_lips = [[28, 73, 59, 29], [25, 58, 51, 25], [17, 60, 51, 25], []]
-    print("bbbb", list_area_lips, "aaaa - ", type(list_area_lips))
+    # list_area_lips = [[28, 73, 59, 29], [25, 58, 51, 25], [17, 60, 51, 25], []]
+    # print("bbbb", list_area_lips, "aaaa - ", type(list_area_lips))
     list_area_lips = temp_list_area_lips
-    print("bbbb", list_area_lips, "aaaa - ", type(list_area_lips))
+    list_label_lips = temp_list_labels
+    list_cluster_lips = temp_list_choosen_cluster
+    print("LABEL - ", list_label_lips)
+    print("CLUSTER - ", list_cluster_lips)
+    # print("bbbb", list_area_lips, "aaaa - ", type(list_area_lips))
 
     list_area_lips = [[[int(e) for e in t] for t in l]for l in list_area_lips]
-    print("bbbb", list_area_lips, "aaaa - ", type(list_area_lips))
+    list_label_lips = [[[int(e) for e in t] for t in l]for l in list_label_lips]
+    list_cluster_lips = [[int(e) for e in t] for t  in list_cluster_lips]
+    # print("bbbb", list_area_lips, "aaaa - ", type(list_area_lips))
     
     list_area_faces = [[int(e) for e in f] for f in list_area_faces]
 
-    # return json.dumps({"urlNew": url, "faceDetected": face_detected, "listFaceUrl": list_face_url, "listFaceCategory": list_face_category, "listAreaLips": list_area_lips})
-    return json.dumps({"faceDetected": face_detected, "listFaceUrl": list_face_url, "listFaceCategory": list_face_category, "listAreaLips": list_area_lips, "listAreaFaces": list_area_faces})
+    # return json.dumps({"urlNew": url, "faceDetected": face_detected, "listFaceUrl": list_face_url, "listFaceCategory": list_face_category, "listAreaLips": list_area_lips})  
+    return json.dumps({"faceDetected": face_detected, "listFaceUrl": list_face_url, "listFaceCategory": list_face_category, "listAreaLips": list_area_lips, "listAreaFaces": list_area_faces, "listLabels": list_label_lips, "listChoosenCluster": list_cluster_lips})
 
 
 # Running the app
