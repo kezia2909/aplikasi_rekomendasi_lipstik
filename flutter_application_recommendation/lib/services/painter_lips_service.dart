@@ -31,7 +31,7 @@ class LipsPainter extends CustomPainter {
     scaleH = 200 / face[3];
 
     final Paint paint_new = Paint()
-      ..style = PaintingStyle.stroke
+      ..style = PaintingStyle.fill
       ..strokeWidth = 1.0
       ..color = color;
 

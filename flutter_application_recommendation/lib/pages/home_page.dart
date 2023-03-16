@@ -8,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/main.dart';
+import 'package:flutter_application_recommendation/pages/guidebook_page.dart';
+import 'package:flutter_application_recommendation/pages/result_page.dart';
 import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
@@ -20,6 +22,69 @@ import 'package:http/http.dart' as http;
 
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path;
+
+String testLink = "..............";
+List listFaceUrl = [];
+String testCategory = "category";
+int countFace = 0;
+
+List listFaceCategory = [];
+List listFaceArea = [];
+List<dynamic> faceArea = [];
+String testWarna = "warna";
+String testLipstik = "lipstik";
+List listLipstikFace = [];
+String testChosenLipstik = "chosen";
+int currentIndex = 0;
+
+late Color lipColor;
+
+String testLipsArea = "area";
+List<dynamic> lipsArea = [];
+List<dynamic> lipsLabel = [];
+List<dynamic> lipsCluster = [];
+
+List listFaceLipsArea = [];
+List listFaceLipsLabel = [];
+List listFaceLipsCluster = [];
+
+// mlkit
+List listFaceMLKit = [];
+List<Face> faceMLKit = [];
+var painter;
+
+void getLipstik(String kategoriKulit) {
+  var tempMap = mapping_lists.where(
+    (element) {
+      if (element['id'] == kategoriKulit) {
+        return true;
+      }
+      return false;
+    },
+  ).take(1);
+  testWarna = tempMap.first['warna'].toString();
+
+  var tempLipstik = [];
+  listLipstikFace = [];
+  tempMap.first['warna'].forEach((warna) {
+    list_lipstik.forEach(
+      (element) {
+        if (element['kategori'] == warna) {
+          listLipstikFace.add(element);
+        }
+      },
+    );
+  });
+  testLipstik = listLipstikFace.toString();
+  testChosenLipstik = listLipstikFace.first['nama_lipstik'];
+
+  String hexString = listLipstikFace.first['kode_warna'];
+  final buffer = StringBuffer();
+  if (hexString.length == 6 || hexString.length == 7) buffer.write('80');
+  buffer.write(hexString.replaceFirst('#', ''));
+  lipColor = Color(int.parse(buffer.toString(), radix: 16));
+  currentIndex = 0;
+}
 
 class HomePage extends StatefulWidget {
   final User firebaseUser;
@@ -41,25 +106,7 @@ class _HomePageState extends State<HomePage> {
   PickedFile? pickedImage;
   bool recommendationStatus = false;
   bool isRecommendationLoading = false;
-  List listFaceUrl = [];
-  List listFaceCategory = [];
-  String testLink = "..............";
-  String testCategory = "category";
-  String testWarna = "warna";
-  String testLipstik = "lipstik";
-  List listLipstikFace = [];
-  String testChosenLipstik = "chosen";
-  int currentIndex = 0;
-  List listFaceLipsArea = [];
-  List listFaceLipsLabel = [];
-  List listFaceLipsCluster = [];
-  String testLipsArea = "area";
-  List<dynamic> lipsArea = [];
-  List<dynamic> lipsLabel = [];
-  List<dynamic> lipsCluster = [];
-  List listFaceArea = [];
-  List<dynamic> faceArea = [];
-  late Color lipColor;
+
   late bool check_using_lips;
 
 // mlkit
@@ -73,11 +120,9 @@ class _HomePageState extends State<HomePage> {
   File? _displayImage;
   String _displayPath = "path";
   List listDownloadPath = [];
-  List listFaceMLKit = [];
-  List<Face> faceMLKit = [];
+
   List listSizeAbsolute = [];
   var sizeAbsolute;
-  var painter;
 
   @override
   void setState(ui.VoidCallback fn) {
@@ -254,49 +299,52 @@ class _HomePageState extends State<HomePage> {
     return response;
   }
 
-  void getLipstik(String kategoriKulit) {
-    var tempMap = mapping_lists.where(
-      (element) {
-        // print("masuk");
-        // print(element);
-        // print("element");
-        // print(element['id']);
-        if (element['id'] == kategoriKulit) {
-          // print("berhasil");
-          return true;
-        }
-        // print("gagal");
-        return false;
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Maaf tidak terdeteksi wajah pada gambar'),
+          content: const Text(
+              'silahkan upload ulang gambar sesuai dengan panduan yang tersedia'),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Close'),
+              onPressed: () {
+                print(_selectedImage);
+                // _selectedImage!.delete();
+
+                setState(() {
+                  pickedImage = null;
+                  _selectedImage = null;
+                });
+                print("deleteee");
+                print(_selectedImage);
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Guidebook'),
+              onPressed: () {
+                setState(() {
+                  pickedImage = null;
+                  _selectedImage = null;
+                });
+                Navigator.of(context).pop();
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => GuidebookPage()));
+              },
+            ),
+          ],
+        );
       },
-    ).take(1);
-    // print("dapat");
-    testWarna = tempMap.first['warna'].toString();
-
-    // print(tempMap.first['warna'].runtimeType);
-    // print("panjang : " + tempMap.first['warna'].length.toString());
-
-    var tempLipstik = [];
-    listLipstikFace = [];
-    tempMap.first['warna'].forEach((warna) {
-      list_lipstik.forEach(
-        (element) {
-          if (element['kategori'] == warna) {
-            listLipstikFace.add(element);
-            // tempLipstik.add(element['nama_lipstik']);
-          }
-        },
-      );
-    });
-    testLipstik = listLipstikFace.toString();
-    testChosenLipstik = listLipstikFace.first['nama_lipstik'];
-
-    String hexString = listLipstikFace.first['kode_warna'];
-    final buffer = StringBuffer();
-    if (hexString.length == 6 || hexString.length == 7) buffer.write('80');
-    buffer.write(hexString.replaceFirst('#', ''));
-    lipColor = Color(int.parse(buffer.toString(), radix: 16));
-    currentIndex = 0;
-    // testLipstik = tempLipstik.toString();
+    );
   }
 
   @override
@@ -334,141 +382,87 @@ class _HomePageState extends State<HomePage> {
               // ),
               (isRecommendationLoading)
                   ? Center(child: CircularProgressIndicator())
-                  : (_selectedImage == null || recommendationStatus)
-                      ? (imageRecomendationURL != "")
-                          // ? Container(
-                          //     width: 200,
-                          //     height: 200,
-                          //     decoration: BoxDecoration(
-                          //       shape: BoxShape.rectangle,
-                          //       border:
-                          //           Border.all(color: Colors.green, width: 5),
-                          //       image: DecorationImage(
-                          //           image: NetworkImage(imageRecomendationURL),
-                          //           fit: BoxFit.cover),
-                          //     ),
-                          //   )
-                          ? CarouselSlider(
-                              options: CarouselOptions(
-                                height: 200.0,
-                                enableInfiniteScroll: false,
-                                onPageChanged: (index, reason) async {
-                                  testLink = listFaceUrl[index];
-                                  testCategory = listFaceCategory[index];
+                  // : (_selectedImage == null || recommendationStatus)
+                  // ? (imageRecomendationURL != "")
+                  //     ? CarouselSlider(
+                  //         options: CarouselOptions(
+                  //           height: 200.0,
+                  //           enableInfiniteScroll: false,
+                  //           onPageChanged: (index, reason) async {
+                  //             testLink = listFaceUrl[index];
+                  //             testCategory = listFaceCategory[index];
 
-                                  faceArea = listFaceArea[index];
-                                  var url = listFaceUrl[index];
+                  //             faceArea = listFaceArea[index];
+                  //             var url = listFaceUrl[index];
 
-                                  print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
-                                  // _download(url);
-                                  print("DOWNLAD DONEE");
+                  //             print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
+                  //             print("DOWNLAD DONEE");
 
-                                  // processImage(
-                                  //     InputImage.fromFilePath(_displayPath),
-                                  //     faceArea);
-                                  print("PROSES SELESAII");
-                                  getLipstik(testCategory);
-                                  // print("astagaaaaaa");
-                                  // print(testCategory);
-                                  // var tempMap = mapping_lists.where(
-                                  //   (element) {
-                                  //     print("masuk");
-                                  //     print(element);
-                                  //     print("element");
-                                  //     print(element['id']);
-                                  //     if (element['id'] == testCategory) {
-                                  //       print("berhasil");
-                                  //       return true;
-                                  //     }
-                                  //     print("gagal");
-                                  //     return false;
-                                  //   },
-                                  // ).take(1);
-                                  // print("dapat");
-                                  // testWarna = tempMap.first['warna'].toString();
+                  //             print("PROSES SELESAII");
+                  //             getLipstik(testCategory);
 
-                                  // WEB GAK BISA
-                                  if (kIsWeb) {
-                                    testLipsArea =
-                                        listFaceLipsArea[index].toString();
-                                    lipsArea = listFaceLipsArea[index];
-                                    lipsLabel = listFaceLipsLabel[index];
-                                    lipsCluster = listFaceLipsCluster[index];
-                                  } else {
-                                    faceMLKit = listFaceMLKit[index];
-                                    // sizeAbsolute = listSizeAbsolute[index];
-                                    print("MASUK PAINTER");
-                                    painter = FaceDetectorPainter(
-                                        faceMLKit, faceArea, lipColor);
-                                  }
+                  //             // WEB GAK BISA
+                  //             if (kIsWeb) {
+                  //               testLipsArea =
+                  //                   listFaceLipsArea[index].toString();
+                  //               lipsArea = listFaceLipsArea[index];
+                  //               lipsLabel = listFaceLipsLabel[index];
+                  //               lipsCluster = listFaceLipsCluster[index];
+                  //             } else {
+                  //               faceMLKit = listFaceMLKit[index];
+                  //               print("MASUK PAINTER");
+                  //               painter = FaceDetectorPainter(
+                  //                   faceMLKit, faceArea, lipColor);
+                  //             }
 
-                                  setState(() {
-                                    // _customPaint = CustomPaint(
-                                    //   painter: FaceDetectorPainter(
-                                    //       faceMLKit, faceArea, lipColor),
-                                    // );
-                                  });
-                                },
-                              ),
-                              items: listFaceUrl.map((url) {
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                      width: 200,
-                                      height: 200,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.rectangle,
-                                        // border: Border.all(
-                                        //     color: Colors.green, width: 0),
-                                        image: DecorationImage(
-                                            image: NetworkImage(url),
-                                            fit: BoxFit.cover),
-                                      ),
-                                      child: kIsWeb
-                                          ? CustomPaint(
-                                              painter: LipsPainter(
-                                                  lips: lipsArea,
-                                                  lipsLabel: lipsLabel,
-                                                  lipsCluster: lipsCluster,
-                                                  face: faceArea,
-                                                  color: lipColor),
-                                            )
-                                          : CustomPaint(
-                                              painter: FaceDetectorPainter(
-                                                  faceMLKit,
-                                                  faceArea,
-                                                  lipColor),
-                                            ),
-                                    );
-                                    // return FutureBuilder<ui.Image>(
-                                    //     future: url,
-                                    //     builder: (context, snapshot) {
-                                    //       if (!snapshot.hasData) {
-                                    //         return Container();
-                                    //       }
-                                    //       return SizedBox(
-                                    //         width:
-                                    //             snapshot.data!.width.toDouble(),
-                                    //         height: snapshot.data!.height
-                                    //             .toDouble(),
-                                    //         child: CustomPaint(
-                                    //           painter: FacePainter(
-                                    //             snapshot.data!,
-                                    //             lipsArea,
-                                    //           ),
-                                    //         ),
-                                    //       );
-                                    //     });
-                                  },
-                                );
-                              }).toList(),
-                            )
-                          : reusablePhotoFrame(
-                              Image.asset(
-                                "assets/images/model.png",
-                                fit: BoxFit.cover,
-                              ),
-                            )
+                  //             setState(() {});
+                  //           },
+                  //         ),
+                  //         items: listFaceUrl.map((url) {
+                  //           return Builder(
+                  //             builder: (BuildContext context) {
+                  //               return Container(
+                  //                 width: 200,
+                  //                 height: 200,
+                  //                 decoration: BoxDecoration(
+                  //                   shape: BoxShape.rectangle,
+                  //                   image: DecorationImage(
+                  //                       image: NetworkImage(url),
+                  //                       fit: BoxFit.cover),
+                  //                 ),
+                  //                 child: kIsWeb
+                  //                     ? CustomPaint(
+                  //                         painter: LipsPainter(
+                  //                             lips: lipsArea,
+                  //                             lipsLabel: lipsLabel,
+                  //                             lipsCluster: lipsCluster,
+                  //                             face: faceArea,
+                  //                             color: lipColor),
+                  //                       )
+                  //                     : CustomPaint(
+                  //                         painter: FaceDetectorPainter(
+                  //                             faceMLKit,
+                  //                             faceArea,
+                  //                             lipColor),
+                  //                       ),
+                  //               );
+                  //             },
+                  //           );
+                  //         }).toList(),
+                  //       )
+                  //     : reusablePhotoFrame(
+                  //         Image.asset(
+                  //           "assets/images/model.png",
+                  //           fit: BoxFit.cover,
+                  //         ),
+                  //       )
+                  : (_selectedImage == null || pickedImage == null)
+                      ? reusablePhotoFrame(
+                          Image.asset(
+                            "assets/images/model.png",
+                            fit: BoxFit.cover,
+                          ),
+                        )
                       : kIsWeb
                           ? reusablePhotoFrame(
                               Image.network(
@@ -482,10 +476,10 @@ class _HomePageState extends State<HomePage> {
                                 fit: BoxFit.cover,
                               ),
                             ),
-              Text(testLink),
-              Text(testCategory),
-              Text(testWarna),
-              Text(_textMLKIT!),
+              // Text(testLink),
+              // Text(testCategory),
+              // Text(testWarna),
+              // Text(_textMLKIT!),
               // Text(listLipstikFace.toString()),
               // (listLipstikFace.isNotEmpty)
               //     ? CarouselSlider(
@@ -531,58 +525,58 @@ class _HomePageState extends State<HomePage> {
               //         }).toList(),
               //       )
               //     : Text("NO LIPSTIK AVAILABLE"),
-              Text(testChosenLipstik),
-              Text(testLipsArea),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: listLipstikFace.map((element) {
-                    int index = listLipstikFace.indexOf(element);
-                    String hexString = element['kode_warna'];
+              // Text(testChosenLipstik),
+              // Text(testLipsArea),
+              // SingleChildScrollView(
+              //   scrollDirection: Axis.horizontal,
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: listLipstikFace.map((element) {
+              //       int index = listLipstikFace.indexOf(element);
+              //       String hexString = element['kode_warna'];
 
-                    // FOR PALLETE
-                    final buffer = StringBuffer();
-                    if (hexString.length == 6 || hexString.length == 7)
-                      buffer.write('ff');
-                    buffer.write(hexString.replaceFirst('#', ''));
+              //       // FOR PALLETE
+              //       final buffer = StringBuffer();
+              //       if (hexString.length == 6 || hexString.length == 7)
+              //         buffer.write('ff');
+              //       buffer.write(hexString.replaceFirst('#', ''));
 
-                    // FOR LIPS
-                    final bufferLip = StringBuffer();
-                    if (hexString.length == 6 || hexString.length == 7)
-                      bufferLip.write('80');
-                    bufferLip.write(hexString.replaceFirst('#', ''));
-                    return GestureDetector(
-                      onTap: () {
-                        testChosenLipstik = element['nama_lipstik'];
-                        currentIndex = index;
-                        lipColor =
-                            Color(int.parse(bufferLip.toString(), radix: 16));
+              //       // FOR LIPS
+              //       final bufferLip = StringBuffer();
+              //       if (hexString.length == 6 || hexString.length == 7)
+              //         bufferLip.write('80');
+              //       bufferLip.write(hexString.replaceFirst('#', ''));
+              //       return GestureDetector(
+              //         onTap: () {
+              //           testChosenLipstik = element['nama_lipstik'];
+              //           currentIndex = index;
+              //           lipColor =
+              //               Color(int.parse(bufferLip.toString(), radix: 16));
 
-                        setState(() {
-                          // _customPaint = CustomPaint(
-                          //   painter: FaceDetectorPainter(
-                          //       faceMLKit, faceArea, lipColor),
-                          // );
-                        });
-                      },
-                      child: Container(
-                        width: 50,
-                        height: 50,
-                        margin: EdgeInsets.symmetric(
-                            vertical: 10.0, horizontal: 2.0),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(int.parse(buffer.toString(), radix: 16)),
-                          border: currentIndex == index
-                              ? Border.all(color: Colors.black, width: 5)
-                              : Border(),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
+              //           setState(() {
+              //             // _customPaint = CustomPaint(
+              //             //   painter: FaceDetectorPainter(
+              //             //       faceMLKit, faceArea, lipColor),
+              //             // );
+              //           });
+              //         },
+              //         child: Container(
+              //           width: 50,
+              //           height: 50,
+              //           margin: EdgeInsets.symmetric(
+              //               vertical: 10.0, horizontal: 2.0),
+              //           decoration: BoxDecoration(
+              //             shape: BoxShape.circle,
+              //             color: Color(int.parse(buffer.toString(), radix: 16)),
+              //             border: currentIndex == index
+              //                 ? Border.all(color: Colors.black, width: 5)
+              //                 : Border(),
+              //           ),
+              //         ),
+              //       );
+              //     }).toList(),
+              //   ),
+              // ),
               const SizedBox(
                 height: 30,
               ),
@@ -626,118 +620,146 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(
                 height: 30,
               ),
-              ElevatedButton(
-                onPressed: () async {
-                  print("button start");
-                  setState(() {
-                    listFaceArea = [];
-                    listDownloadPath = [];
-                    isRecommendationLoading = true;
-                  });
-                  imageOriURL = await DatabaseService.uploadImage(pickedImage!);
-                  print("upload");
-                  DatabaseService.createOrUpdateListImagesOri(user.uid,
-                      imageURL: imageOriURL);
-                  print("aaaaaaaaaa");
-                  final res = await getRecommendation(
-                      imageOriURL, _selectedImage!.path.split('/').last);
-                  print("responseeee");
-                  print(res.runtimeType);
-                  // final val = jsonDecode(res.body);
-                  // print(val['urlNew'].toString());
-                  final val = jsonDecode(res.body);
-                  print("vallll");
-                  print(val);
+              (_selectedImage != null && pickedImage != null)
+                  ? ElevatedButton(
+                      onPressed: () async {
+                        print("button start");
+                        setState(() {
+                          listFaceArea = [];
+                          listDownloadPath = [];
+                          isRecommendationLoading = true;
+                        });
+                        imageOriURL =
+                            await DatabaseService.uploadImage(pickedImage!);
+                        print("upload");
+                        DatabaseService.createOrUpdateListImagesOri(user.uid,
+                            imageURL: imageOriURL);
+                        print("aaaaaaaaaa");
+                        final res = await getRecommendation(
+                            imageOriURL, _selectedImage!.path.split('/').last);
+                        print("responseeee");
+                        print(res.runtimeType);
+                        // final val = jsonDecode(res.body);
+                        // print(val['urlNew'].toString());
+                        final val = jsonDecode(res.body);
+                        print("vallll");
+                        print(val);
 
-                  if (val['faceDetected']) {
-                    // if (val['urlNew'] != "") {
-                    if (val['listFaceUrl'][0] != "") {
-                      print("masukk");
-                      print(val['listFaceUrl']);
-                      listFaceUrl = val['listFaceUrl'];
+                        if (val['faceDetected']) {
+                          // if (val['urlNew'] != "") {
+                          if (val['listFaceUrl'][0] != "") {
+                            print("masukk");
+                            print(val['listFaceUrl']);
+                            listFaceUrl = val['listFaceUrl'];
+                            countFace = listFaceUrl.length;
 
-                      listFaceCategory = val['listFaceCategory'];
-                      print(listFaceUrl);
-                      print(listFaceUrl.length);
-                      print(listFaceUrl[0]);
-                      recommendationStatus = true;
-                      // imageRecomendationURL = val['urlNew'];
-                      imageRecomendationURL = listFaceUrl[0];
+                            listFaceCategory = val['listFaceCategory'];
+                            print(listFaceUrl);
+                            print(listFaceUrl.length);
+                            print(listFaceUrl[0]);
+                            recommendationStatus = true;
+                            // imageRecomendationURL = val['urlNew'];
+                            imageRecomendationURL = listFaceUrl[0];
 
-                      testLink = listFaceUrl[0];
-                      testCategory = listFaceCategory[0];
-                      print(testCategory);
+                            testLink = listFaceUrl[0];
+                            testCategory = listFaceCategory[0];
+                            print(testCategory);
 
-                      getLipstik(testCategory);
+                            getLipstik(testCategory);
 
-                      print("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                      print(val['listAreaFaces'].toString());
-                      listFaceArea = val['listAreaFaces'];
-                      faceArea = listFaceArea[0];
+                            print(
+                                "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                            print(val['listAreaFaces'].toString());
+                            listFaceArea = val['listAreaFaces'];
+                            faceArea = listFaceArea[0];
 
-                      if (kIsWeb) {
-                        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                        print(val['listAreaLips'].toString());
-                        listFaceLipsArea = val['listAreaLips'];
-                        testLipsArea = listFaceLipsArea[0].toString();
-                        lipsArea = listFaceLipsArea[0];
-                        listFaceLipsLabel = val['listLabels'];
-                        lipsLabel = listFaceLipsLabel[0];
-                        listFaceLipsCluster = val['listChoosenCluster'];
-                        lipsCluster = listFaceLipsCluster[0];
-                      } else {
-                        // download image
-                        print("downloaddd");
-                        // WEB GAK BISA
-                        for (String url in listFaceUrl) {
-                          await _download(url);
+                            if (kIsWeb) {
+                              print(
+                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                              print(val['listAreaLips'].toString());
+                              listFaceLipsArea = val['listAreaLips'];
+                              testLipsArea = listFaceLipsArea[0].toString();
+                              lipsArea = listFaceLipsArea[0];
+                              listFaceLipsLabel = val['listLabels'];
+                              lipsLabel = listFaceLipsLabel[0];
+                              listFaceLipsCluster = val['listChoosenCluster'];
+                              lipsCluster = listFaceLipsCluster[0];
+                            } else {
+                              // download image
+                              print("downloaddd");
+                              // WEB GAK BISA
+                              for (String url in listFaceUrl) {
+                                await _download(url);
+                              }
+                              print("selesaii downloadd");
+                              print(listDownloadPath);
+
+                              print("detecttt");
+                              var counterIndex = 0;
+                              // WEB GAK BISA
+                              for (String path in listDownloadPath) {
+                                print("path");
+                                print(path);
+                                String tempPath =
+                                    listDownloadPath[counterIndex];
+                                print("temp path");
+                                print(tempPath);
+                                print("list face");
+                                print(listFaceArea);
+                                print(counterIndex);
+                                faceArea = listFaceArea[counterIndex];
+
+                                await processImage(
+                                    InputImage.fromFilePath(
+                                        File(tempPath).path),
+                                    faceArea);
+                                counterIndex++;
+                              }
+                              print(counterIndex.toString());
+                              print(listFaceMLKit.toString());
+
+                              // SET FIRST
+                              faceMLKit = listFaceMLKit[0];
+                              faceArea = listFaceArea[0];
+                              // sizeAbsolute = listSizeAbsolute[0];
+                              // WEB GAK BISAprint("MASUK PAINTER");
+                              painter = FaceDetectorPainter(
+                                  faceMLKit, faceArea, lipColor);
+                            }
+                          }
+                        } else {
+                          print("no face detected");
                         }
-                        print("selesaii downloadd");
-                        print(listDownloadPath);
 
-                        print("detecttt");
-                        var counterIndex = 0;
-                        // WEB GAK BISA
-                        for (String path in listDownloadPath) {
-                          print("path");
-                          print(path);
-                          String tempPath = listDownloadPath[counterIndex];
-                          print("temp path");
-                          print(tempPath);
-                          print("list face");
-                          print(listFaceArea);
-                          print(counterIndex);
-                          faceArea = listFaceArea[counterIndex];
-
-                          await processImage(
-                              InputImage.fromFilePath(File(tempPath).path),
-                              faceArea);
-                          counterIndex++;
-                        }
-                        print(counterIndex.toString());
-                        print(listFaceMLKit.toString());
-
-                        // SET FIRST
-                        faceMLKit = listFaceMLKit[0];
-                        faceArea = listFaceArea[0];
-                        // sizeAbsolute = listSizeAbsolute[0];
-                        // WEB GAK BISAprint("MASUK PAINTER");
-                        painter =
-                            FaceDetectorPainter(faceMLKit, faceArea, lipColor);
-                      }
-                    }
-                  } else {
-                    print("no face detected");
-                  }
-
-                  print(res.toString());
-                  print(imageRecomendationURL);
-                  setState(() {
-                    isRecommendationLoading = false;
-                  });
-                },
-                child: const Text("Cari Rekomendasi"),
-              ),
+                        print(res.toString());
+                        print(imageRecomendationURL);
+                        setState(() {
+                          isRecommendationLoading = false;
+                          if (val['faceDetected']) {
+                            pickedImage = null;
+                            _selectedImage = null;
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ResultPage(
+                                          firebaseUser: user,
+                                        )));
+                          } else {
+                            print("OHHHHHHH NOOOOOOO");
+                            _dialogBuilder(context);
+                            print("OHHHHHHH NOOOOOOO 2");
+                          }
+                        });
+                      },
+                      child: const Text("Cari Rekomendasi"),
+                    )
+                  : Container(),
+              // ElevatedButton(
+              //     child: Text("result"),
+              //     onPressed: () {
+              //       Navigator.push(context,
+              //           MaterialPageRoute(builder: (context) => ResultPage()));
+              //     }),
               ElevatedButton(
                   child: Text("LOG OUT"),
                   onPressed: () async {
