@@ -36,6 +36,8 @@ def index():
     print("url done")
     name = request.json['oriName']
     print("name done")
+    userId = request.json['userId']
+
     print(url)
     downloadImage(url, name)
 
@@ -59,9 +61,11 @@ def index():
     
     if counter != 0:
         for i in range(counter):
-            uploadToFirebase(str(i)+"_"+name+".jpg")
+            # uploadToFirebase(str(i)+"_"+name+".jpg")
             # url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new"+str(i)+"_"+name+".jpg?alt=media"
-            url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new_image%2Fnew"+str(i)+"_"+name+".jpg?alt=media"
+            # url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new_image%2Fnew"+str(i)+"_"+name+".jpg?alt=media"
+            uploadToFirebase(userId, str(i)+"_"+name+".jpg")
+            url = "https://firebasestorage.googleapis.com/v0/b/skripsi-c47d7.appspot.com/o/new_image%2F"+userId+"%2Fnew"+str(i)+"_"+name+".jpg?alt=media"
             list_face_url.append(url)
             list_face_category.append(kmeansFace(str(i)+"_"+name+".jpg"))
             # temp_list_area_lips.append(detectLips(str(i)+"_"+name+".jpg"))

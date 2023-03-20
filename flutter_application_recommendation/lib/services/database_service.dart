@@ -50,14 +50,17 @@ class DatabaseService {
   //   }
   // }
 
-  static Future<String> uploadImage(PickedFile? imageFile) async {
+  static Future<String> uploadImage(
+      String userId, PickedFile? imageFile) async {
     print("start firebase");
     String imageUrl = "";
     print("start ref");
 
     Reference reference = FirebaseStorage.instance
         .ref()
-        .child("ori_image/${basename(imageFile!.path)}");
+        .child("ori_image")
+        .child(userId)
+        .child(basename(imageFile!.path));
     print("ref oke");
 
     print("upload");

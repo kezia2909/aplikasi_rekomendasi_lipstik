@@ -98,9 +98,8 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  // String pathNgrok =
-  // "https://7c01-2400-9800-820-4674-c13-d801-ba53-d4b3.ap.ngrok.io/face_detection";
-  String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
+  String pathNgrok = "https://511a-140-213-57-125.ap.ngrok.io/face_detection";
+  // String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
   PickedFile? pickedImage;
@@ -276,10 +275,12 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
-  Future<http.Response> getRecommendation(String oriURL, String oriName) async {
+  Future<http.Response> getRecommendation(
+      String userId, String oriURL, String oriName) async {
     print("start function");
     print(pathNgrok);
     Map data = {
+      'userId': userId,
       'oriURL': oriURL,
       'oriName': oriName,
       'check_using_lips': check_using_lips
@@ -653,13 +654,13 @@ class _HomePageState extends State<HomePage> {
                           listDownloadPath = [];
                           isRecommendationLoading = true;
                         });
-                        imageOriURL =
-                            await DatabaseService.uploadImage(pickedImage!);
+                        imageOriURL = await DatabaseService.uploadImage(
+                            user.uid, pickedImage!);
                         print("upload");
                         DatabaseService.createOrUpdateListImagesOri(user.uid,
                             imageURL: imageOriURL);
                         print("aaaaaaaaaa");
-                        final res = await getRecommendation(
+                        final res = await getRecommendation(user.uid,
                             imageOriURL, _selectedImage!.path.split('/').last);
                         print("responseeee");
                         print(res.runtimeType);

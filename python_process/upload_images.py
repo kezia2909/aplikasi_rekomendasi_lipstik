@@ -14,7 +14,7 @@ config = {
 
 
 
-def uploadToFirebase(filename):
+def uploadToFirebase(userId, filename):
     print("start upload")
     firebase = pyrebase.initialize_app(config)
     print("config")
@@ -24,7 +24,8 @@ def uploadToFirebase(filename):
 
     # storage.child("new"+filename).put("./python_process/Images_New/"+filename)
     # url = storage.child("newimage_picker8651999042837450779.jpg").get_url(None)
-    storage.child("new_image").child("new"+filename).put("./mysite/Images_New/"+filename)
+    # storage.child("new_image").child("new"+filename).put("./mysite/Images_New/"+filename)
+    storage.child("new_image").child(userId).child("new"+filename).put("./python_process/Images_New/"+filename)
 
     # print(url)
     print("end upload")

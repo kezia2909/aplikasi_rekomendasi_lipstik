@@ -631,7 +631,8 @@ class _HomePageState extends State<HomePage> {
                     listDownloadPath = [];
                     isRecommendationLoading = true;
                   });
-                  imageOriURL = await DatabaseService.uploadImage(pickedImage!);
+                  imageOriURL =
+                      await DatabaseService.uploadImage(user.uid, pickedImage!);
                   print("upload");
                   DatabaseService.createOrUpdateListImagesOri(user.uid,
                       imageURL: imageOriURL);
