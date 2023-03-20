@@ -308,28 +308,17 @@ class _HomePageState extends State<HomePage> {
           content: const Text(
               'silahkan upload ulang gambar sesuai dengan panduan yang tersedia'),
           actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
+            ElevatedButton(
               child: const Text('Close'),
               onPressed: () {
-                print(_selectedImage);
-                // _selectedImage!.delete();
-
                 setState(() {
                   pickedImage = null;
                   _selectedImage = null;
                 });
-                print("deleteee");
-                print(_selectedImage);
                 Navigator.of(context).pop();
               },
             ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
+            ElevatedButton(
               child: const Text('Guidebook'),
               onPressed: () {
                 setState(() {
@@ -337,10 +326,44 @@ class _HomePageState extends State<HomePage> {
                   _selectedImage = null;
                 });
                 Navigator.of(context).pop();
+
                 Navigator.push(context,
                     MaterialPageRoute(builder: (context) => GuidebookPage()));
               },
             ),
+            // TextButton(
+            //   style: TextButton.styleFrom(
+            //     textStyle: Theme.of(context).textTheme.labelLarge,
+            //   ),
+            //   child: const Text('Close'),
+            //   onPressed: () {
+            //     print(_selectedImage);
+            //     // _selectedImage!.delete();
+
+            //     setState(() {
+            //       pickedImage = null;
+            //       _selectedImage = null;
+            //     });
+            //     print("deleteee");
+            //     print(_selectedImage);
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+            // TextButton(
+            //   style: TextButton.styleFrom(
+            //     textStyle: Theme.of(context).textTheme.labelLarge,
+            //   ),
+            //   child: const Text('Guidebook'),
+            //   onPressed: () {
+            //     setState(() {
+            //       pickedImage = null;
+            //       _selectedImage = null;
+            //     });
+            //     Navigator.of(context).pop();
+            //     Navigator.push(context,
+            //         MaterialPageRoute(builder: (context) => GuidebookPage()));
+            //   },
+            // ),
           ],
         );
       },
@@ -360,6 +383,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(children: <Widget>[
               Text(user.uid),
               Text(user.isAnonymous ? "ANONIM" : "USER"),
+
               const SizedBox(
                 height: 30,
               ),
