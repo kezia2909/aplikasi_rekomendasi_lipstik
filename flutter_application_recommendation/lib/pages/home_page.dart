@@ -28,6 +28,8 @@ List listFaceUrl = [];
 String testCategory = "category";
 int countFace = 0;
 
+List listSaved = [];
+
 List listFaceCategory = [];
 List listFaceArea = [];
 List<dynamic> faceArea = [];
@@ -235,6 +237,7 @@ class _HomePageState extends State<HomePage> {
       recommendationStatus = false;
       _selectedImage = File(pickedImage!.path);
       listFaceUrl = [];
+      listSaved = [];
       listFaceCategory = [];
       testLink = "..............";
       testCategory = "category";
@@ -258,6 +261,7 @@ class _HomePageState extends State<HomePage> {
       recommendationStatus = false;
       _selectedImage = File(pickedImage!.path);
       listFaceUrl = [];
+      listSaved = [];
       listFaceCategory = [];
       testLink = "..............";
       testCategory = "category";
@@ -677,6 +681,10 @@ class _HomePageState extends State<HomePage> {
                             print(val['listFaceUrl']);
                             listFaceUrl = val['listFaceUrl'];
                             countFace = listFaceUrl.length;
+
+                            listSaved = [
+                              for (var i = 0; i < countFace; i++) false
+                            ];
 
                             listFaceCategory = val['listFaceCategory'];
                             print(listFaceUrl);

@@ -31,6 +31,21 @@ class DatabaseService {
     });
   }
 
+  static CollectionReference historyRekomendasiCollection =
+      FirebaseFirestore.instance.collection('history_rekomendasi');
+
+  static Future<void> createHistoryRekomendasi(String userId,
+      {required String nameHistory,
+      required List listFaceUrl,
+      required List listFaceCategory}) async {
+    await historyRekomendasiCollection.doc().set({
+      "uid": FirebaseFirestore.instance.collection('users').doc(userId),
+      "nameHistory": nameHistory,
+      "listFaceUrl": FieldValue.arrayUnion(listFaceUrl),
+      "listFaceCategory": FieldValue.arrayUnion(listFaceCategory)
+    });
+  }
+
   //   Future<String> uploadImageNew(PlatformFile? file) async {
   //   try {
 

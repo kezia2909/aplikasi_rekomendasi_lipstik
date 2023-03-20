@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
 import 'package:flutter_application_recommendation/services/painter_lips_service.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
+import 'package:flutter_application_recommendation/services/database_service.dart';
 
 class ResultPage extends StatefulWidget {
   final User firebaseUser;
@@ -16,6 +17,57 @@ class ResultPage extends StatefulWidget {
 
 class _ResultPageState extends State<ResultPage> {
   late User user = widget.firebaseUser;
+  int tempIndex = 0;
+  TextEditingController textFieldNameHistoryController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    textFieldNameHistoryController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _displayTextInputDialog(
+      BuildContext context, bool statusSave) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('TextField in Dialog'),
+          content: TextField(
+            controller: textFieldNameHistoryController,
+            decoration: InputDecoration(hintText: "Text Field in Dialog"),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('CANCEL'),
+              onPressed: () {
+                Navigator.pop(context);
+                textFieldNameHistoryController.clear();
+              },
+            ),
+            ElevatedButton(
+              child: !statusSave ? Text('Save') : Text('Edit'),
+              onPressed: () {
+                print(textFieldNameHistoryController.text);
+                listSaved[tempIndex] = true;
+                Navigator.pop(context);
+                DatabaseService.createHistoryRekomendasi(user.uid,
+                    nameHistory: textFieldNameHistoryController.text,
+                    listFaceUrl: listFaceUrl,
+                    listFaceCategory: listFaceCategory);
+                textFieldNameHistoryController.clear();
+                setState(() {
+                  // textFieldNameHistoryController.
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +97,7 @@ class _ResultPageState extends State<ResultPage> {
                     height: 200.0,
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) async {
+                      tempIndex = index;
                       testLink = listFaceUrl[index];
                       testCategory = listFaceCategory[index];
 
@@ -161,8 +214,20 @@ class _ResultPageState extends State<ResultPage> {
                   ),
                 ),
                 (!user.isAnonymous)
-                    ? ElevatedButton(child: Text("Simpan"), onPressed: () {})
-                    : Container(),
+                    ? (!listSaved[tempIndex])
+                        ? ElevatedButton(
+                            child: Text("Simpan"),
+                            onPressed: () {
+                              _displayTextInputDialog(
+                                  context, listSaved[tempIndex]);
+                            })
+                        : ElevatedButton(
+                            child: Text("Edit"),
+                            onPressed: () {
+                              _displayTextInputDialog(
+                                  context, listSaved[tempIndex]);
+                            })
+                    : Container()
               ],
             ),
           ),
