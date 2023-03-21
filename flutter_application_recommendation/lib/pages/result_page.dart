@@ -20,6 +20,9 @@ class _ResultPageState extends State<ResultPage> {
   int tempIndex = 0;
   TextEditingController textFieldNameHistoryController =
       TextEditingController();
+  var snackBar = SnackBar(
+    content: const Text('Yay! A SnackBar!'),
+  );
 
   @override
   void dispose() {
@@ -50,41 +53,88 @@ class _ResultPageState extends State<ResultPage> {
             statusSave
                 ? ElevatedButton(
                     child: Text('Edit'),
-                    onPressed: () {
+                    onPressed: () async {
                       print(textFieldNameHistoryController.text);
                       listSaved[tempIndex] = true;
-                      Navigator.pop(context);
                       if (textFieldNameHistoryController.text !=
                           listNameHistory[tempIndex]) {
-                        DatabaseService.createHistoryRekomendasi(user.uid,
-                            nameHistory: textFieldNameHistoryController.text,
-                            faceUrl: listFaceUrl[tempIndex],
-                            faceCategory: listFaceCategory[tempIndex]);
-                        DatabaseService.deleteHistoryRekomendasi(user.uid,
-                            oldName: listNameHistory[tempIndex]);
-                      }
-
-                      setState(() {
+                        if (await DatabaseService.checkHistoryRekomendasi(
+                            userId: user.uid,
+                            nameHistory: textFieldNameHistoryController.text)) {
+                          snackBar = SnackBar(
+                            content: const Text(
+                                'Maaf history dengan nama tersebut sudah ada'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        } else {
+                          if (await DatabaseService.createHistoryRekomendasi(
+                              userId: user.uid,
+                              nameHistory: textFieldNameHistoryController.text,
+                              faceUrl: listFaceUrl[tempIndex],
+                              faceCategory: listFaceCategory[tempIndex])) {
+                            DatabaseService.deleteHistoryRekomendasi(user.uid,
+                                oldName: listNameHistory[tempIndex]);
+                            print("SNACKBARRRRRRRRRR");
+                            listSaved[tempIndex] = true;
+                            Navigator.pop(context);
+                            snackBar = SnackBar(
+                              content: const Text('History berhasil diedit'),
+                            );
+                            listNameHistory[tempIndex] =
+                                textFieldNameHistoryController.text;
+                          }
+                        }
+                      } else {
+                        Navigator.pop(context);
+                        snackBar = SnackBar(
+                          content: const Text('History berhasil diedit'),
+                        );
                         listNameHistory[tempIndex] =
                             textFieldNameHistoryController.text;
-                        textFieldNameHistoryController.clear();
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                      textFieldNameHistoryController.clear();
+                      setState(() {
                         // textFieldNameHistoryController.
                       });
                     },
                   )
                 : ElevatedButton(
                     child: Text('Save'),
-                    onPressed: () {
+                    onPressed: () async {
                       print(textFieldNameHistoryController.text);
-                      listSaved[tempIndex] = true;
+
                       listNameHistory[tempIndex] =
                           textFieldNameHistoryController.text;
-                      Navigator.pop(context);
-                      DatabaseService.createHistoryRekomendasi(user.uid,
-                          nameHistory: textFieldNameHistoryController.text,
-                          faceUrl: listFaceUrl[tempIndex],
-                          faceCategory: listFaceCategory[tempIndex]);
+
+                      if (await DatabaseService.checkHistoryRekomendasi(
+                          userId: user.uid,
+                          nameHistory: textFieldNameHistoryController.text)) {
+                        snackBar = SnackBar(
+                          content: const Text(
+                              'Maaf history dengan nama tersebut sudah ada'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        if (await DatabaseService.createHistoryRekomendasi(
+                            userId: user.uid,
+                            nameHistory: textFieldNameHistoryController.text,
+                            faceUrl: listFaceUrl[tempIndex],
+                            faceCategory: listFaceCategory[tempIndex])) {
+                          print("SNACKBARRRRRRRRRR");
+                          listSaved[tempIndex] = true;
+                          Navigator.pop(context);
+                          snackBar = SnackBar(
+                            content: const Text('History berhasil dibuat'),
+                          );
+                        }
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
                       textFieldNameHistoryController.clear();
+
+                      print("NOOOOOOOOOO");
                       setState(() {});
                     },
                   ),

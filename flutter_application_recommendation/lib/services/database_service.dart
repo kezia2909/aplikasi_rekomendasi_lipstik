@@ -34,7 +34,7 @@ class DatabaseService {
   static CollectionReference historyRekomendasiCollection =
       FirebaseFirestore.instance.collection('history_rekomendasi');
 
-  static Future<void> createHistoryRekomendasi(String userId,
+  static Future<void> createHistoryRekomendasiOld(String userId,
       {required String nameHistory,
       required String faceUrl,
       required String faceCategory}) async {
@@ -45,6 +45,47 @@ class DatabaseService {
       "FaceCategory": faceCategory
     });
   }
+
+  static Future<bool> checkHistoryRekomendasi(
+          {required String userId, required String nameHistory}) async =>
+      await historyRekomendasiCollection
+          .doc(userId)
+          .collection("detail")
+          .doc(nameHistory)
+          .get()
+          .then(
+        (result) {
+          print("ADAAAAAa");
+          print(result);
+          print(result.exists);
+          return result.exists;
+        },
+      ).catchError((error) {
+        print("TIDAK ADAAA");
+        return false;
+      });
+
+  static Future<bool> createHistoryRekomendasi(
+          {required String userId,
+          required String nameHistory,
+          required String faceUrl,
+          required String faceCategory}) async =>
+      await historyRekomendasiCollection
+          .doc(userId)
+          .collection("detail")
+          .doc(nameHistory)
+          .set({
+        "uid": FirebaseFirestore.instance.collection('users').doc(userId),
+        "nameHistory": nameHistory,
+        "FaceUrl": faceUrl,
+        "FaceCategory": faceCategory
+      }).then(
+        (result) {
+          return true;
+        },
+      ).catchError((error) {
+        return false;
+      });
 
   // static Future<void> editHistoryRekomendasi(
   //     String userId, String faceUrl, String faceCategory,
@@ -59,7 +100,12 @@ class DatabaseService {
   // }
   static Future<void> deleteHistoryRekomendasi(String userId,
       {required String oldName}) async {
-    await historyRekomendasiCollection.doc("${userId}_$oldName").delete();
+    await historyRekomendasiCollection
+        .doc(userId)
+        .collection("detail")
+        .doc(oldName)
+        .delete();
+    // await historyRekomendasiCollection.doc("${userId}_$oldName").delete();
   }
 
   //   Future<String> uploadImageNew(PlatformFile? file) async {
