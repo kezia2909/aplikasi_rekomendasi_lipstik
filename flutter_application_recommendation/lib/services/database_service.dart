@@ -46,11 +46,20 @@ class DatabaseService {
     });
   }
 
-  static Stream<QuerySnapshot> getHistoryRekomendasi({required String userId}) {
+  static Stream<QuerySnapshot> getHistoryRekomendasi(String nameSearch,
+      {required String userId}) {
+    if (nameSearch == "") {
+      return historyRekomendasiCollection
+          .doc(userId)
+          .collection("detail")
+          .snapshots();
+    }
+
     return historyRekomendasiCollection
         .doc(userId)
         .collection("detail")
-        .snapshots();
+        .orderBy("nameHistory")
+        .startAt([nameSearch]).endAt([nameSearch + '\uf8ff']).snapshots();
   }
 
   static Future<bool> checkHistoryRekomendasi(

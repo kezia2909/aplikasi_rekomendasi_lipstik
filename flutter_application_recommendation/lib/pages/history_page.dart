@@ -44,6 +44,29 @@ class _HistoryPageState extends State<HistoryPage> {
     "Zulu"
   ];
 
+  final _searchHistoryController = TextEditingController();
+  Stream<QuerySnapshot<Object?>> onSearch() {
+    setState(() {});
+    return DatabaseService.getHistoryRekomendasi(_searchHistoryController.text,
+        userId: user.uid);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _searchHistoryController.addListener(onSearch);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _searchHistoryController.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,11 +95,15 @@ class _HistoryPageState extends State<HistoryPage> {
                 ],
               ),
               TextField(
-                obscureText: true,
+                controller: _searchHistoryController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'cari history',
                 ),
+                onChanged: (String value) {
+                  onSearch();
+                  // setState(() {});
+                },
               ),
               // Expanded(
               //   child: ListView.builder(
@@ -102,39 +129,43 @@ class _HistoryPageState extends State<HistoryPage> {
               // ),
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
-                    stream:
-                        DatabaseService.getHistoryRekomendasi(userId: user.uid),
+                    stream: onSearch(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Text("Data Error");
                       } else if (snapshot.hasData || snapshot.data != null) {
-                        return ListView.separated(
-                          itemBuilder: (context, index) {
-                            DocumentSnapshot historyData =
-                                snapshot.data!.docs[index];
-                            String name = historyData['nameHistory'];
-                            return Container(
-                              color:
-                                  (index % 2 == 0) ? Colors.grey : Colors.white,
-                              padding: EdgeInsets.all(10.0),
-                              child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(name),
-                                    Row(
-                                      children: [
-                                        Icon(Icons.info_rounded),
-                                        Icon(Icons.delete)
-                                      ],
-                                    ),
-                                  ]),
-                            );
-                          },
-                          separatorBuilder: (context, index) =>
-                              SizedBox(height: 8.0),
-                          itemCount: snapshot.data!.docs.length,
-                        );
+                        if (snapshot.data!.size == 0) {
+                          return Text("Data Not Found");
+                        } else {
+                          return ListView.separated(
+                            itemBuilder: (context, index) {
+                              DocumentSnapshot historyData =
+                                  snapshot.data!.docs[index];
+                              String name = historyData['nameHistory'];
+                              return Container(
+                                color: (index % 2 == 0)
+                                    ? Colors.grey
+                                    : Colors.white,
+                                padding: EdgeInsets.all(10.0),
+                                child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(name),
+                                      Row(
+                                        children: [
+                                          Icon(Icons.info_rounded),
+                                          Icon(Icons.delete)
+                                        ],
+                                      ),
+                                    ]),
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                SizedBox(height: 8.0),
+                            itemCount: snapshot.data!.docs.length,
+                          );
+                        }
                       }
                       return const Center(
                         child: CircularProgressIndicator(
