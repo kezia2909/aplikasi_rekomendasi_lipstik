@@ -29,6 +29,7 @@ String testCategory = "category";
 int countFace = 0;
 
 List listSaved = [];
+List listNameHistory = [];
 
 List listFaceCategory = [];
 List listFaceArea = [];
@@ -100,7 +101,7 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  String pathNgrok = "https://511a-140-213-57-125.ap.ngrok.io/face_detection";
+  String pathNgrok = "https://779d-112-215-172-182.ap.ngrok.io/face_detection";
   // String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
@@ -238,6 +239,7 @@ class _HomePageState extends State<HomePage> {
       _selectedImage = File(pickedImage!.path);
       listFaceUrl = [];
       listSaved = [];
+      listNameHistory = [];
       listFaceCategory = [];
       testLink = "..............";
       testCategory = "category";
@@ -262,6 +264,7 @@ class _HomePageState extends State<HomePage> {
       _selectedImage = File(pickedImage!.path);
       listFaceUrl = [];
       listSaved = [];
+      listNameHistory = [];
       listFaceCategory = [];
       testLink = "..............";
       testCategory = "category";
@@ -684,6 +687,9 @@ class _HomePageState extends State<HomePage> {
 
                             listSaved = [
                               for (var i = 0; i < countFace; i++) false
+                            ];
+                            listNameHistory = [
+                              for (var i = 0; i < countFace; i++) ""
                             ];
 
                             listFaceCategory = val['listFaceCategory'];

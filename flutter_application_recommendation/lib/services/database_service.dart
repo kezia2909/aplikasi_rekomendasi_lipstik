@@ -36,14 +36,30 @@ class DatabaseService {
 
   static Future<void> createHistoryRekomendasi(String userId,
       {required String nameHistory,
-      required List listFaceUrl,
-      required List listFaceCategory}) async {
-    await historyRekomendasiCollection.doc().set({
+      required String faceUrl,
+      required String faceCategory}) async {
+    await historyRekomendasiCollection.doc("${userId}_$nameHistory").set({
       "uid": FirebaseFirestore.instance.collection('users').doc(userId),
       "nameHistory": nameHistory,
-      "listFaceUrl": FieldValue.arrayUnion(listFaceUrl),
-      "listFaceCategory": FieldValue.arrayUnion(listFaceCategory)
+      "FaceUrl": faceUrl,
+      "FaceCategory": faceCategory
     });
+  }
+
+  // static Future<void> editHistoryRekomendasi(
+  //     String userId, String faceUrl, String faceCategory,
+  //     {required String oldName, required String nameHistory}) async {
+  //   await historyRekomendasiCollection.doc("${userId}_$nameHistory").update({
+  //     "uid": FirebaseFirestore.instance.collection('users').doc(userId),
+  //     "nameHistory": nameHistory,
+  //     "FaceUrl": faceUrl,
+  //     "FaceCategory": faceCategory
+  //   });
+  //   historyRekomendasiCollection.doc("${userId}_$oldName").delete();
+  // }
+  static Future<void> deleteHistoryRekomendasi(String userId,
+      {required String oldName}) async {
+    await historyRekomendasiCollection.doc("${userId}_$oldName").delete();
   }
 
   //   Future<String> uploadImageNew(PlatformFile? file) async {

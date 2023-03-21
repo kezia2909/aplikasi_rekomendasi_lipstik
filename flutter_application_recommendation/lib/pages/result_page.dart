@@ -47,22 +47,47 @@ class _ResultPageState extends State<ResultPage> {
                 textFieldNameHistoryController.clear();
               },
             ),
-            ElevatedButton(
-              child: !statusSave ? Text('Save') : Text('Edit'),
-              onPressed: () {
-                print(textFieldNameHistoryController.text);
-                listSaved[tempIndex] = true;
-                Navigator.pop(context);
-                DatabaseService.createHistoryRekomendasi(user.uid,
-                    nameHistory: textFieldNameHistoryController.text,
-                    listFaceUrl: listFaceUrl,
-                    listFaceCategory: listFaceCategory);
-                textFieldNameHistoryController.clear();
-                setState(() {
-                  // textFieldNameHistoryController.
-                });
-              },
-            ),
+            statusSave
+                ? ElevatedButton(
+                    child: Text('Edit'),
+                    onPressed: () {
+                      print(textFieldNameHistoryController.text);
+                      listSaved[tempIndex] = true;
+                      Navigator.pop(context);
+                      if (textFieldNameHistoryController.text !=
+                          listNameHistory[tempIndex]) {
+                        DatabaseService.createHistoryRekomendasi(user.uid,
+                            nameHistory: textFieldNameHistoryController.text,
+                            faceUrl: listFaceUrl[tempIndex],
+                            faceCategory: listFaceCategory[tempIndex]);
+                        DatabaseService.deleteHistoryRekomendasi(user.uid,
+                            oldName: listNameHistory[tempIndex]);
+                      }
+
+                      setState(() {
+                        listNameHistory[tempIndex] =
+                            textFieldNameHistoryController.text;
+                        textFieldNameHistoryController.clear();
+                        // textFieldNameHistoryController.
+                      });
+                    },
+                  )
+                : ElevatedButton(
+                    child: Text('Save'),
+                    onPressed: () {
+                      print(textFieldNameHistoryController.text);
+                      listSaved[tempIndex] = true;
+                      listNameHistory[tempIndex] =
+                          textFieldNameHistoryController.text;
+                      Navigator.pop(context);
+                      DatabaseService.createHistoryRekomendasi(user.uid,
+                          nameHistory: textFieldNameHistoryController.text,
+                          faceUrl: listFaceUrl[tempIndex],
+                          faceCategory: listFaceCategory[tempIndex]);
+                      textFieldNameHistoryController.clear();
+                      setState(() {});
+                    },
+                  ),
           ],
         );
       },
@@ -224,6 +249,8 @@ class _ResultPageState extends State<ResultPage> {
                         : ElevatedButton(
                             child: Text("Edit"),
                             onPressed: () {
+                              textFieldNameHistoryController.text =
+                                  listNameHistory[tempIndex];
                               _displayTextInputDialog(
                                   context, listSaved[tempIndex]);
                             })
