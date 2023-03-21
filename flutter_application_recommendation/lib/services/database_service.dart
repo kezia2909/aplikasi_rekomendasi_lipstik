@@ -46,6 +46,13 @@ class DatabaseService {
     });
   }
 
+  static Stream<QuerySnapshot> getHistoryRekomendasi({required String userId}) {
+    return historyRekomendasiCollection
+        .doc(userId)
+        .collection("detail")
+        .snapshots();
+  }
+
   static Future<bool> checkHistoryRekomendasi(
           {required String userId, required String nameHistory}) async =>
       await historyRekomendasiCollection

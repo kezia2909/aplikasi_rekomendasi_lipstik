@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/main.dart';
 import 'package:flutter_application_recommendation/pages/guidebook_page.dart';
+import 'package:flutter_application_recommendation/pages/history_page.dart';
 import 'package:flutter_application_recommendation/pages/result_page.dart';
 import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
@@ -101,7 +102,7 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  String pathNgrok = "https://779d-112-215-172-182.ap.ngrok.io/face_detection";
+  String pathNgrok = "https://269e-112-215-172-182.ap.ngrok.io/face_detection";
   // String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
@@ -389,6 +390,29 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.fromLTRB(
                 20, MediaQuery.of(context).size.height * 0.1, 20, 0),
             child: Column(children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () {
+                      // Navigator.pop(context);
+                    },
+                  ),
+                  (!user.isAnonymous)
+                      ? IconButton(
+                          icon: Icon(Icons.history),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        HistoryPage(firebaseUser: user)));
+                          },
+                        )
+                      : Container(),
+                ],
+              ),
               Text(user.uid),
               Text(user.isAnonymous ? "ANONIM" : "USER"),
 
