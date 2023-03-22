@@ -143,6 +143,34 @@ class DatabaseService {
         print(error);
         return false;
       });
+
+  static Future<bool> resetHistoryRekomendasi(String userId) async =>
+      await historyRekomendasiCollection
+          .doc(userId)
+          .collection("detail")
+          .get()
+          .then(
+        (result) {
+          for (DocumentSnapshot ds in result.docs) {
+            ds.reference.delete();
+          }
+          return true;
+        },
+      ).catchError((error) {
+        print("TIDAK ADAAA");
+        return false;
+      });
+  // await historyRekomendasiCollection.doc(userId).delete().then(
+  //   (result) {
+  //     print(userId);
+  //     print("reset oke");
+  //     return true;
+  //   },
+  // ).catchError((error) {
+  //   print("error");
+  //   print(error);
+  //   return false;
+  // });
   // await historyRekomendasiCollection.doc("${userId}_$oldName").delete();
 
   // static Future<void> deleteHistoryRekomendasi(String userId,

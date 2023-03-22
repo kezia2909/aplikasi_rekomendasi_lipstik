@@ -203,8 +203,8 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  String pathNgrok = "https://16b7-140-213-40-19.ap.ngrok.io/face_detection";
-  // String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
+  // String pathNgrok = "https://16b7-140-213-40-19.ap.ngrok.io/face_detection";
+  String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
   PickedFile? pickedImage;

@@ -99,6 +99,42 @@ class _HistoryPageState extends State<HistoryPage> {
     );
   }
 
+  Future<void> _resetHistory(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Yakin mau reset?'),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('CANCEL'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            ElevatedButton(
+              child: Text('DELETE'),
+              onPressed: () async {
+                if (await DatabaseService.resetHistoryRekomendasi(user.uid)) {
+                  snackBar = SnackBar(
+                    content: Text('History berhasil direset'),
+                  );
+                } else {
+                  snackBar = SnackBar(
+                    content: Text('History gagal direset'),
+                  );
+                }
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -138,7 +174,9 @@ class _HistoryPageState extends State<HistoryPage> {
                   ),
                   ElevatedButton(
                     child: Text("Reset History"),
-                    onPressed: () {},
+                    onPressed: () {
+                      _resetHistory(context);
+                    },
                   ),
                 ],
               ),
@@ -256,7 +294,6 @@ class _HistoryPageState extends State<HistoryPage> {
                                                     lipColor);
                                               }
                                             }
-
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
