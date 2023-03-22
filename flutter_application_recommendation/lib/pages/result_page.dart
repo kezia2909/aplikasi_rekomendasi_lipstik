@@ -74,7 +74,7 @@ class _ResultPageState extends State<ResultPage> {
                               faceUrl: listFaceUrl[tempIndex],
                               faceCategory: listFaceCategory[tempIndex])) {
                             DatabaseService.deleteHistoryRekomendasi(user.uid,
-                                oldName: listNameHistory[tempIndex]);
+                                nameHistory: listNameHistory[tempIndex]);
                             print("SNACKBARRRRRRRRRR");
                             listSaved[tempIndex] = true;
                             Navigator.pop(context);

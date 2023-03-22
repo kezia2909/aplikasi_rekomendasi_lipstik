@@ -58,6 +58,47 @@ class _HistoryPageState extends State<HistoryPage> {
         userId: user.uid);
   }
 
+  var snackBar = SnackBar(
+    content: const Text('Yay! A SnackBar!'),
+  );
+
+  Future<void> _deleteHistory(BuildContext context, String name) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Yakin mau delete?'),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('CANCEL'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            ElevatedButton(
+              child: Text('DELETE'),
+              onPressed: () async {
+                if (await DatabaseService.deleteHistoryRekomendasi(user.uid,
+                    nameHistory: name)) {
+                  snackBar = SnackBar(
+                    content: Text('History $name berhasil didelete'),
+                  );
+                } else {
+                  snackBar = SnackBar(
+                    content: Text('History $name gagal didelete'),
+                  );
+                }
+                Navigator.pop(context);
+
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -229,7 +270,12 @@ class _HistoryPageState extends State<HistoryPage> {
                                             );
                                           },
                                         ),
-                                        Icon(Icons.delete)
+                                        IconButton(
+                                          icon: Icon(Icons.delete),
+                                          onPressed: () {
+                                            _deleteHistory(context, name);
+                                          },
+                                        ),
                                       ],
                                     ),
                                   ],

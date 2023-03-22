@@ -126,16 +126,33 @@ class DatabaseService {
   //   });
   //   historyRekomendasiCollection.doc("${userId}_$oldName").delete();
   // }
-  static Future<void> deleteHistoryRekomendasi(String userId,
-      {required String oldName}) async {
-    await historyRekomendasiCollection
-        .doc(userId)
-        .collection("detail")
-        .doc(oldName)
-        .delete();
-    // await historyRekomendasiCollection.doc("${userId}_$oldName").delete();
-  }
+  static Future<bool> deleteHistoryRekomendasi(String userId,
+          {required String nameHistory}) async =>
+      await historyRekomendasiCollection
+          .doc(userId)
+          .collection("detail")
+          .doc(nameHistory)
+          .delete()
+          .then(
+        (result) {
+          print("oke");
+          return true;
+        },
+      ).catchError((error) {
+        print("error");
+        print(error);
+        return false;
+      });
+  // await historyRekomendasiCollection.doc("${userId}_$oldName").delete();
 
+  // static Future<void> deleteHistoryRekomendasi(String userId,
+  //     {required String oldName}) async {
+  //   await historyRekomendasiCollection
+  //       .doc(userId)
+  //       .collection("detail")
+  //       .doc(oldName)
+  //       .delete();
+  // }
   //   Future<String> uploadImageNew(PlatformFile? file) async {
   //   try {
 
