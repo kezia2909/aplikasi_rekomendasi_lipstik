@@ -58,5 +58,21 @@ class AuthServices {
     _auth.signOut();
   }
 
+  // static Future<void> anonymousLogInEmail({
+  //   required User user,
+  //   required String email,
+  //   required String password,
+  // }) async {
+  //   try {
+  //     await Future.wait([
+  //       user.updateEmail(email),
+  //       user.updatePassword(password),
+  //     ]);
+  //   } catch (e) {
+  //     print(e.toString());
+  //     return null;
+  //   }
+  // }
+
   static Stream<User?> get firebaseUserStream => _auth.authStateChanges();
 }

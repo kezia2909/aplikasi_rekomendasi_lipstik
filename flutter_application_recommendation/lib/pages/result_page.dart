@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
+import 'package:flutter_application_recommendation/pages/login_from_anonymous_page.dart';
+import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/services/painter_lips_service.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
@@ -23,6 +25,7 @@ class _ResultPageState extends State<ResultPage> {
   var snackBar = SnackBar(
     content: const Text('Yay! A SnackBar!'),
   );
+  String temp = "baru";
 
   @override
   void dispose() {
@@ -31,8 +34,7 @@ class _ResultPageState extends State<ResultPage> {
     super.dispose();
   }
 
-  Future<void> _displayTextInputDialog(
-      BuildContext context, bool statusSave) async {
+  Future<void> modalSaveEditLogin(BuildContext context, bool statusSave) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -156,6 +158,53 @@ class _ResultPageState extends State<ResultPage> {
     );
   }
 
+  Future<void> modalSaveEditNotLogin(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+            title: Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            content: Text('Login/Daftar untuk dapat menyimpan data'),
+            // content: TextField(
+            //   controller: textFieldNameHistoryController,
+            //   decoration: InputDecoration(hintText: "Text Field in Dialog"),
+            // ),
+            actions: <Widget>[
+              ElevatedButton(
+                child: Text('LOGIN'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  user = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LoginFromAnonymousPage(
+                                firebaseUser: user,
+                              )));
+                  setState(() {});
+                  // user = Provider.of<User?>(context);
+
+                  setState(() {});
+                },
+              ),
+              ElevatedButton(
+                child: Text('DAFTAR'),
+                onPressed: () {
+                  // Navigator.pop(context);
+                },
+              ),
+            ]);
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,6 +227,10 @@ class _ResultPageState extends State<ResultPage> {
                   ),
                 ),
                 Text("Pilihan Warna Untukmu"),
+                Text(user.uid),
+                Text(temp),
+                Text(user.isAnonymous ? "ANONIM" : "USER"),
+
                 Text("${countFace} face detected"),
                 CarouselSlider(
                   options: CarouselOptions(
@@ -300,23 +353,41 @@ class _ResultPageState extends State<ResultPage> {
                     }).toList(),
                   ),
                 ),
-                (!user.isAnonymous)
-                    ? (!listSaved[tempIndex])
-                        ? ElevatedButton(
-                            child: Text("Simpan"),
-                            onPressed: () {
-                              _displayTextInputDialog(
-                                  context, listSaved[tempIndex]);
-                            })
-                        : ElevatedButton(
-                            child: Text("Edit"),
-                            onPressed: () {
-                              textFieldNameHistoryController.text =
-                                  listNameHistory[tempIndex];
-                              _displayTextInputDialog(
-                                  context, listSaved[tempIndex]);
-                            })
-                    : Container()
+                // gak login gak bisa simpan
+                // (!user.isAnonymous)
+                //     ? (!listSaved[tempIndex])
+                //         ? ElevatedButton(
+                //             child: Text("Simpan"),
+                //             onPressed: () {
+                //               modalSaveEditLogin(
+                //                   context, listSaved[tempIndex]);
+                //             })
+                //         : ElevatedButton(
+                //             child: Text("Edit"),
+                //             onPressed: () {
+                //               textFieldNameHistoryController.text =
+                //                   listNameHistory[tempIndex];
+                //               modalSaveEditLogin(
+                //                   context, listSaved[tempIndex]);
+                //             })
+                //     : Container()
+                (!listSaved[tempIndex])
+                    ? ElevatedButton(
+                        child: Text("Simpan"),
+                        onPressed: () {
+                          if (!user.isAnonymous) {
+                            modalSaveEditLogin(context, listSaved[tempIndex]);
+                          } else {
+                            modalSaveEditNotLogin(context);
+                          }
+                        })
+                    : ElevatedButton(
+                        child: Text("Edit"),
+                        onPressed: () {
+                          textFieldNameHistoryController.text =
+                              listNameHistory[tempIndex];
+                          modalSaveEditLogin(context, listSaved[tempIndex]);
+                        }),
               ],
             ),
           ),

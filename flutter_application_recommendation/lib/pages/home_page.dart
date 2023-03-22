@@ -191,9 +191,13 @@ Future<void> download(String _url) async {
   print(await "END DOWNLOADDDD");
 }
 
+// late User global_firebaseUser;
+
 class HomePage extends StatefulWidget {
   final User firebaseUser;
   const HomePage({Key? key, required this.firebaseUser}) : super(key: key);
+  // const HomePage({Key? key}) : super(key: key);
+
   @override
   State<HomePage> createState() => _HomePageState();
 }
@@ -225,6 +229,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void setState(ui.VoidCallback fn) {
     // TODO: implement setState
+    // global_firebaseUser = user;
     kIsWeb ? check_using_lips = true : check_using_lips = false;
     super.setState(fn);
   }
