@@ -79,14 +79,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                         image: NetworkImage(faceUrl), fit: BoxFit.cover),
                   ),
                   child: kIsWeb
-                      ? CustomPaint(
-                          painter: LipsPainter(
-                              lips: lipsArea,
-                              lipsLabel: lipsLabel,
-                              lipsCluster: lipsCluster,
-                              face: faceArea,
-                              color: lipColor),
-                        )
+                      ? Container()
                       : CustomPaint(
                           painter: FaceDetectorPainter(
                               faceMLKit, faceArea, lipColor),

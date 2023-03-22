@@ -83,9 +83,9 @@ class DatabaseService {
       });
 
   static Future<bool> createHistoryRekomendasi(
-          List<dynamic> lipsArea,
-          List<dynamic> lipsLabel,
-          List<dynamic> lipsCluster,
+          // List<dynamic> lipsArea,
+          // List<dynamic> lipsLabel,
+          // List<dynamic> lipsCluster,
           List<dynamic> faceArea,
           {required String userId,
           required String nameHistory,
@@ -100,9 +100,9 @@ class DatabaseService {
         "nameHistory": nameHistory,
         "faceUrl": faceUrl,
         "faceCategory": faceCategory,
-        "lipsArea": lipsArea,
-        "lipsLabel": lipsLabel,
-        "lipsCluster": lipsCluster,
+        // "lipsArea": lipsArea,
+        // "lipsLabel": lipsLabel,
+        // "lipsCluster": lipsCluster,
         "faceArea": faceArea,
       }).then(
         (result) {

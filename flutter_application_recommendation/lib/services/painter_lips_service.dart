@@ -36,6 +36,8 @@ class LipsPainter extends CustomPainter {
       ..color = color;
 
     var temp_count;
+    print("MULAIII");
+    print(lips.length);
 
     for (var i = 0; i < lips.length; i++) {
       final x = lips[i][0].toDouble() * scaleW;
@@ -73,12 +75,16 @@ class LipsPainter extends CustomPainter {
       ..strokeWidth = 2.0
       ..color = color;
 
-    // print("CANVASSSS");
-    for (var i = 0; i < lips.length; i++) {
-      canvas.drawRect(rects[i], paint);
-    }
-    // print("CANVASSS ENDD");
-    // print("ENDD PAINTERRR");
+    print("CANVASSSS");
+    // for (var i = 0; i < lips.length; i++) {
+    //   print("canvas-$i");
+    //   print(rects[i]);
+
+    //   canvas.drawRect(rects[i], paint);
+    //   print("oke");
+    // }
+    print("CANVASSS ENDD");
+    print("ENDD PAINTERRR");
 
     // Paint paint_0 = Paint()
     //   ..color = Color.fromARGB(255, 33, 150, 243)

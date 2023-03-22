@@ -250,6 +250,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                                 "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCAAAAAAAAAAAaaaa==================BBBBBBBBBBB");
                                             getLipstik(category);
                                             if (kIsWeb) {
+                                              print("WEBBB");
                                             } else {
                                               print("start download");
                                               await download(url);
