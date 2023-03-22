@@ -68,6 +68,7 @@ class _ResultPageState extends State<ResultPage> {
                           ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         } else {
                           if (await DatabaseService.createHistoryRekomendasi(
+                              lipsArea, lipsLabel, lipsCluster, faceArea,
                               userId: user.uid,
                               nameHistory: textFieldNameHistoryController.text,
                               faceUrl: listFaceUrl[tempIndex],
@@ -117,7 +118,10 @@ class _ResultPageState extends State<ResultPage> {
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
+                        print("mlkit");
+                        print(faceMLKit.toString());
                         if (await DatabaseService.createHistoryRekomendasi(
+                            lipsArea, lipsLabel, lipsCluster, faceArea,
                             userId: user.uid,
                             nameHistory: textFieldNameHistoryController.text,
                             faceUrl: listFaceUrl[tempIndex],

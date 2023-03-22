@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_recommendation/pages/detail_history_page.dart';
+import 'package:flutter_application_recommendation/pages/home_page.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
+import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
 class HistoryPage extends StatefulWidget {
   final User firebaseUser;
@@ -142,23 +149,91 @@ class _HistoryPageState extends State<HistoryPage> {
                               DocumentSnapshot historyData =
                                   snapshot.data!.docs[index];
                               String name = historyData['nameHistory'];
+                              String url = historyData['faceUrl'];
+                              String category = historyData['faceCategory'];
+                              List<dynamic> area = historyData['faceArea'];
                               return Container(
                                 color: (index % 2 == 0)
                                     ? Colors.grey
                                     : Colors.white,
                                 padding: EdgeInsets.all(10.0),
                                 child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(name),
-                                      Row(
-                                        children: [
-                                          Icon(Icons.info_rounded),
-                                          Icon(Icons.delete)
-                                        ],
-                                      ),
-                                    ]),
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(name),
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                          icon: Icon(Icons.info_rounded),
+                                          onPressed: () async {
+                                            print(
+                                                "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCAAAAAAAAAAAaaaa==================BBBBBBBBBBB");
+                                            getLipstik(category);
+                                            if (kIsWeb) {
+                                            } else {
+                                              print("start download");
+                                              await download(url);
+                                              setState(() {});
+
+                                              print("selesaii downloadd");
+                                              print(listDownloadPath);
+
+                                              print("detecttt");
+                                              var counterIndex = 0;
+                                              // WEB GAK BISA
+                                              for (String path
+                                                  in listDownloadPath) {
+                                                print("path");
+                                                print(path);
+                                                String tempPath =
+                                                    listDownloadPath[
+                                                        counterIndex];
+                                                print("temp path");
+                                                print(tempPath);
+                                                print("list face");
+                                                print(listFaceArea);
+                                                print(counterIndex);
+                                                faceArea = area;
+                                                print(faceArea);
+                                                // faceArea = await listFaceArea[
+                                                //     counterIndex];
+
+                                                await processImage(
+                                                    InputImage.fromFilePath(
+                                                        File(tempPath).path),
+                                                    faceArea);
+                                                counterIndex++;
+
+                                                // SET FIRST
+                                                faceMLKit = listFaceMLKit[0];
+                                                // sizeAbsolute = listSizeAbsolute[0];
+                                                // WEB GAK BISAprint("MASUK PAINTER");
+                                                painter = FaceDetectorPainter(
+                                                    faceMLKit,
+                                                    faceArea,
+                                                    lipColor);
+                                              }
+                                            }
+
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DetailHistoryPage(
+                                                  nameHistory: name,
+                                                  faceUrl: url,
+                                                  faceCategory: category,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        Icon(Icons.delete)
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               );
                             },
                             separatorBuilder: (context, index) =>

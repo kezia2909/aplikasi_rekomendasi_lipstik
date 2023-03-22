@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,8 +42,8 @@ class DatabaseService {
     await historyRekomendasiCollection.doc("${userId}_$nameHistory").set({
       "uid": FirebaseFirestore.instance.collection('users').doc(userId),
       "nameHistory": nameHistory,
-      "FaceUrl": faceUrl,
-      "FaceCategory": faceCategory
+      "faceUrl": faceUrl,
+      "faceCategory": faceCategory,
     });
   }
 
@@ -82,6 +83,10 @@ class DatabaseService {
       });
 
   static Future<bool> createHistoryRekomendasi(
+          List<dynamic> lipsArea,
+          List<dynamic> lipsLabel,
+          List<dynamic> lipsCluster,
+          List<dynamic> faceArea,
           {required String userId,
           required String nameHistory,
           required String faceUrl,
@@ -93,13 +98,20 @@ class DatabaseService {
           .set({
         "uid": FirebaseFirestore.instance.collection('users').doc(userId),
         "nameHistory": nameHistory,
-        "FaceUrl": faceUrl,
-        "FaceCategory": faceCategory
+        "faceUrl": faceUrl,
+        "faceCategory": faceCategory,
+        "lipsArea": lipsArea,
+        "lipsLabel": lipsLabel,
+        "lipsCluster": lipsCluster,
+        "faceArea": faceArea,
       }).then(
         (result) {
+          print("oke");
           return true;
         },
       ).catchError((error) {
+        print("error");
+        print(error);
         return false;
       });
 
@@ -109,8 +121,8 @@ class DatabaseService {
   //   await historyRekomendasiCollection.doc("${userId}_$nameHistory").update({
   //     "uid": FirebaseFirestore.instance.collection('users').doc(userId),
   //     "nameHistory": nameHistory,
-  //     "FaceUrl": faceUrl,
-  //     "FaceCategory": faceCategory
+  //     "faceUrl": faceUrl,
+  //     "faceCategory": faceCategory
   //   });
   //   historyRekomendasiCollection.doc("${userId}_$oldName").delete();
   // }

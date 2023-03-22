@@ -58,6 +58,7 @@ List<Face> faceMLKit = [];
 var painter;
 
 void getLipstik(String kategoriKulit) {
+  print("START GET LIPSTIK");
   var tempMap = mapping_lists.where(
     (element) {
       if (element['id'] == kategoriKulit) {
@@ -88,6 +89,106 @@ void getLipstik(String kategoriKulit) {
   buffer.write(hexString.replaceFirst('#', ''));
   lipColor = Color(int.parse(buffer.toString(), radix: 16));
   currentIndex = 0;
+
+  print(testChosenLipstik);
+}
+
+// mlkit
+final FaceDetector _faceDetector = FaceDetector(
+    options: FaceDetectorOptions(
+  enableContours: true,
+  enableClassification: true,
+));
+String? _textMLKIT = "MLKIT";
+List listDownloadPath = [];
+
+Future<void> processImage(
+    final InputImage inputImage, List<dynamic> face) async {
+  print("START PROSEESSS DETECTTTT");
+  final faces = await _faceDetector.processImage(inputImage);
+  print("- FACES");
+  String text = "faces found: ${faces.length}\n\n";
+  print("- TEXT");
+  for (final face in faces) {
+    text += "face: ${face.boundingBox}\n\n";
+  }
+  print("- FOR");
+  listFaceMLKit.add(faces);
+  // listSizeAbsolute.add(inputImage.inputImageData!.size);
+
+  _textMLKIT = text;
+
+  // print("MASUK PAINTER");
+  // final painter = FaceDetectorPainter(faces, face
+  //     // inputImage.inputImageData!.size,
+  //     // inputImage.inputImageData!.imageRotation,
+  //     );
+  // _customPaint = CustomPaint(
+  //   painter: painter,
+  // );
+  // if (inputImage.inputImageData?.size != null) {
+  //   print("MASUK PAINTER");
+  //   final painter = FaceDetectorPainter(faces, face
+  //       // inputImage.inputImageData!.size,
+  //       // inputImage.inputImageData!.imageRotation,
+  //       );
+  //   _customPaint = CustomPaint(
+  //     painter: painter,
+  //   );
+  // } else {
+  //   print("GAGAL MASUK");
+  // }
+  print(await "END PROSEESSS DETECTTTT");
+}
+
+Future<void> download(String _url) async {
+  print("START DOWNLOADDD");
+  final response = await http.get(Uri.parse(_url));
+  // final response = await http.get(Uri.https(_url, ''));
+  // var uri = Uri.https(_url, '');
+  // var response = await http.get(
+  //   uri,
+  //   headers: {
+  //     // "Content-Type": "application/json",
+  //     "Access-Control-Allow-Origin": "*",
+  //     'Accept': '*/*'
+  //   },
+  // );
+  print("response done");
+
+  // final response = await http.get(
+  //   Uri.parse(_url),
+  //   headers: {
+  //     // "Content-Type": "application/json",
+  //     "Access-Control-Allow-Origin": "*",
+  //     'Accept': '*/*'
+  //   },
+  // );
+  // Get the image name
+  final imageName = path.basename(_url);
+  print(imageName);
+  // Get the document directory path
+  final appDir = await path_provider.getApplicationDocumentsDirectory();
+  print(appDir);
+  // This is the saved image path
+  // You can use it to display the saved image later
+  final localPath = await path.join(appDir.path, imageName);
+  print(localPath);
+  // Downloading
+  final imageFile = File(localPath);
+  print("imageFile done");
+  await imageFile.writeAsBytes(response.bodyBytes);
+  print("download");
+
+  listDownloadPath.add(await localPath);
+  // setState(() {
+  //   _displayImage = imageFile;
+  //   _displayPath = localPath;
+  // });
+  // print("SELESAII");
+  // print(_displayImage);
+  // print(_displayPath);
+  print(await "END DOWNLOADDDD");
 }
 
 class HomePage extends StatefulWidget {
@@ -102,7 +203,7 @@ class _HomePageState extends State<HomePage> {
   String imageOriURL = "";
   String imageRecomendationURL = "";
 
-  String pathNgrok = "https://269e-112-215-172-182.ap.ngrok.io/face_detection";
+  String pathNgrok = "https://16b7-140-213-40-19.ap.ngrok.io/face_detection";
   // String pathNgrok = "https://kezia24.pythonanywhere.com/face_detection";
 
   File? _selectedImage;
@@ -113,16 +214,10 @@ class _HomePageState extends State<HomePage> {
   late bool check_using_lips;
 
 // mlkit
-  final FaceDetector _faceDetector = FaceDetector(
-      options: FaceDetectorOptions(
-    enableContours: true,
-    enableClassification: true,
-  ));
+
   CustomPaint? _customPaint;
-  String? _textMLKIT = "MLKIT";
   File? _displayImage;
   String _displayPath = "path";
-  List listDownloadPath = [];
 
   List listSizeAbsolute = [];
   var sizeAbsolute;
@@ -139,96 +234,6 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement dispose
     _faceDetector.close();
     super.dispose();
-  }
-
-  Future<void> processImage(
-      final InputImage inputImage, List<dynamic> face) async {
-    print("START PROSEESSS DETECTTTT");
-    final faces = await _faceDetector.processImage(inputImage);
-    print("- FACES");
-    String text = "faces found: ${faces.length}\n\n";
-    print("- TEXT");
-    for (final face in faces) {
-      text += "face: ${face.boundingBox}\n\n";
-    }
-    print("- FOR");
-    listFaceMLKit.add(faces);
-    // listSizeAbsolute.add(inputImage.inputImageData!.size);
-
-    _textMLKIT = text;
-
-    // print("MASUK PAINTER");
-    // final painter = FaceDetectorPainter(faces, face
-    //     // inputImage.inputImageData!.size,
-    //     // inputImage.inputImageData!.imageRotation,
-    //     );
-    // _customPaint = CustomPaint(
-    //   painter: painter,
-    // );
-    // if (inputImage.inputImageData?.size != null) {
-    //   print("MASUK PAINTER");
-    //   final painter = FaceDetectorPainter(faces, face
-    //       // inputImage.inputImageData!.size,
-    //       // inputImage.inputImageData!.imageRotation,
-    //       );
-    //   _customPaint = CustomPaint(
-    //     painter: painter,
-    //   );
-    // } else {
-    //   print("GAGAL MASUK");
-    // }
-    print(await "END PROSEESSS DETECTTTT");
-  }
-
-  Future<void> _download(String _url) async {
-    print("START DOWNLOADDD");
-    final response = await http.get(Uri.parse(_url));
-    // final response = await http.get(Uri.https(_url, ''));
-    // var uri = Uri.https(_url, '');
-    // var response = await http.get(
-    //   uri,
-    //   headers: {
-    //     // "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //     'Accept': '*/*'
-    //   },
-    // );
-    print("response done");
-
-    // final response = await http.get(
-    //   Uri.parse(_url),
-    //   headers: {
-    //     // "Content-Type": "application/json",
-    //     "Access-Control-Allow-Origin": "*",
-    //     'Accept': '*/*'
-    //   },
-    // );
-    // Get the image name
-    final imageName = path.basename(_url);
-    print(imageName);
-    // Get the document directory path
-    final appDir = await path_provider.getApplicationDocumentsDirectory();
-    print(appDir);
-    // This is the saved image path
-    // You can use it to display the saved image later
-    final localPath = await path.join(appDir.path, imageName);
-    print(localPath);
-    // Downloading
-    final imageFile = File(localPath);
-    print("imageFile done");
-    await imageFile.writeAsBytes(response.bodyBytes);
-    print("download");
-
-    listDownloadPath.add(await localPath);
-    setState(() {});
-    // setState(() {
-    //   _displayImage = imageFile;
-    //   _displayPath = localPath;
-    // });
-    // print("SELESAII");
-    // print(_displayImage);
-    // print(_displayPath);
-    print(await "END DOWNLOADDDD");
   }
 
   Future<void> imageFromCamera() async {
@@ -403,6 +408,25 @@ class _HomePageState extends State<HomePage> {
                       ? IconButton(
                           icon: Icon(Icons.history),
                           onPressed: () {
+                            recommendationStatus = false;
+                            // _selectedImage = File(pickedImage!.path);
+                            listFaceUrl = [];
+                            listSaved = [];
+                            listNameHistory = [];
+                            listFaceCategory = [];
+                            testLink = "..............";
+                            testCategory = "category";
+                            testWarna = "warna";
+                            testLipstik = "lipstik";
+                            listLipstikFace = [];
+                            testChosenLipstik = "choosen";
+                            testLipsArea = "area";
+                            listDownloadPath = [];
+                            listFaceMLKit = [];
+                            listSizeAbsolute = [];
+                            listFaceArea = [];
+                            print("Look history");
+                            print(listDownloadPath);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -752,7 +776,8 @@ class _HomePageState extends State<HomePage> {
                               print("downloaddd");
                               // WEB GAK BISA
                               for (String url in listFaceUrl) {
-                                await _download(url);
+                                await download(url);
+                                setState(() {});
                               }
                               print("selesaii downloadd");
                               print(listDownloadPath);
