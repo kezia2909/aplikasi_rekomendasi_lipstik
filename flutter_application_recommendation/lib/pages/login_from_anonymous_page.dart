@@ -47,8 +47,9 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
       // await user.reload();
 
       // REGIST DAN LOGIN
+      await user.delete();
       // await AuthServices.logOut();
-      // user = await AuthServices.logInEmail(email, password);
+      user = await AuthServices.logInEmail(email, password);
 
       // try login
       // await user.reauthenticateWithCredential(credential);
@@ -69,22 +70,23 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
       // await user.updatePassword(password);
       // await user.reload();
 
-      await user.linkWithCredential(credential);
-      print("HAHAHAHA");
-      print(user);
-      print(await user);
-      // await user.reload();
+      // await user.linkWithCredential(credential);
       // print("HAHAHAHA");
       // print(user);
       // print(await user);
-      // user = Provider.of<User>(context);
-      print("HAHAHAHA");
-      print(user);
-      print(await user);
+      // // await user.reload();
+      // // print("HAHAHAHA");
+      // // print(user);
+      // // print(await user);
+      // // user = Provider.of<User>(context);
+      // print("HAHAHAHA");
+      // print(user);
+      // print(await user);
 
       Navigator.pop(context, await user);
     } catch (e) {
       print("GAGAL MASUK ANONYMOUS");
+      // user.delete();
       user = await AuthServices.logInAnonymous();
       print(e.toString());
       snackBar = SnackBar(
