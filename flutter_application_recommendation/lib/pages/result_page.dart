@@ -172,7 +172,7 @@ class _ResultPageState extends State<ResultPage> {
                 },
               ),
             ),
-            content: Text('Login/Daftar untuk dapat menyimpan data'),
+            content: Text('Login/regist to save your data'),
             // content: TextField(
             //   controller: textFieldNameHistoryController,
             //   decoration: InputDecoration(hintText: "Text Field in Dialog"),
@@ -195,7 +195,7 @@ class _ResultPageState extends State<ResultPage> {
                 },
               ),
               ElevatedButton(
-                child: Text('DAFTAR'),
+                child: Text('REGIST'),
                 onPressed: () {
                   // Navigator.pop(context);
                 },
@@ -226,10 +226,10 @@ class _ResultPageState extends State<ResultPage> {
                     },
                   ),
                 ),
-                Text("Pilihan Warna Untukmu"),
+                // Text("Pilihan Warna Untukmu"),
                 Text(user.uid),
-                Text(temp),
-                Text(user.isAnonymous ? "ANONIM" : "USER"),
+                // Text(temp),
+                Text(user.isAnonymous ? "ANONYMOUSLY" : "USER"),
 
                 Text("${countFace} face detected"),
                 CarouselSlider(
@@ -297,7 +297,7 @@ class _ResultPageState extends State<ResultPage> {
                     );
                   }).toList(),
                 ),
-                Text(testLink),
+                // Text(testLink),
                 SizedBox(
                   height: 20,
                 ),
@@ -373,7 +373,7 @@ class _ResultPageState extends State<ResultPage> {
                 //     : Container()
                 (!listSaved[tempIndex])
                     ? ElevatedButton(
-                        child: Text("Simpan"),
+                        child: Text("save"),
                         onPressed: () {
                           if (!user.isAnonymous) {
                             modalSaveEditLogin(context, listSaved[tempIndex]);

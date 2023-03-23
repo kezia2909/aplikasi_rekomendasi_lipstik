@@ -6,6 +6,7 @@ import 'package:flutter_application_recommendation/pages/result_page.dart';
 import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/utils/color_utils.dart';
+import 'package:provider/provider.dart';
 
 class LoginFromAnonymousPage extends StatefulWidget {
   final User firebaseUser;
@@ -37,21 +38,51 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
       print(user);
       print(email);
       print(password);
+
       AuthCredential credential =
           EmailAuthProvider.credential(email: email, password: password);
 
-      // BUAT REGIST ULANG
-
+      // REGIST
       // await user.linkWithCredential(credential);
       // await user.reload();
-      await AuthServices.logOut();
-      user = await AuthServices.logInEmail(email, password);
 
+      // REGIST DAN LOGIN
+      // await AuthServices.logOut();
+      // user = await AuthServices.logInEmail(email, password);
+
+      // try login
+      // await user.reauthenticateWithCredential(credential);
+
+      // await user.delete();
+
+      // try regist
+      // await user.linkWithCredential(credential);
+      // print("HEHEHEHEHHEHEE");
+      // print(user);
+      // print(await user);
+      // await user.reauthenticateWithCredential(credential);
+      // print("HOHOHOHOHO");
+      // print(user);
+      // print(await user);
+
+      // await user.updateEmail(email);
+      // await user.updatePassword(password);
+      // await user.reload();
+
+      await user.linkWithCredential(credential);
+      print("HAHAHAHA");
+      print(user);
+      print(await user);
+      // await user.reload();
+      // print("HAHAHAHA");
+      // print(user);
+      // print(await user);
+      // user = Provider.of<User>(context);
       print("HAHAHAHA");
       print(user);
       print(await user);
 
-      Navigator.pop(context, user);
+      Navigator.pop(context, await user);
     } catch (e) {
       print("GAGAL MASUK ANONYMOUS");
       user = await AuthServices.logInAnonymous();
