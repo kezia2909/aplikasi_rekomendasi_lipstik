@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
 import 'package:flutter_application_recommendation/pages/login_from_anonymous_page.dart';
+import 'package:flutter_application_recommendation/pages/registration_from_anonymous_page.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/services/painter_lips_service.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
@@ -196,8 +197,18 @@ class _ResultPageState extends State<ResultPage> {
               ),
               ElevatedButton(
                 child: Text('REGIST'),
-                onPressed: () {
-                  // Navigator.pop(context);
+                onPressed: () async {
+                  Navigator.pop(context);
+                  user = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => RegistrationFromAnonymousPage(
+                                firebaseUser: user,
+                              )));
+                  setState(() {});
+                  // user = Provider.of<User?>(context);
+
+                  setState(() {});
                 },
               ),
             ]);

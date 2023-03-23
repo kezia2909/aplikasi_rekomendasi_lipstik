@@ -51,38 +51,6 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
       // await AuthServices.logOut();
       user = await AuthServices.logInEmail(email, password);
 
-      // try login
-      // await user.reauthenticateWithCredential(credential);
-
-      // await user.delete();
-
-      // try regist
-      // await user.linkWithCredential(credential);
-      // print("HEHEHEHEHHEHEE");
-      // print(user);
-      // print(await user);
-      // await user.reauthenticateWithCredential(credential);
-      // print("HOHOHOHOHO");
-      // print(user);
-      // print(await user);
-
-      // await user.updateEmail(email);
-      // await user.updatePassword(password);
-      // await user.reload();
-
-      // await user.linkWithCredential(credential);
-      // print("HAHAHAHA");
-      // print(user);
-      // print(await user);
-      // // await user.reload();
-      // // print("HAHAHAHA");
-      // // print(user);
-      // // print(await user);
-      // // user = Provider.of<User>(context);
-      // print("HAHAHAHA");
-      // print(user);
-      // print(await user);
-
       Navigator.pop(context, await user);
     } catch (e) {
       print("GAGAL MASUK ANONYMOUS");
