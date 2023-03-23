@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
+import 'package:flutter_application_recommendation/pages/registration_from_anonymous_page.dart';
 import 'package:flutter_application_recommendation/pages/registration_page.dart';
 import 'package:flutter_application_recommendation/pages/result_page.dart';
 import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
@@ -68,6 +69,15 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          "Login",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -129,7 +139,7 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
                 //   await AuthServices.registAccount("coba", "coba",
                 //       _emailTextController.text, _passwordTextController.text);
                 // }),
-                registrationOption()
+                // registrationOption()
               ],
             ),
           ),
@@ -146,8 +156,13 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
             style: TextStyle(color: Colors.white70)),
         GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => RegistrationPage()));
+            // Navigator.pop(context);
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => RegistrationFromAnonymousPage(
+                          firebaseUser: user,
+                        )));
           },
           child: const Text(
             "Registration",
