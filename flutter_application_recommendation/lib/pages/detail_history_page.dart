@@ -5,6 +5,7 @@ import 'package:flutter_application_recommendation/services/painter_lips_service
 import 'package:flutter_application_recommendation/utils/color_utils.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
 
+// PRIVATE
 class DetailHistoryPage extends StatefulWidget {
   final String nameHistory;
   final String faceUrl;
@@ -25,26 +26,39 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
   late String nameHistory = widget.nameHistory;
   late String faceUrl = widget.faceUrl;
   late String faceCategory = widget.faceCategory;
-  late double size;
+  // late double size;
 
+  late double sizeFrame;
+  late double sizePadding;
   @override
   void setState(VoidCallback fn) {
     // TODO: implement setState
     super.setState(fn);
   }
 
+// START WIDGET
+
   @override
   Widget build(BuildContext context) {
-    kIsWeb
-        ? size = MediaQuery.of(context).size.height * 0.5
-        : size = MediaQuery.of(context).size.width * 0.8;
+    if (MediaQuery.of(context).size.width <
+        MediaQuery.of(context).size.height) {
+      if (MediaQuery.of(context).size.width * 0.1 >= 40) {
+        print("aaaaaa${MediaQuery.of(context).size.width}");
+        sizePadding = 40;
+        // sizePadding = MediaQuery.of(context).size.width * 0.1;
+      } else {
+        print("bbbbbbbbbbb${MediaQuery.of(context).size.width}");
+        sizePadding = MediaQuery.of(context).size.width * 0.1;
+      }
+      sizeFrame = (MediaQuery.of(context).size.width - sizePadding * 2);
+    }
     return Scaffold(
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: hexStringToColor("f9e8e6"),
+        foregroundColor: hexStringToColor("d3445d"),
         elevation: 0,
         title: const Text(
-          "Registration",
+          "Detail History",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
       ),
@@ -54,41 +68,21 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
         decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                MediaQuery.of(context).size.width * 0.1,
-                MediaQuery.of(context).size.height * 0.1,
-                MediaQuery.of(context).size.width * 0.1,
-                0),
+            padding: EdgeInsets.fromLTRB(sizePadding, 10, sizePadding, 0),
             child: Column(
               children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      // _selectedImage = File(pickedImage!.path);
-                      listFaceUrl = [];
-                      listSaved = [];
-                      listNameHistory = [];
-                      listFaceCategory = [];
-                      testLink = "..............";
-                      testCategory = "category";
-                      testWarna = "warna";
-                      testLipstik = "lipstik";
-                      listLipstikFace = [];
-                      testChosenLipstik = "choosen";
-                      testLipsArea = "area";
-                      listDownloadPath = [];
-                      listFaceMLKit = [];
-                      listFaceArea = [];
-                      Navigator.pop(context);
-                    },
-                  ),
+                Text("Name : \"$nameHistory\"",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center),
+                SizedBox(
+                  height: 10,
                 ),
-                Text("Detail $nameHistory"),
                 Container(
-                  width: size,
-                  height: size,
+                  width: sizeFrame,
+                  height: sizeFrame,
                   // width: size,
                   // height: size,
                   // width: MediaQuery.of(context).size.width * 0.8,
@@ -104,11 +98,23 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                       ? Container()
                       : CustomPaint(
                           painter: FaceDetectorPainter(
-                              faceMLKit, faceArea, lipColor, size),
+                              faceMLKit, faceArea, lipColor, sizeFrame),
                         ),
                 ),
-                Text(faceCategory),
-                Text(testChosenLipstik),
+                SizedBox(
+                  height: 20,
+                ),
+                Text(
+                  "Skin Type : $faceCategory",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -159,6 +165,14 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                       );
                     }).toList(),
                   ),
+                ),
+                Text(
+                  testChosenLipstik,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
                 ),
               ],
             ),

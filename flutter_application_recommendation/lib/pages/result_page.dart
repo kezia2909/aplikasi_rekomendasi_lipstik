@@ -13,6 +13,7 @@ import 'package:flutter_application_recommendation/services/database_service.dar
 
 import '../utils/color_utils.dart';
 
+// PRIVATE
 class ResultPage extends StatefulWidget {
   final User firebaseUser;
   const ResultPage({Key? key, required this.firebaseUser}) : super(key: key);
@@ -396,14 +397,19 @@ class _ResultPageState extends State<ResultPage> {
                 SizedBox(
                   height: 20,
                 ),
+
                 Text(
-                  testChosenLipstik,
+                  "Skin Type : ${listFaceCategory[tempIndex]}",
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -454,6 +460,17 @@ class _ResultPageState extends State<ResultPage> {
                       );
                     }).toList(),
                   ),
+                ),
+                Text(
+                  testChosenLipstik,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 20,
                 ),
                 // gak login gak bisa simpan
                 // (!user.isAnonymous)
