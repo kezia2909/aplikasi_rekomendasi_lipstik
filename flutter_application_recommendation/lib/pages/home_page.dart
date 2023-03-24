@@ -336,23 +336,45 @@ class _HomePageState extends State<HomePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Maaf tidak terdeteksi wajah pada gambar'),
+          contentPadding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 24.0),
+          buttonPadding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Text('No face detected')),
+              IconButton(
+                padding: EdgeInsets.all(0),
+                alignment: Alignment.topRight,
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  setState(() {
+                    pickedImage = null;
+                    _selectedImage = null;
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
           content: const Text(
-              'silahkan upload ulang gambar sesuai dengan panduan yang tersedia'),
+              'Please use an appropriate photo that matches the guidelines provided'),
           actions: <Widget>[
-            ElevatedButton(
-              child: const Text('Close'),
-              onPressed: () {
-                setState(() {
-                  pickedImage = null;
-                  _selectedImage = null;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            ElevatedButton(
-              child: const Text('Guidebook'),
-              onPressed: () {
+            // ElevatedButton(
+            //   child: const Text('Close'),
+            //   onPressed: () {
+            //     setState(() {
+            //       pickedImage = null;
+            //       _selectedImage = null;
+            //     });
+            //     Navigator.of(context).pop();
+            //   },
+            // ),
+            reusableButtonLog(
+              context,
+              "Guidebook",
+              hexStringToColor("d3445d"),
+              hexStringToColor("ffffff"),
+              () {
                 setState(() {
                   pickedImage = null;
                   _selectedImage = null;
