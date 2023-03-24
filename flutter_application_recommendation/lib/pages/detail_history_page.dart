@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
 import 'package:flutter_application_recommendation/services/painter_lips_service.dart';
+import 'package:flutter_application_recommendation/utils/color_utils.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
 
 class DetailHistoryPage extends StatefulWidget {
@@ -24,6 +25,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
   late String nameHistory = widget.nameHistory;
   late String faceUrl = widget.faceUrl;
   late String faceCategory = widget.faceCategory;
+  late double size;
 
   @override
   void setState(VoidCallback fn) {
@@ -33,14 +35,30 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    kIsWeb
+        ? size = MediaQuery.of(context).size.height * 0.5
+        : size = MediaQuery.of(context).size.width * 0.8;
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+          "Registration",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * 0.1, 20, 0),
+                MediaQuery.of(context).size.width * 0.1,
+                MediaQuery.of(context).size.height * 0.1,
+                MediaQuery.of(context).size.width * 0.1,
+                0),
             child: Column(
               children: <Widget>[
                 Align(
@@ -69,8 +87,12 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                 ),
                 Text("Detail $nameHistory"),
                 Container(
-                  width: 200,
-                  height: 200,
+                  width: size,
+                  height: size,
+                  // width: size,
+                  // height: size,
+                  // width: MediaQuery.of(context).size.width * 0.8,
+                  // height: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
                     // border: Border.all(
@@ -82,7 +104,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                       ? Container()
                       : CustomPaint(
                           painter: FaceDetectorPainter(
-                              faceMLKit, faceArea, lipColor),
+                              faceMLKit, faceArea, lipColor, size),
                         ),
                 ),
                 Text(faceCategory),

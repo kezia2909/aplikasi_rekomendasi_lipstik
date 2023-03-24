@@ -5,10 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
 import 'package:flutter_application_recommendation/pages/login_from_anonymous_page.dart';
 import 'package:flutter_application_recommendation/pages/registration_from_anonymous_page.dart';
+import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/services/painter_lips_service.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
+
+import '../utils/color_utils.dart';
 
 class ResultPage extends StatefulWidget {
   final User firebaseUser;
@@ -40,23 +43,59 @@ class _ResultPageState extends State<ResultPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('TextField in Dialog'),
+          contentPadding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 24.0),
+          // actionsPadding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+          buttonPadding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+          // actionsAlignment: MainAxisSize.max,
+          actionsOverflowButtonSpacing: 0.0,
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                  child:
+                      statusSave ? Text("Edit History") : Text('Save History')),
+              IconButton(
+                padding: EdgeInsets.all(0),
+                alignment: Alignment.topRight,
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  Navigator.pop(context);
+                  textFieldNameHistoryController.clear();
+                },
+              ),
+            ],
+          ),
           content: TextField(
             controller: textFieldNameHistoryController,
-            decoration: InputDecoration(hintText: "Text Field in Dialog"),
+            decoration: InputDecoration(
+                hintText: "history name",
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                ),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.black),
+                )),
           ),
           actions: <Widget>[
-            ElevatedButton(
-              child: Text('CANCEL'),
-              onPressed: () {
-                Navigator.pop(context);
-                textFieldNameHistoryController.clear();
-              },
-            ),
+            // ElevatedButton(
+            //   child: Text('CANCEL'),
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //     textFieldNameHistoryController.clear();
+            //   },
+            // ),
+            // statusSave
+            //     ? reusableButtonLog(context, "Edit", hexStringToColor("d3445d"),
+            //         hexStringToColor("ffffff"), () {})
+            //     : reusableButtonLog(context, "Save", hexStringToColor("d3445d"),
+            //         hexStringToColor("ffffff"), () {}),
             statusSave
-                ? ElevatedButton(
-                    child: Text('Edit'),
-                    onPressed: () async {
+                ? reusableButtonLog(
+                    context,
+                    "Edit",
+                    hexStringToColor("d3445d"),
+                    hexStringToColor("ffffff"),
+                    () async {
                       print(textFieldNameHistoryController.text);
                       listSaved[tempIndex] = true;
                       if (textFieldNameHistoryController.text !=
@@ -105,9 +144,12 @@ class _ResultPageState extends State<ResultPage> {
                       });
                     },
                   )
-                : ElevatedButton(
-                    child: Text('Save'),
-                    onPressed: () async {
+                : reusableButtonLog(
+                    context,
+                    "Save",
+                    hexStringToColor("d3445d"),
+                    hexStringToColor("ffffff"),
+                    () async {
                       print(textFieldNameHistoryController.text);
 
                       listNameHistory[tempIndex] =
@@ -216,36 +258,59 @@ class _ResultPageState extends State<ResultPage> {
     );
   }
 
+  late double sizeFrame;
+  late double sizePadding;
+
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width <
+        MediaQuery.of(context).size.height) {
+      if (MediaQuery.of(context).size.width * 0.1 >= 40) {
+        print("aaaaaa${MediaQuery.of(context).size.width}");
+        sizePadding = 40;
+        // sizePadding = MediaQuery.of(context).size.width * 0.1;
+      } else {
+        print("bbbbbbbbbbb${MediaQuery.of(context).size.width}");
+        sizePadding = MediaQuery.of(context).size.width * 0.1;
+      }
+      sizeFrame = (MediaQuery.of(context).size.width - sizePadding * 2);
+    }
     return Scaffold(
+      // extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: hexStringToColor("f9e8e6"),
+        foregroundColor: hexStringToColor("d3445d"),
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          "Result",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(color: hexStringToColor("fcedea")),
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * 0.1, 20, 0),
+            padding: EdgeInsets.fromLTRB(sizePadding, 10, sizePadding, 0),
             child: Column(
               children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                // Text("Pilihan Warna Untukmu"),
-                Text(user.uid),
-                // Text(temp),
-                Text(user.isAnonymous ? "ANONYMOUSLY" : "USER"),
-
-                Text("${countFace} face detected"),
+                Text(
+                    "$countFace face detected (face : ${tempIndex + 1}/$countFace)",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center),
                 CarouselSlider(
                   options: CarouselOptions(
-                    height: 200.0,
+                    height: sizeFrame,
+                    aspectRatio: 1 / 1,
+                    viewportFraction: 1.0,
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) async {
                       tempIndex = index;
@@ -270,8 +335,8 @@ class _ResultPageState extends State<ResultPage> {
                       } else {
                         faceMLKit = listFaceMLKit[index];
                         print("MASUK PAINTER");
-                        painter =
-                            FaceDetectorPainter(faceMLKit, faceArea, lipColor);
+                        painter = FaceDetectorPainter(
+                            faceMLKit, faceArea, lipColor, sizeFrame);
                       }
 
                       setState(() {});
@@ -281,12 +346,12 @@ class _ResultPageState extends State<ResultPage> {
                     return Builder(
                       builder: (BuildContext context) {
                         return Container(
-                          width: 200,
-                          height: 200,
+                          width: sizeFrame,
+                          height: sizeFrame,
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
-                            // border: Border.all(
-                            //     color: Colors.green, width: 0),
+                            border: Border.all(
+                                color: hexStringToColor("1b1c1e"), width: 5),
                             image: DecorationImage(
                                 image: NetworkImage(url), fit: BoxFit.cover),
                           ),
@@ -301,7 +366,7 @@ class _ResultPageState extends State<ResultPage> {
                                 )
                               : CustomPaint(
                                   painter: FaceDetectorPainter(
-                                      faceMLKit, faceArea, lipColor),
+                                      faceMLKit, faceArea, lipColor, sizeFrame),
                                 ),
                         );
                       },
@@ -309,10 +374,35 @@ class _ResultPageState extends State<ResultPage> {
                   }).toList(),
                 ),
                 // Text(testLink),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: listFaceUrl.map((url) {
+                    int index = listFaceUrl.indexOf(url);
+                    return Container(
+                      width: 8.0,
+                      height: 8.0,
+                      margin:
+                          EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: tempIndex == index
+                            ? hexStringToColor("d3445d")
+                            : Color.fromRGBO(0, 0, 0, 0.4),
+                      ),
+                    );
+                  }).toList(),
+                ),
                 SizedBox(
                   height: 20,
                 ),
-                Text(testChosenLipstik),
+                Text(
+                  testChosenLipstik,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
@@ -347,8 +437,8 @@ class _ResultPageState extends State<ResultPage> {
                           });
                         },
                         child: Container(
-                          width: 50,
-                          height: 50,
+                          width: sizeFrame / 5,
+                          height: sizeFrame / 5,
                           margin: EdgeInsets.symmetric(
                               vertical: 10.0, horizontal: 2.0),
                           decoration: BoxDecoration(
@@ -383,22 +473,43 @@ class _ResultPageState extends State<ResultPage> {
                 //             })
                 //     : Container()
                 (!listSaved[tempIndex])
-                    ? ElevatedButton(
-                        child: Text("save"),
-                        onPressed: () {
-                          if (!user.isAnonymous) {
-                            modalSaveEditLogin(context, listSaved[tempIndex]);
-                          } else {
-                            modalSaveEditNotLogin(context);
-                          }
-                        })
-                    : ElevatedButton(
-                        child: Text("Edit"),
-                        onPressed: () {
-                          textFieldNameHistoryController.text =
-                              listNameHistory[tempIndex];
+                    ? reusableButtonLog(
+                        context,
+                        "Save",
+                        hexStringToColor("d3445d"),
+                        hexStringToColor("ffffff"), () {
+                        if (!user.isAnonymous) {
                           modalSaveEditLogin(context, listSaved[tempIndex]);
-                        }),
+                        } else {
+                          modalSaveEditNotLogin(context);
+                        }
+                      })
+                    : reusableButtonLog(
+                        context,
+                        "Edit",
+                        hexStringToColor("d3445d"),
+                        hexStringToColor("ffffff"), () {
+                        textFieldNameHistoryController.text =
+                            listNameHistory[tempIndex];
+                        modalSaveEditLogin(context, listSaved[tempIndex]);
+                      }),
+                // (!listSaved[tempIndex])
+                //     ? ElevatedButton(
+                //         child: Text("save"),
+                //         onPressed: () {
+                //           if (!user.isAnonymous) {
+                //             modalSaveEditLogin(context, listSaved[tempIndex]);
+                //           } else {
+                //             modalSaveEditNotLogin(context);
+                //           }
+                //         })
+                //     : ElevatedButton(
+                //         child: Text("Edit"),
+                //         onPressed: () {
+                //           textFieldNameHistoryController.text =
+                //               listNameHistory[tempIndex];
+                //           modalSaveEditLogin(context, listSaved[tempIndex]);
+                //         }),
               ],
             ),
           ),

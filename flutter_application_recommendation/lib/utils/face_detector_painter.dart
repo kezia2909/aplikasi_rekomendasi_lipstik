@@ -8,6 +8,7 @@ class FaceDetectorPainter extends CustomPainter {
   final List<Face> faces;
   final List<dynamic> face;
   final Color color;
+  final double sizeForScale;
   // final Size absoluteImageSize;
 
   var scaleW;
@@ -16,12 +17,14 @@ class FaceDetectorPainter extends CustomPainter {
   // final InputImageRotation rotation;
 
   // FaceDetectorPainter(this.faces, this.absoluteImageSize, this.rotation);
-  FaceDetectorPainter(this.faces, this.face, this.color);
+  FaceDetectorPainter(this.faces, this.face, this.color, this.sizeForScale);
 
   @override
   void paint(final Canvas canvas, final Size size) {
-    scaleW = 200.0 / face[2];
-    scaleH = 200.0 / face[3];
+    // scaleW = 200.0 / face[2];
+    // scaleH = 200.0 / face[3];
+    scaleW = sizeForScale / face[2];
+    scaleH = sizeForScale / face[3];
     // scaleW = size.width / face[2];
     // scaleH = size.height / face[3];
     // scaleW = (200.0 / size.width) * 200.0 / face[2];

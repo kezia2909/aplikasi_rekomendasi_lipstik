@@ -16,6 +16,7 @@ import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
 import 'package:flutter_application_recommendation/services/painter_lips_service.dart';
 import 'package:flutter_application_recommendation/services/painter_service.dart';
+import 'package:flutter_application_recommendation/utils/color_utils.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +25,10 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path;
 
+// bottom navbar
+int selectedIndex = 0;
+
+// start
 String testLink = "..............";
 List listFaceUrl = [];
 String testCategory = "category";
@@ -193,6 +198,8 @@ Future<void> download(String _url) async {
 
 // late User global_firebaseUser;
 
+// PRIVATE
+
 class HomePage extends StatefulWidget {
   final User firebaseUser;
   const HomePage({Key? key, required this.firebaseUser}) : super(key: key);
@@ -203,6 +210,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // bottom navbar
+  int _selectedIndex = 0;
+
+  late double sizeFrame;
+  late double sizePadding;
+
   late User user = widget.firebaseUser;
   String imageOriURL = "";
   String imageRecomendationURL = "";
@@ -391,477 +404,523 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width <
+        MediaQuery.of(context).size.height) {
+      if (MediaQuery.of(context).size.width * 0.1 >= 40) {
+        print("aaaaaa${MediaQuery.of(context).size.width}");
+        sizePadding = 40;
+        // sizePadding = MediaQuery.of(context).size.width * 0.1;
+      } else {
+        print("bbbbbbbbbbb${MediaQuery.of(context).size.width}");
+        sizePadding = MediaQuery.of(context).size.width * 0.1;
+      }
+      sizeFrame = MediaQuery.of(context).size.width - sizePadding * 2;
+    }
+    // ? (MediaQuery.of(context).size.width * 0.1 < 20)
+    //     ? size = MediaQuery.of(context).size.width - 40
+    //     : size = MediaQuery.of(context).size.width * 0.8
+    // : size = MediaQuery.of(context).size.width * 0.8;
     return Scaffold(
+      // extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: hexStringToColor("f9e8e6"),
+        elevation: 0,
+        centerTitle: true,
+        title: Text(
+          "Find Your Color",
+          style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: hexStringToColor("d3445d")),
+        ),
+        actions: <Widget>[
+          (!user.isAnonymous)
+              ? IconButton(
+                  icon: Icon(Icons.history, color: hexStringToColor("d3445d")),
+                  onPressed: () {
+                    recommendationStatus = false;
+                    // _selectedImage = File(pickedImage!.path);
+                    listFaceUrl = [];
+                    listSaved = [];
+                    listNameHistory = [];
+                    listFaceCategory = [];
+                    testLink = "..............";
+                    testCategory = "category";
+                    testWarna = "warna";
+                    testLipstik = "lipstik";
+                    listLipstikFace = [];
+                    testChosenLipstik = "choosen";
+                    testLipsArea = "area";
+                    listDownloadPath = [];
+                    listFaceMLKit = [];
+                    listSizeAbsolute = [];
+                    listFaceArea = [];
+                    print("Look history");
+                    print(listDownloadPath);
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                HistoryPage(firebaseUser: user)));
+                  },
+                )
+              : Container(),
+        ],
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * 0.1, 20, 0),
-            child: Column(children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.logout),
-                    onPressed: () {
-                      // Navigator.pop(context);
-                    },
-                  ),
-                  (!user.isAnonymous)
-                      ? IconButton(
-                          icon: Icon(Icons.history),
-                          onPressed: () {
-                            recommendationStatus = false;
-                            // _selectedImage = File(pickedImage!.path);
-                            listFaceUrl = [];
-                            listSaved = [];
-                            listNameHistory = [];
-                            listFaceCategory = [];
-                            testLink = "..............";
-                            testCategory = "category";
-                            testWarna = "warna";
-                            testLipstik = "lipstik";
-                            listLipstikFace = [];
-                            testChosenLipstik = "choosen";
-                            testLipsArea = "area";
-                            listDownloadPath = [];
-                            listFaceMLKit = [];
-                            listSizeAbsolute = [];
-                            listFaceArea = [];
-                            print("Look history");
-                            print(listDownloadPath);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        HistoryPage(firebaseUser: user)));
-                          },
-                        )
-                      : Container(),
-                ],
-              ),
-              Text(user.uid),
-              Text(user.isAnonymous ? "ANONIM" : "USER"),
+        // decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
+        decoration: BoxDecoration(color: hexStringToColor("fcedea")),
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(sizePadding, 10, sizePadding, 0),
+                  child: Column(
+                    children: <Widget>[
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     IconButton(
+                      //       icon: Icon(Icons.logout),
+                      //       onPressed: () {
+                      //         // Navigator.pop(context);
+                      //       },
+                      //     ),
+                      //     (!user.isAnonymous)
+                      //         ? IconButton(
+                      //             icon: Icon(Icons.history),
+                      //             onPressed: () {
+                      //               recommendationStatus = false;
+                      //               // _selectedImage = File(pickedImage!.path);
+                      //               listFaceUrl = [];
+                      //               listSaved = [];
+                      //               listNameHistory = [];
+                      //               listFaceCategory = [];
+                      //               testLink = "..............";
+                      //               testCategory = "category";
+                      //               testWarna = "warna";
+                      //               testLipstik = "lipstik";
+                      //               listLipstikFace = [];
+                      //               testChosenLipstik = "choosen";
+                      //               testLipsArea = "area";
+                      //               listDownloadPath = [];
+                      //               listFaceMLKit = [];
+                      //               listSizeAbsolute = [];
+                      //               listFaceArea = [];
+                      //               print("Look history");
+                      //               print(listDownloadPath);
+                      //               Navigator.push(
+                      //                   context,
+                      //                   MaterialPageRoute(
+                      //                       builder: (context) =>
+                      //                           HistoryPage(firebaseUser: user)));
+                      //             },
+                      //           )
+                      //         : Container(),
+                      //   ],
+                      // ),
 
-              const SizedBox(
-                height: 30,
-              ),
-              // CarouselSlider(
-              //   options: CarouselOptions(height: 400.0),
-              //   items: [1, 2, 3, 4, 5].map((i) {
-              //     return Builder(
-              //       builder: (BuildContext context) {
-              //         return Container(
-              //             width: MediaQuery.of(context).size.width,
-              //             margin: EdgeInsets.symmetric(horizontal: 5.0),
-              //             decoration: BoxDecoration(color: Colors.amber),
-              //             child: Text(
-              //               'text $i',
-              //               style: TextStyle(fontSize: 16.0),
-              //             ));
-              //       },
-              //     );
-              //   }).toList(),
-              // ),
-              (isRecommendationLoading)
-                  ? Center(child: CircularProgressIndicator())
-                  // : (_selectedImage == null || recommendationStatus)
-                  // ? (imageRecomendationURL != "")
-                  //     ? CarouselSlider(
-                  //         options: CarouselOptions(
-                  //           height: 200.0,
-                  //           enableInfiniteScroll: false,
-                  //           onPageChanged: (index, reason) async {
-                  //             testLink = listFaceUrl[index];
-                  //             testCategory = listFaceCategory[index];
+                      // Text(user.uid),
+                      // Text(user.isAnonymous
+                      //     ? "ANONIM : ${user.uid}"
+                      //     : "USER : ${user.uid}"),
 
-                  //             faceArea = listFaceArea[index];
-                  //             var url = listFaceUrl[index];
+                      // const SizedBox(
+                      //   height: 30,
+                      // ),
+                      // CarouselSlider(
+                      //   options: CarouselOptions(height: 400.0),
+                      //   items: [1, 2, 3, 4, 5].map((i) {
+                      //     return Builder(
+                      //       builder: (BuildContext context) {
+                      //         return Container(
+                      //             width: MediaQuery.of(context).size.width,
+                      //             margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      //             decoration: BoxDecoration(color: Colors.amber),
+                      //             child: Text(
+                      //               'text $i',
+                      //               style: TextStyle(fontSize: 16.0),
+                      //             ));
+                      //       },
+                      //     );
+                      //   }).toList(),
+                      // ),
+                      (isRecommendationLoading)
+                          ? Center(child: CircularProgressIndicator())
+                          : (_selectedImage == null || pickedImage == null)
+                              ? reusablePhotoFrame(
+                                  Image.asset(
+                                    "assets/images/model.png",
+                                    fit: BoxFit.cover,
+                                    color: hexStringToColor("1f1f1f"),
+                                  ),
+                                  sizeFrame)
+                              : kIsWeb
+                                  ? reusablePhotoFrame(
+                                      Image.network(
+                                        _selectedImage!.path,
+                                        fit: BoxFit.cover,
+                                      ),
+                                      sizeFrame)
+                                  : reusablePhotoFrame(
+                                      Image.file(
+                                        File(_selectedImage!.path),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      sizeFrame),
+                      const SizedBox(
+                        height: 30,
+                      ),
 
-                  //             print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa");
-                  //             print("DOWNLAD DONEE");
-
-                  //             print("PROSES SELESAII");
-                  //             getLipstik(testCategory);
-
-                  //             // WEB GAK BISA
-                  //             if (kIsWeb) {
-                  //               testLipsArea =
-                  //                   listFaceLipsArea[index].toString();
-                  //               lipsArea = listFaceLipsArea[index];
-                  //               lipsLabel = listFaceLipsLabel[index];
-                  //               lipsCluster = listFaceLipsCluster[index];
-                  //             } else {
-                  //               faceMLKit = listFaceMLKit[index];
-                  //               print("MASUK PAINTER");
-                  //               painter = FaceDetectorPainter(
-                  //                   faceMLKit, faceArea, lipColor);
-                  //             }
-
-                  //             setState(() {});
-                  //           },
-                  //         ),
-                  //         items: listFaceUrl.map((url) {
-                  //           return Builder(
-                  //             builder: (BuildContext context) {
-                  //               return Container(
-                  //                 width: 200,
-                  //                 height: 200,
-                  //                 decoration: BoxDecoration(
-                  //                   shape: BoxShape.rectangle,
-                  //                   image: DecorationImage(
-                  //                       image: NetworkImage(url),
-                  //                       fit: BoxFit.cover),
-                  //                 ),
-                  //                 child: kIsWeb
-                  //                     ? CustomPaint(
-                  //                         painter: LipsPainter(
-                  //                             lips: lipsArea,
-                  //                             lipsLabel: lipsLabel,
-                  //                             lipsCluster: lipsCluster,
-                  //                             face: faceArea,
-                  //                             color: lipColor),
-                  //                       )
-                  //                     : CustomPaint(
-                  //                         painter: FaceDetectorPainter(
-                  //                             faceMLKit,
-                  //                             faceArea,
-                  //                             lipColor),
-                  //                       ),
-                  //               );
-                  //             },
-                  //           );
-                  //         }).toList(),
-                  //       )
-                  //     : reusablePhotoFrame(
-                  //         Image.asset(
-                  //           "assets/images/model.png",
-                  //           fit: BoxFit.cover,
-                  //         ),
-                  //       )
-                  : (_selectedImage == null || pickedImage == null)
-                      ? reusablePhotoFrame(
-                          Image.asset(
-                            "assets/images/model.png",
-                            fit: BoxFit.cover,
+                      Column(
+                        children: [
+                          const Text(
+                            "Take a photo / choose from gallery",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center,
                           ),
-                        )
-                      : kIsWeb
-                          ? reusablePhotoFrame(
-                              Image.network(
-                                _selectedImage!.path,
-                                fit: BoxFit.cover,
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      imageFromCamera();
+                                      String testLink = "..............";
+
+                                      setState(() {});
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: hexStringToColor("d3445d"),
+                                    ),
+                                    child: Icon(
+                                      Icons.photo_camera_outlined,
+                                      size: sizeFrame / 4,
+                                      color: hexStringToColor("ffffff"),
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text("Camera",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: ui.FontWeight.w500),
+                                      textAlign: TextAlign.center)
+                                ],
                               ),
-                            )
-                          : reusablePhotoFrame(
-                              Image.file(
-                                File(_selectedImage!.path),
-                                fit: BoxFit.cover,
+                              const SizedBox(
+                                width: 30,
                               ),
-                            ),
-              // Text(testLink),
-              // Text(testCategory),
-              // Text(testWarna),
-              // Text(_textMLKIT!),
-              // Text(listLipstikFace.toString()),
-              // (listLipstikFace.isNotEmpty)
-              //     ? CarouselSlider(
-              //         options: CarouselOptions(
-              //           height: 50.0,
-              //           enableInfiniteScroll: false,
-              //           viewportFraction: 0.1,
-              //           initialPage: (listLipstikFace.length / 2).toInt(),
-              //           onPageChanged: (index, reason) async {
-              //             setState(() {});
-              //           },
-              //         ),
-              //         items: listLipstikFace.map((element) {
-              //           // var tempColor = "0xff";
-              //           // tempColor += element['kode_warna'];
-              //           String hexString = element['kode_warna'];
-              //           // tempColor = "#b76384";
-              //           final buffer = StringBuffer();
-              //           if (hexString.length == 6 || hexString.length == 7)
-              //             buffer.write('ff');
-              //           buffer.write(hexString.replaceFirst('#', ''));
-              //           // buffer.write(tempColor);
-              //           // buffer.write(tempColor.replaceFirst('#', ''));
-              //           // Color(int.parse(buffer.toString(), radix: 16));
+                              Column(
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      imageFromGallery();
+                                      String testLink = "..............";
 
-              //           return Builder(
-              //             builder: (BuildContext context) {
-              //               return Container(
-              //                 width: 50,
-              //                 height: 50,
-              //                 decoration: BoxDecoration(
-              //                   shape: BoxShape.circle,
-              //                   color: Color(
-              //                       int.parse(buffer.toString(), radix: 16)),
-              //                   // border: Border.all(
-              //                   //     color: Color(int.parse(buffer.toString(),
-              //                   //         radix: 16)),
-              //                   //     width: 5),
-              //                 ),
-              //               );
-              //             },
-              //           );
-              //         }).toList(),
-              //       )
-              //     : Text("NO LIPSTIK AVAILABLE"),
-              // Text(testChosenLipstik),
-              // Text(testLipsArea),
-              // SingleChildScrollView(
-              //   scrollDirection: Axis.horizontal,
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: listLipstikFace.map((element) {
-              //       int index = listLipstikFace.indexOf(element);
-              //       String hexString = element['kode_warna'];
-
-              //       // FOR PALLETE
-              //       final buffer = StringBuffer();
-              //       if (hexString.length == 6 || hexString.length == 7)
-              //         buffer.write('ff');
-              //       buffer.write(hexString.replaceFirst('#', ''));
-
-              //       // FOR LIPS
-              //       final bufferLip = StringBuffer();
-              //       if (hexString.length == 6 || hexString.length == 7)
-              //         bufferLip.write('80');
-              //       bufferLip.write(hexString.replaceFirst('#', ''));
-              //       return GestureDetector(
-              //         onTap: () {
-              //           testChosenLipstik = element['nama_lipstik'];
-              //           currentIndex = index;
-              //           lipColor =
-              //               Color(int.parse(bufferLip.toString(), radix: 16));
-
-              //           setState(() {
-              //             // _customPaint = CustomPaint(
-              //             //   painter: FaceDetectorPainter(
-              //             //       faceMLKit, faceArea, lipColor),
-              //             // );
-              //           });
-              //         },
-              //         child: Container(
-              //           width: 50,
-              //           height: 50,
-              //           margin: EdgeInsets.symmetric(
-              //               vertical: 10.0, horizontal: 2.0),
-              //           decoration: BoxDecoration(
-              //             shape: BoxShape.circle,
-              //             color: Color(int.parse(buffer.toString(), radix: 16)),
-              //             border: currentIndex == index
-              //                 ? Border.all(color: Colors.black, width: 5)
-              //                 : Border(),
-              //           ),
-              //         ),
-              //       );
-              //     }).toList(),
-              //   ),
-              // ),
-              const SizedBox(
-                height: 30,
-              ),
-              const Text("Tentukan Foto"),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          imageFromCamera();
-                          String testLink = "..............";
-
-                          setState(() {});
-                        },
-                        child: const Icon(Icons.photo_camera_outlined),
+                                      setState(() {});
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        primary: Colors.transparent,
+                                        elevation: 0),
+                                    child: Icon(
+                                      Icons.photo_library_outlined,
+                                      size: sizeFrame / 4,
+                                      color: hexStringToColor("d3445d"),
+                                    ),
+                                  ),
+                                  Text("Gallery",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                          fontWeight: ui.FontWeight.w500),
+                                      textAlign: TextAlign.center)
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                        ],
                       ),
-                      Text("Kamera")
+                      (_selectedImage != null && pickedImage != null)
+                          ? reusableButtonLog(
+                              context,
+                              "START",
+                              hexStringToColor("d3445d"),
+                              hexStringToColor("ffffff"), () async {
+                              print("button start");
+                              setState(() {
+                                listFaceArea = [];
+                                listDownloadPath = [];
+                                isRecommendationLoading = true;
+                              });
+                              imageOriURL = await DatabaseService.uploadImage(
+                                  user.uid, pickedImage!);
+                              print("upload");
+                              DatabaseService.createOrUpdateListImagesOri(
+                                  user.uid,
+                                  imageURL: imageOriURL);
+                              print("aaaaaaaaaa");
+                              final res = await getRecommendation(
+                                  user.uid,
+                                  imageOriURL,
+                                  _selectedImage!.path.split('/').last);
+                              print("responseeee");
+                              print(res.runtimeType);
+                              final val = jsonDecode(res.body);
+                              print("vallll");
+                              print(val);
+
+                              if (val['faceDetected']) {
+                                if (val['listFaceUrl'][0] != "") {
+                                  print("masukk");
+                                  print(val['listFaceUrl']);
+                                  listFaceUrl = val['listFaceUrl'];
+                                  countFace = listFaceUrl.length;
+
+                                  listSaved = [
+                                    for (var i = 0; i < countFace; i++) false
+                                  ];
+                                  listNameHistory = [
+                                    for (var i = 0; i < countFace; i++) ""
+                                  ];
+
+                                  listFaceCategory = val['listFaceCategory'];
+                                  print(listFaceUrl);
+                                  print(listFaceUrl.length);
+                                  print(listFaceUrl[0]);
+                                  recommendationStatus = true;
+                                  imageRecomendationURL = listFaceUrl[0];
+
+                                  testLink = listFaceUrl[0];
+                                  testCategory = listFaceCategory[0];
+                                  print(testCategory);
+
+                                  getLipstik(testCategory);
+
+                                  print(
+                                      "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                                  print(val['listAreaFaces'].toString());
+                                  listFaceArea = val['listAreaFaces'];
+                                  faceArea = listFaceArea[0];
+
+                                  if (kIsWeb) {
+                                    print(
+                                        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                                    print(val['listAreaLips'].toString());
+                                    listFaceLipsArea = val['listAreaLips'];
+                                    testLipsArea =
+                                        listFaceLipsArea[0].toString();
+                                    lipsArea = listFaceLipsArea[0];
+                                    listFaceLipsLabel = val['listLabels'];
+                                    lipsLabel = listFaceLipsLabel[0];
+                                    listFaceLipsCluster =
+                                        val['listChoosenCluster'];
+                                    lipsCluster = listFaceLipsCluster[0];
+                                  } else {
+                                    // download image
+                                    print("downloaddd");
+                                    // WEB GAK BISA
+                                    for (String url in listFaceUrl) {
+                                      await download(url);
+                                      setState(() {});
+                                    }
+                                    print("selesaii downloadd");
+                                    print(listDownloadPath);
+
+                                    print("detecttt");
+                                    var counterIndex = 0;
+                                    // WEB GAK BISA
+                                    for (String path in listDownloadPath) {
+                                      print("path");
+                                      print(path);
+                                      String tempPath =
+                                          listDownloadPath[counterIndex];
+                                      print("temp path");
+                                      print(tempPath);
+                                      print("list face");
+                                      print(listFaceArea);
+                                      print(counterIndex);
+                                      faceArea = listFaceArea[counterIndex];
+
+                                      await processImage(
+                                          InputImage.fromFilePath(
+                                              File(tempPath).path),
+                                          faceArea);
+                                      counterIndex++;
+                                    }
+                                    print(counterIndex.toString());
+                                    print(listFaceMLKit.toString());
+
+                                    // SET FIRST
+                                    faceMLKit = listFaceMLKit[0];
+                                    faceArea = listFaceArea[0];
+                                    // WEB GAK BISAprint("MASUK PAINTER");
+                                    painter = FaceDetectorPainter(
+                                        faceMLKit,
+                                        faceArea,
+                                        lipColor,
+                                        MediaQuery.of(context).size.width *
+                                            0.8);
+                                  }
+                                }
+                              } else {
+                                print("no face detected");
+                              }
+
+                              print(res.toString());
+                              print(imageRecomendationURL);
+                              setState(() {
+                                isRecommendationLoading = false;
+                                if (val['faceDetected']) {
+                                  pickedImage = null;
+                                  _selectedImage = null;
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ResultPage(
+                                                firebaseUser: user,
+                                              )));
+                                } else {
+                                  _dialogBuilder(context);
+                                }
+                              });
+                            })
+                          : Container(),
+                      // reusableButtonLog(
+                      //     context,
+                      //     "How to Use?",
+                      //     hexStringToColor("db9196"),
+                      //     hexStringToColor("ffffff"), () {
+                      //   Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => GuidebookPage()));
+                      // })
+                      // (_selectedImage != null && pickedImage != null)
+                      //     ? ElevatedButton(
+                      //         onPressed: () {},
+                      //         child: const Text("Cari Rekomendasi"),
+                      //       )
+                      //     : Container(),
+                      // ElevatedButton(
+                      //   child: Icon(Icons.book_outlined),
+                      //   onPressed: () {},
+                      // ),
+                      // ElevatedButton(
+                      //     child: Text("LOG OUT"),
+                      //     onPressed: () async {
+                      //       await AuthServices.logOut();
+                      //     }),
+
+                      // Text(user.isAnonymous
+                      //     ? "ANONIM : ${user.uid}"
+                      //     : "USER : ${user.uid}"),
+
+                      // Text(user.isAnonymous
+                      //     ? "ANONIM : ${user.uid}"
+                      //     : "USER : ${user.uid}"),
+                      // Text(user.isAnonymous
+                      //     ? "ANONIM : ${user.uid}"
+                      //     : "USER : ${user.uid}"),
+                      // Text(user.isAnonymous
+                      //     ? "ANONIM : ${user.uid}"
+                      //     : "USER : ${user.uid}"),
+                      // Text(user.isAnonymous
+                      //     ? "ANONIM : ${user.uid}"
+                      //     : "USER : ${user.uid}"),
+                      // Text(user.isAnonymous
+                      //     ? "ANONIM : ${user.uid}"
+                      //     : "USER : ${user.uid}"),
+                      // Text("AAAAAAAAAAAAAA"),
+                      // reusableButtonLog(
+                      //     context,
+                      //     "How to Use?",
+                      //     hexStringToColor("db9196"),
+                      //     hexStringToColor("ffffff"), () {
+                      //   Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //           builder: (context) => GuidebookPage()));
+                      // }),
                     ],
                   ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  Column(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          imageFromGallery();
-                          String testLink = "..............";
-
-                          setState(() {});
-                        },
-                        child: const Icon(Icons.photo_camera_outlined),
-                      ),
-                      Text("Galeri")
-                    ],
-                  ),
-                ],
+                ),
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              (_selectedImage != null && pickedImage != null)
-                  ? ElevatedButton(
-                      onPressed: () async {
-                        print("button start");
-                        setState(() {
-                          listFaceArea = [];
-                          listDownloadPath = [];
-                          isRecommendationLoading = true;
-                        });
-                        imageOriURL = await DatabaseService.uploadImage(
-                            user.uid, pickedImage!);
-                        print("upload");
-                        DatabaseService.createOrUpdateListImagesOri(user.uid,
-                            imageURL: imageOriURL);
-                        print("aaaaaaaaaa");
-                        final res = await getRecommendation(user.uid,
-                            imageOriURL, _selectedImage!.path.split('/').last);
-                        print("responseeee");
-                        print(res.runtimeType);
-                        // final val = jsonDecode(res.body);
-                        // print(val['urlNew'].toString());
-                        final val = jsonDecode(res.body);
-                        print("vallll");
-                        print(val);
-
-                        if (val['faceDetected']) {
-                          // if (val['urlNew'] != "") {
-                          if (val['listFaceUrl'][0] != "") {
-                            print("masukk");
-                            print(val['listFaceUrl']);
-                            listFaceUrl = val['listFaceUrl'];
-                            countFace = listFaceUrl.length;
-
-                            listSaved = [
-                              for (var i = 0; i < countFace; i++) false
-                            ];
-                            listNameHistory = [
-                              for (var i = 0; i < countFace; i++) ""
-                            ];
-
-                            listFaceCategory = val['listFaceCategory'];
-                            print(listFaceUrl);
-                            print(listFaceUrl.length);
-                            print(listFaceUrl[0]);
-                            recommendationStatus = true;
-                            // imageRecomendationURL = val['urlNew'];
-                            imageRecomendationURL = listFaceUrl[0];
-
-                            testLink = listFaceUrl[0];
-                            testCategory = listFaceCategory[0];
-                            print(testCategory);
-
-                            getLipstik(testCategory);
-
-                            print(
-                                "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                            print(val['listAreaFaces'].toString());
-                            listFaceArea = val['listAreaFaces'];
-                            faceArea = listFaceArea[0];
-
-                            if (kIsWeb) {
-                              print(
-                                  "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                              print(val['listAreaLips'].toString());
-                              listFaceLipsArea = val['listAreaLips'];
-                              testLipsArea = listFaceLipsArea[0].toString();
-                              lipsArea = listFaceLipsArea[0];
-                              listFaceLipsLabel = val['listLabels'];
-                              lipsLabel = listFaceLipsLabel[0];
-                              listFaceLipsCluster = val['listChoosenCluster'];
-                              lipsCluster = listFaceLipsCluster[0];
-                            } else {
-                              // download image
-                              print("downloaddd");
-                              // WEB GAK BISA
-                              for (String url in listFaceUrl) {
-                                await download(url);
-                                setState(() {});
-                              }
-                              print("selesaii downloadd");
-                              print(listDownloadPath);
-
-                              print("detecttt");
-                              var counterIndex = 0;
-                              // WEB GAK BISA
-                              for (String path in listDownloadPath) {
-                                print("path");
-                                print(path);
-                                String tempPath =
-                                    listDownloadPath[counterIndex];
-                                print("temp path");
-                                print(tempPath);
-                                print("list face");
-                                print(listFaceArea);
-                                print(counterIndex);
-                                faceArea = listFaceArea[counterIndex];
-
-                                await processImage(
-                                    InputImage.fromFilePath(
-                                        File(tempPath).path),
-                                    faceArea);
-                                counterIndex++;
-                              }
-                              print(counterIndex.toString());
-                              print(listFaceMLKit.toString());
-
-                              // SET FIRST
-                              faceMLKit = listFaceMLKit[0];
-                              faceArea = listFaceArea[0];
-                              // sizeAbsolute = listSizeAbsolute[0];
-                              // WEB GAK BISAprint("MASUK PAINTER");
-                              painter = FaceDetectorPainter(
-                                  faceMLKit, faceArea, lipColor);
-                            }
-                          }
-                        } else {
-                          print("no face detected");
-                        }
-
-                        print(res.toString());
-                        print(imageRecomendationURL);
-                        setState(() {
-                          isRecommendationLoading = false;
-                          if (val['faceDetected']) {
-                            pickedImage = null;
-                            _selectedImage = null;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ResultPage(
-                                          firebaseUser: user,
-                                        )));
-                          } else {
-                            print("OHHHHHHH NOOOOOOO");
-                            _dialogBuilder(context);
-                            print("OHHHHHHH NOOOOOOO 2");
-                          }
-                        });
-                      },
-                      child: const Text("Cari Rekomendasi"),
-                    )
-                  : Container(),
-              // ElevatedButton(
-              //     child: Text("result"),
-              //     onPressed: () {
-              //       Navigator.push(context,
-              //           MaterialPageRoute(builder: (context) => ResultPage()));
-              //     }),
-              ElevatedButton(
-                  child: Text("LOG OUT"),
-                  onPressed: () async {
-                    await AuthServices.logOut();
-                  }),
-            ]),
-          ),
+            ),
+            Text(
+              user.isAnonymous ? "ANONIM : ${user.uid}" : "USER : ${user.uid}",
+            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Container(
+            //       width: MediaQuery.of(context).size.width * 0.8,
+            //       child: Text(
+            //         user.isAnonymous
+            //             ? "ANONIM : ${user.uid}aaaaaaaaaaa"
+            //             : "USER : ${user.uid}",
+            //         softWrap: true,
+            //       ),
+            //     ),
+            //     Expanded(
+            //       child: IconButton(
+            //         icon: Icon(Icons.logout),
+            //         onPressed: () async {
+            //           await AuthServices.logOut();
+            //         },
+            //       ),
+            //     )
+            //   ],
+            // ),
+          ],
         ),
       ),
+
+      // bottomNavigationBar: (!user.isAnonymous)
+      //     ? BottomNavigationBar(
+      //         items: <BottomNavigationBarItem>[
+      //           BottomNavigationBarItem(
+      //             icon: Icon(Icons.home),
+      //             label: 'home',
+      //           ),
+      //           BottomNavigationBarItem(
+      //             icon: Icon(Icons.book),
+      //             label: 'guidebook',
+      //           ),
+      //           BottomNavigationBarItem(
+      //             icon: Icon(Icons.person),
+      //             label: 'profile',
+      //           ),
+      //         ],
+      //         unselectedItemColor: hexStringToColor("db9196"),
+      //         currentIndex: _selectedIndex,
+      //         selectedItemColor: hexStringToColor("d3445d"),
+      //         onTap: (index) {
+      //           print(index);
+      //           _selectedIndex = index;
+      //           if (_selectedIndex == 1) {}
+      //           setState(() {
+      //             Navigator.push(context,
+      //                 MaterialPageRoute(builder: (context) => GuidebookPage()));
+      //           });
+      //         },
+      //       )
+      //     : null,
     );
   }
 }

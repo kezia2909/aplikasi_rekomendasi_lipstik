@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/detail_history_page.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
 import 'package:flutter_application_recommendation/services/database_service.dart';
+import 'package:flutter_application_recommendation/utils/color_utils.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 
@@ -154,9 +155,22 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: AppBar(
+        backgroundColor: hexStringToColor("f9e8e6"),
+        foregroundColor: hexStringToColor("d3445d"),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Registration",
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+      ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
+        decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
+
         // child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(
@@ -292,7 +306,11 @@ class _HistoryPageState extends State<HistoryPage> {
                                                 painter = FaceDetectorPainter(
                                                     faceMLKit,
                                                     faceArea,
-                                                    lipColor);
+                                                    lipColor,
+                                                    MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.8);
                                               }
                                             }
                                             Navigator.push(

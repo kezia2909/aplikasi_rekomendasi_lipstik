@@ -62,10 +62,20 @@ class _LoginPageState extends State<LoginPage> {
                             context,
                             "SIGN IN",
                             hexStringToColor("f9e8e6"),
-                            hexStringToColor("d3445d"), () async {
+                            hexStringToColor("1b1c1e"), () async {
                           await AuthServices.logInEmail(
                               _emailTextController.text,
                               _passwordTextController.text);
+                        }),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        reusableButtonLog(
+                            context,
+                            "SKIP",
+                            hexStringToColor("db9196"),
+                            hexStringToColor("f9e8e6"), () async {
+                          await AuthServices.logInAnonymous();
                         }),
                         // Text("OR"),
                         // Text("Don't have an account?"),
@@ -119,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                         // }),
                         // USING TEXT
                         const SizedBox(
-                          height: 30,
+                          height: 20,
                         ),
                         reusableLogOption(
                           context,
@@ -132,26 +142,26 @@ class _LoginPageState extends State<LoginPage> {
                                     builder: (context) => RegistrationPage()));
                           },
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          "or",
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(1.0),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        reusableLogOption(
-                          context,
-                          "Sign In",
-                          "Anonymously",
-                          () async {
-                            await AuthServices.logInAnonymous();
-                          },
-                        )
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        // Text(
+                        //   "or",
+                        //   style: TextStyle(
+                        //     color: Colors.white.withOpacity(1.0),
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        // reusableLogOption(
+                        //   context,
+                        //   "Sign In",
+                        //   "Anonymously",
+                        //   () async {
+                        //     await AuthServices.logInAnonymous();
+                        //   },
+                        // )
                       ],
                     ),
                   ),

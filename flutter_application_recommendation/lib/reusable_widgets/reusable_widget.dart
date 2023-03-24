@@ -19,18 +19,6 @@ Text reusableTextTitle(String title) {
           fontWeight: FontWeight.bold));
 }
 
-Container reusablePhotoFrame(Image image) {
-  return Container(
-    width: 200,
-    height: 200,
-    decoration: BoxDecoration(
-      shape: BoxShape.rectangle,
-      border: Border.all(color: Colors.black, width: 5),
-    ),
-    child: image,
-  );
-}
-
 TextField reusableTextFieldLog(String text, IconData icon, bool isPasswordType,
     TextEditingController controller) {
   return TextField(
@@ -71,7 +59,7 @@ Container reusableButtonLog(
     width: MediaQuery.of(context).size.width,
     height: 50,
     // margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-    decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
+    // decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
     child: ElevatedButton(
       onPressed: () {
         onTap();
@@ -89,7 +77,7 @@ Container reusableButtonLog(
             return buttonColor;
           }),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
     ),
   );
 }
@@ -114,5 +102,17 @@ Row reusableLogOption(
         ),
       )
     ],
+  );
+}
+
+Container reusablePhotoFrame(Image image, double size) {
+  return Container(
+    width: size,
+    height: size,
+    decoration: BoxDecoration(
+      shape: BoxShape.rectangle,
+      border: Border.all(color: hexStringToColor("1b1c1e"), width: 5),
+    ),
+    child: image,
   );
 }

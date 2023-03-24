@@ -64,7 +64,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                    20, MediaQuery.of(context).size.height * 0.06, 20, 20),
+                    20, MediaQuery.of(context).size.height * 0.1, 20, 20),
                 child: Column(
                   children: [
                     Align(
@@ -118,7 +118,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   context,
                                   "SIGN UP",
                                   hexStringToColor("f9e8e6"),
-                                  hexStringToColor("d3445d"), () async {
+                                  hexStringToColor("1b1c1e"), () async {
                                 await AuthServices.registAccount(
                                     _firstnameTextController.text,
                                     _lastnameTextController.text,
