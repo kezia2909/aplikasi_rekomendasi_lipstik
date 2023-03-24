@@ -116,19 +116,54 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               ),
                               reusableButtonLog(
                                   context,
-                                  "SUBMIT",
-                                  hexStringToColor("ffffff"),
-                                  hexStringToColor("1b1c1e"), () async {
+                                  "SIGN UP",
+                                  hexStringToColor("f9e8e6"),
+                                  hexStringToColor("d3445d"), () async {
                                 await AuthServices.registAccount(
                                     _firstnameTextController.text,
                                     _lastnameTextController.text,
                                     _emailTextController.text,
                                     _passwordTextController.text);
                               }),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              // reusableButtonLog(
+                              //     context,
+                              //     "SKIP",
+                              //     hexStringToColor("db9196"),
+                              //     hexStringToColor("1b1c1e"), () async {
+                              //   await AuthServices.logInAnonymous();
+                              // }),
+                              // const SizedBox(
+                              //   height: 30,
+                              // ),
+                              // Align(
+                              //   alignment: Alignment.topLeft,
+                              //   child: Text(
+                              //     "Already have an account?",
+                              //     style: TextStyle(
+                              //       color: Colors.white.withOpacity(1.0),
+                              //     ),
+                              //   ),
+                              // ),
+                              // const SizedBox(
+                              //   height: 10,
+                              // ),
+                              // reusableButtonLog(
+                              //     context,
+                              //     "SIGN IN",
+                              //     hexStringToColor("db9196"),
+                              //     hexStringToColor("1b1c1e"), () {
+                              //   Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //           builder: (context) => LoginPage()));
+                              // }),
                               reusableLogOption(
                                 context,
-                                "Already have account?",
-                                "Log In",
+                                "Already have an account?",
+                                "Sign In",
                                 () {
                                   Navigator.push(
                                       context,
@@ -136,6 +171,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           builder: (context) => LoginPage()));
                                 },
                               ),
+                              // const SizedBox(
+                              //   height: 20,
+                              // ),
+                              // reusableLogOption(
+                              //   context,
+                              //   "Log in as",
+                              //   "Guest",
+                              //   () async {
+                              //     await AuthServices.logInAnonymous();
+                              //   },
+                              // )
                             ],
                           ),
                         ),

@@ -60,29 +60,96 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         reusableButtonLog(
                             context,
-                            "LOG IN",
+                            "SIGN IN",
                             hexStringToColor("f9e8e6"),
-                            hexStringToColor("1b1c1e"), () async {
+                            hexStringToColor("d3445d"), () async {
                           await AuthServices.logInEmail(
                               _emailTextController.text,
                               _passwordTextController.text);
                         }),
-                        reusableButtonLog(
-                            context,
-                            "SKIP",
-                            hexStringToColor("f9e8e6"),
-                            hexStringToColor("1b1c1e"), () async {
-                          await AuthServices.logInAnonymous();
-                        }),
+                        // Text("OR"),
+                        // Text("Don't have an account?"),
+
+                        // reusableLogOption(
+                        //   context,
+                        //   "Don't have an account?",
+                        //   "SIGN UP",
+                        //   () {
+                        //     Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //             builder: (context) => RegistrationPage()));
+                        //   },
+                        // ),
+                        // USING BUTTON
+                        // const SizedBox(
+                        //   height: 30,
+                        // ),
+                        // Align(
+                        //   alignment: Alignment.topLeft,
+                        //   child: Text(
+                        //     "Don't have an account?",
+                        //     style: TextStyle(
+                        //       color: Colors.white.withOpacity(1.0),
+                        //     ),
+                        //   ),
+                        // ),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        // reusableButtonLog(
+                        //     context,
+                        //     "SIGN UP",
+                        //     hexStringToColor("db9196"),
+                        //     hexStringToColor("1b1c1e"), () {
+                        //   Navigator.push(
+                        //       context,
+                        //       MaterialPageRoute(
+                        //           builder: (context) => RegistrationPage()));
+                        // }),
+                        // const SizedBox(
+                        //   height: 10,
+                        // ),
+                        // reusableButtonLog(
+                        //     context,
+                        //     "SKIP",
+                        //     hexStringToColor("db9196"),
+                        //     hexStringToColor("1b1c1e"), () async {
+                        //   await AuthServices.logInAnonymous();
+                        // }),
+                        // USING TEXT
+                        const SizedBox(
+                          height: 30,
+                        ),
                         reusableLogOption(
                           context,
-                          "Don't have account?",
-                          "Registration",
+                          "Don't have an account?",
+                          "Sign Up",
                           () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => RegistrationPage()));
+                          },
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "or",
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(1.0),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        reusableLogOption(
+                          context,
+                          "Sign In",
+                          "Anonymously",
+                          () async {
+                            await AuthServices.logInAnonymous();
                           },
                         )
                       ],

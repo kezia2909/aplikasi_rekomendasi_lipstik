@@ -70,7 +70,7 @@ Container reusableButtonLog(
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 50,
-    margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+    // margin: const EdgeInsets.fromLTRB(0, 10, 0, 10),
     decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
     child: ElevatedButton(
       onPressed: () {
@@ -78,13 +78,13 @@ Container reusableButtonLog(
       },
       child: Text(
         text,
-        style: const TextStyle(
-            color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 16),
+        style: TextStyle(
+            color: fontColor, fontWeight: FontWeight.bold, fontSize: 16),
       ),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.pressed)) {
-              return fontColor;
+              return buttonColor;
             }
             return buttonColor;
           }),
