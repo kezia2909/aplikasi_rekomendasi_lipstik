@@ -31,6 +31,9 @@ class _ResultPageState extends State<ResultPage> {
   );
   String temp = "baru";
 
+  late double sizeFrame;
+  late double sizePadding;
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -258,9 +261,7 @@ class _ResultPageState extends State<ResultPage> {
     );
   }
 
-  late double sizeFrame;
-  late double sizePadding;
-
+// START WIDGET
   @override
   Widget build(BuildContext context) {
     if (MediaQuery.of(context).size.width <

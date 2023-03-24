@@ -39,7 +39,7 @@ TextField reusableTextFieldLog(String text, IconData icon, bool isPasswordType,
       floatingLabelBehavior: FloatingLabelBehavior.never,
       fillColor: Colors.white.withOpacity(0.3),
       border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(10.0),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none)),
     ),
     keyboardType: isPasswordType
