@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_recommendation/utils/color_utils.dart';
 
 Image logoWidget(String imageName) {
   return Image.asset(
@@ -6,8 +7,16 @@ Image logoWidget(String imageName) {
     fit: BoxFit.fitWidth,
     width: 240,
     height: 240,
-    color: Colors.white,
+    color: hexStringToColor("f9e8e6"),
   );
+}
+
+Text reusableTextTitle(String title) {
+  return Text(title,
+      style: TextStyle(
+          color: Colors.white.withOpacity(1.0),
+          fontSize: 25,
+          fontWeight: FontWeight.bold));
 }
 
 Container reusablePhotoFrame(Image image) {
@@ -22,7 +31,7 @@ Container reusablePhotoFrame(Image image) {
   );
 }
 
-TextField reusableTextField(String text, IconData icon, bool isPasswordType,
+TextField reusableTextFieldLog(String text, IconData icon, bool isPasswordType,
     TextEditingController controller) {
   return TextField(
     controller: controller,
@@ -30,14 +39,14 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
     enableSuggestions: !isPasswordType,
     autocorrect: !isPasswordType,
     cursorColor: Colors.white,
-    style: TextStyle(color: Colors.white.withOpacity(0.9)),
+    style: TextStyle(color: Colors.white.withOpacity(1.0)),
     decoration: InputDecoration(
       prefixIcon: Icon(
         icon,
-        color: Colors.white70,
+        color: Colors.white,
       ),
       labelText: text,
-      labelStyle: TextStyle(color: Colors.white.withOpacity(0.9)),
+      labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
       filled: true,
       floatingLabelBehavior: FloatingLabelBehavior.never,
       fillColor: Colors.white.withOpacity(0.3),
@@ -51,7 +60,13 @@ TextField reusableTextField(String text, IconData icon, bool isPasswordType,
   );
 }
 
-Container reusableButtonLog(BuildContext context, String type, Function onTap) {
+Container reusableButtonLog(
+  BuildContext context,
+  String text,
+  Color buttonColor,
+  Color fontColor,
+  Function onTap,
+) {
   return Container(
     width: MediaQuery.of(context).size.width,
     height: 50,
@@ -62,19 +77,42 @@ Container reusableButtonLog(BuildContext context, String type, Function onTap) {
         onTap();
       },
       child: Text(
-        type,
+        text,
         style: const TextStyle(
             color: Colors.black87, fontWeight: FontWeight.bold, fontSize: 16),
       ),
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.resolveWith((states) {
             if (states.contains(MaterialState.pressed)) {
-              return Colors.black26;
+              return fontColor;
             }
-            return Colors.white;
+            return buttonColor;
           }),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
     ),
+  );
+}
+
+Row reusableLogOption(
+  BuildContext context,
+  String description,
+  String logOption,
+  Function onTap,
+) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Text("$description ", style: TextStyle(color: Colors.white70)),
+      GestureDetector(
+        onTap: () {
+          onTap();
+        },
+        child: Text(
+          logOption,
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      )
+    ],
   );
 }

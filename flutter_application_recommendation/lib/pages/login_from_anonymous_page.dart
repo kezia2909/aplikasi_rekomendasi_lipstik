@@ -83,9 +83,8 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-            hexStringToColor("CB2B93"),
-            hexStringToColor("9546C4"),
-            hexStringToColor("5E61F4"),
+            hexStringToColor("db9196"),
+            hexStringToColor("d3445d"),
           ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
         ),
         child: SingleChildScrollView(
@@ -98,12 +97,12 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
                 const SizedBox(
                   height: 30,
                 ),
-                reusableTextField("Enter Email", Icons.person_outline, false,
+                reusableTextFieldLog("Enter Email", Icons.person_outline, false,
                     _emailTextController),
                 const SizedBox(
                   height: 20,
                 ),
-                reusableTextField("Enter Password", Icons.lock_outline, true,
+                reusableTextFieldLog("Enter Password", Icons.lock_outline, true,
                     _passwordTextController),
                 const SizedBox(
                   height: 20,
@@ -123,7 +122,8 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
                 //     print("Error ${error.toString()}");
                 //   });
                 // }),
-                reusableButtonLog(context, "LOG IN", () async {
+                reusableButtonLog(context, "LOG IN", hexStringToColor("ffffff"),
+                    hexStringToColor("1b1c1e"), () async {
                   credential = EmailAuthProvider.credential(
                       email: _emailTextController.text,
                       password: _passwordTextController.text);

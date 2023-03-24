@@ -126,22 +126,22 @@ class _RegistrationFromAnonymousPageState
             const SizedBox(
               height: 20,
             ),
-            reusableTextField("Enter First Name", Icons.person_outline, false,
-                _firstnameTextController),
+            reusableTextFieldLog("Enter First Name", Icons.person_outline,
+                false, _firstnameTextController),
             const SizedBox(
               height: 20,
             ),
-            reusableTextField("Enter Last Name", Icons.person_outline, false,
+            reusableTextFieldLog("Enter Last Name", Icons.person_outline, false,
                 _lastnameTextController),
             const SizedBox(
               height: 20,
             ),
-            reusableTextField(
+            reusableTextFieldLog(
                 "Enter Email", Icons.mail_outline, false, _emailTextController),
             const SizedBox(
               height: 20,
             ),
-            reusableTextField("Enter Password", Icons.lock_outline, true,
+            reusableTextFieldLog("Enter Password", Icons.lock_outline, true,
                 _passwordTextController),
             const SizedBox(
               height: 20,
@@ -167,7 +167,8 @@ class _RegistrationFromAnonymousPageState
             //     print("Error ${error.toString()}");
             //   }));
             // }),
-            reusableButtonLog(context, "SUBMIT", () async {
+            reusableButtonLog(context, "SUBMIT", hexStringToColor("ffffff"),
+                hexStringToColor("1b1c1e"), () async {
               await anonymousRegistEmail(
                   user: user,
                   firstname: _firstnameTextController.text,
