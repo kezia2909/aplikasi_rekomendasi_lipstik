@@ -16,6 +16,7 @@ import '../utils/color_utils.dart';
 // PRIVATE
 class ResultPage extends StatefulWidget {
   final User firebaseUser;
+
   const ResultPage({Key? key, required this.firebaseUser}) : super(key: key);
 
   @override
@@ -59,6 +60,7 @@ class _ResultPageState extends State<ResultPage> {
                   child:
                       statusSave ? Text("Edit History") : Text('Save History')),
               IconButton(
+                color: colorTheme(colorBlack),
                 padding: EdgeInsets.all(0),
                 alignment: Alignment.topRight,
                 icon: Icon(Icons.close),
@@ -74,31 +76,19 @@ class _ResultPageState extends State<ResultPage> {
             decoration: InputDecoration(
                 hintText: "history name",
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
+                  borderSide: BorderSide(color: colorTheme(colorBlack)),
                 ),
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.black),
+                  borderSide: BorderSide(color: colorTheme(colorBlack)),
                 )),
           ),
           actions: <Widget>[
-            // ElevatedButton(
-            //   child: Text('CANCEL'),
-            //   onPressed: () {
-            //     Navigator.pop(context);
-            //     textFieldNameHistoryController.clear();
-            //   },
-            // ),
-            // statusSave
-            //     ? reusableButtonLog(context, "Edit", hexStringToColor("d3445d"),
-            //         hexStringToColor("ffffff"), () {})
-            //     : reusableButtonLog(context, "Save", hexStringToColor("d3445d"),
-            //         hexStringToColor("ffffff"), () {}),
             statusSave
                 ? reusableButtonLog(
                     context,
-                    "Edit",
-                    hexStringToColor("d3445d"),
-                    hexStringToColor("ffffff"),
+                    "SUBMIT",
+                    colorTheme(colorAccent),
+                    colorTheme(colorWhite),
                     () async {
                       print(textFieldNameHistoryController.text);
                       listSaved[tempIndex] = true;
@@ -107,11 +97,23 @@ class _ResultPageState extends State<ResultPage> {
                         if (await DatabaseService.checkHistoryRekomendasi(
                             userId: user.uid,
                             nameHistory: textFieldNameHistoryController.text)) {
+                          var message = "Sorry the name is already used";
                           snackBar = SnackBar(
-                            content: const Text(
-                                'Maaf history dengan nama tersebut sudah ada'),
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.warning,
+                                  color: colorTheme(colorWhite),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(message),
+                              ],
+                            ),
+                            backgroundColor: colorTheme(colorRed),
                           );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                          // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                         } else {
                           if (await DatabaseService.createHistoryRekomendasi(
                               // lipsArea, lipsLabel, lipsCluster,
@@ -125,8 +127,21 @@ class _ResultPageState extends State<ResultPage> {
                             print("SNACKBARRRRRRRRRR");
                             listSaved[tempIndex] = true;
                             Navigator.pop(context);
+                            var message = "History Edited";
                             snackBar = SnackBar(
-                              content: const Text('History berhasil diedit'),
+                              content: Row(
+                                children: [
+                                  Icon(
+                                    Icons.check,
+                                    color: colorTheme(colorWhite),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(message),
+                                ],
+                              ),
+                              backgroundColor: colorTheme(colorShadow),
                             );
                             listNameHistory[tempIndex] =
                                 textFieldNameHistoryController.text;
@@ -134,8 +149,21 @@ class _ResultPageState extends State<ResultPage> {
                         }
                       } else {
                         Navigator.pop(context);
+                        var message = "History Edited";
                         snackBar = SnackBar(
-                          content: const Text('History berhasil diedit'),
+                          content: Row(
+                            children: [
+                              Icon(
+                                Icons.check,
+                                color: colorTheme(colorWhite),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(message),
+                            ],
+                          ),
+                          backgroundColor: colorTheme(colorShadow),
                         );
                         listNameHistory[tempIndex] =
                             textFieldNameHistoryController.text;
@@ -150,9 +178,9 @@ class _ResultPageState extends State<ResultPage> {
                   )
                 : reusableButtonLog(
                     context,
-                    "Save",
-                    hexStringToColor("d3445d"),
-                    hexStringToColor("ffffff"),
+                    "SUBMIT",
+                    colorTheme(colorAccent),
+                    colorTheme(colorWhite),
                     () async {
                       print(textFieldNameHistoryController.text);
 
@@ -162,11 +190,24 @@ class _ResultPageState extends State<ResultPage> {
                       if (await DatabaseService.checkHistoryRekomendasi(
                           userId: user.uid,
                           nameHistory: textFieldNameHistoryController.text)) {
+                        var message = "Sorry the name is already used";
                         snackBar = SnackBar(
-                          content: const Text(
-                              'Maaf history dengan nama tersebut sudah ada'),
+                          content: Row(
+                            children: [
+                              Icon(
+                                Icons.warning,
+                                color: colorTheme(colorWhite),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(message),
+                            ],
+                          ),
+                          backgroundColor: colorTheme(colorRed),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
+                        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
                         print("mlkit");
                         print(faceMLKit.toString());
@@ -186,8 +227,21 @@ class _ResultPageState extends State<ResultPage> {
                           print("SNACKBARRRRRRRRRR");
                           listSaved[tempIndex] = true;
                           Navigator.pop(context);
+                          var message = "History Saved";
                           snackBar = SnackBar(
-                            content: const Text('History berhasil dibuat'),
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.check,
+                                  color: colorTheme(colorWhite),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(message),
+                              ],
+                            ),
+                            backgroundColor: colorTheme(colorShadow),
                           );
                         }
                       }
@@ -289,8 +343,8 @@ class _ResultPageState extends State<ResultPage> {
     return Scaffold(
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: hexStringToColor("f9e8e6"),
-        foregroundColor: hexStringToColor("d3445d"),
+        backgroundColor: colorTheme(colorHighlight),
+        foregroundColor: colorTheme(colorAccent),
         elevation: 0,
         centerTitle: true,
         title: Text(
@@ -304,7 +358,7 @@ class _ResultPageState extends State<ResultPage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(color: hexStringToColor("fcedea")),
+        decoration: BoxDecoration(color: colorTheme(colorHighlight)),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(sizePadding, 10, sizePadding, 0),
@@ -313,7 +367,7 @@ class _ResultPageState extends State<ResultPage> {
                 Text(
                     "$countFace face detected (face : ${tempIndex + 1}/$countFace)",
                     style: TextStyle(
-                        color: Colors.black,
+                        color: colorTheme(colorBlack),
                         fontSize: 15,
                         fontWeight: FontWeight.w500),
                     textAlign: TextAlign.center),
@@ -398,8 +452,8 @@ class _ResultPageState extends State<ResultPage> {
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         color: tempIndex == index
-                            ? hexStringToColor("d3445d")
-                            : Color.fromRGBO(0, 0, 0, 0.4),
+                            ? colorTheme(colorAccent)
+                            : colorTheme(colorMidtone),
                       ),
                     );
                   }).toList(),
@@ -411,8 +465,8 @@ class _ResultPageState extends State<ResultPage> {
                 Text(
                   "Skin Type : ${listFaceCategory[tempIndex]}",
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
+                      color: colorTheme(colorBlack),
+                      fontSize: 20,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -463,7 +517,8 @@ class _ResultPageState extends State<ResultPage> {
                             color:
                                 Color(int.parse(buffer.toString(), radix: 16)),
                             border: currentIndex == index
-                                ? Border.all(color: Colors.black, width: 5)
+                                ? Border.all(
+                                    color: colorTheme(colorBlack), width: 5)
                                 : Border(),
                           ),
                         ),
@@ -480,8 +535,25 @@ class _ResultPageState extends State<ResultPage> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 30,
                 ),
+                // (listSaved[tempIndex])
+                //     ? Text(
+                //         "Name : ${listNameHistory[tempIndex]}",
+                //         style: TextStyle(
+                //             color: colorTheme(colorBlack),
+                //             fontSize: 15,
+                //             fontWeight: FontWeight.bold),
+                //         textAlign: TextAlign.center,
+                //       )
+                //     : Text(
+                //         "Not save",
+                //         style: TextStyle(
+                //             color: colorTheme(colorBlack),
+                //             fontSize: 15,
+                //             fontWeight: FontWeight.bold),
+                //         textAlign: TextAlign.center,
+                //       ),
                 // gak login gak bisa simpan
                 // (!user.isAnonymous)
                 //     ? (!listSaved[tempIndex])
@@ -501,11 +573,8 @@ class _ResultPageState extends State<ResultPage> {
                 //             })
                 //     : Container()
                 (!listSaved[tempIndex])
-                    ? reusableButtonLog(
-                        context,
-                        "Save",
-                        hexStringToColor("d3445d"),
-                        hexStringToColor("ffffff"), () {
+                    ? reusableButtonLog(context, "SAVE",
+                        colorTheme(colorAccent), colorTheme(colorWhite), () {
                         if (!user.isAnonymous) {
                           modalSaveEditLogin(context, listSaved[tempIndex]);
                         } else {
@@ -514,9 +583,9 @@ class _ResultPageState extends State<ResultPage> {
                       })
                     : reusableButtonLog(
                         context,
-                        "Edit",
-                        hexStringToColor("d3445d"),
-                        hexStringToColor("ffffff"), () {
+                        "EDIT \"${listNameHistory[tempIndex]}\"",
+                        colorTheme(colorDark),
+                        colorTheme(colorWhite), () {
                         textFieldNameHistoryController.text =
                             listNameHistory[tempIndex];
                         modalSaveEditLogin(context, listSaved[tempIndex]);

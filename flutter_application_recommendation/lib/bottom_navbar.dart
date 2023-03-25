@@ -28,7 +28,13 @@ class _BottomNavbarState extends State<BottomNavbar> {
   @override
   Widget build(BuildContext context) {
     final userScreens = [
-      HomePage(firebaseUser: user),
+      HomePage(
+          firebaseUser: user,
+          ref: (int number) {
+            setState(() {
+              currentIndex = number;
+            });
+          }),
       HistoryPage(firebaseUser: user),
       const GuidebookPage(),
       ProfilePage(firebaseUser: user),
@@ -60,6 +66,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
               ],
               unselectedItemColor: colorTheme(colorShadow),
               selectedItemColor: colorTheme(colorAccent),
+              backgroundColor: colorTheme(colorHighlight),
             ),
           )
         : Scaffold(
@@ -91,6 +98,9 @@ class _BottomNavbarState extends State<BottomNavbar> {
               ],
               unselectedItemColor: colorTheme(colorShadow),
               selectedItemColor: colorTheme(colorAccent),
+              // backgroundColor: Colors.transparent,
+              // fixedColor: Colors.transparent,
+              elevation: 0,
             ),
           );
   }

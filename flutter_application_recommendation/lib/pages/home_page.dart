@@ -203,7 +203,10 @@ Future<void> download(String _url) async {
 
 class HomePage extends StatefulWidget {
   final User firebaseUser;
-  const HomePage({Key? key, required this.firebaseUser}) : super(key: key);
+  final Function(int)? ref;
+
+  const HomePage({Key? key, required this.firebaseUser, this.ref})
+      : super(key: key);
   // const HomePage({Key? key}) : super(key: key);
 
   @override
@@ -211,6 +214,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Function(int)? ref = widget.ref;
   // bottom navbar
   int _selectedIndex = 0;
 
@@ -346,7 +350,10 @@ class _HomePageState extends State<HomePage> {
               IconButton(
                 padding: EdgeInsets.all(0),
                 alignment: Alignment.topRight,
-                icon: Icon(Icons.close),
+                icon: Icon(
+                  Icons.close,
+                  color: colorTheme(colorBlack),
+                ),
                 onPressed: () {
                   setState(() {
                     pickedImage = null;
@@ -357,8 +364,10 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          content: const Text(
-              'Please use an appropriate photo that matches the guidelines provided'),
+          content: Text(
+            'Please use an appropriate photo that matches the guidelines provided',
+            style: TextStyle(color: colorTheme(colorBlack)),
+          ),
           actions: <Widget>[
             // ElevatedButton(
             //   child: const Text('Close'),
@@ -373,17 +382,17 @@ class _HomePageState extends State<HomePage> {
             reusableButtonLog(
               context,
               "Guidebook",
-              hexStringToColor("d3445d"),
-              hexStringToColor("ffffff"),
+              colorTheme(colorAccent),
+              colorTheme(colorWhite),
               () {
                 setState(() {
                   pickedImage = null;
                   _selectedImage = null;
                 });
                 Navigator.of(context).pop();
-
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => GuidebookPage()));
+                ref!(2);
+                // Navigator.push(context,
+                //     MaterialPageRoute(builder: (context) => GuidebookPage()));
               },
             ),
             // TextButton(
@@ -500,434 +509,425 @@ class _HomePageState extends State<HomePage> {
         //       : Container(),
         // ],
       ),
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        // decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
-        decoration: BoxDecoration(color: colorTheme(colorHighlight)),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(sizePadding, 10, sizePadding, 0),
-                  child: Column(
-                    children: <Widget>[
-                      // Row(
-                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //   children: [
-                      //     IconButton(
-                      //       icon: Icon(Icons.logout),
-                      //       onPressed: () {
-                      //         // Navigator.pop(context);
-                      //       },
-                      //     ),
-                      //     (!user.isAnonymous)
-                      //         ? IconButton(
-                      //             icon: Icon(Icons.history),
-                      //             onPressed: () {
-                      //               recommendationStatus = false;
-                      //               // _selectedImage = File(pickedImage!.path);
-                      //               listFaceUrl = [];
-                      //               listSaved = [];
-                      //               listNameHistory = [];
-                      //               listFaceCategory = [];
-                      //               testLink = "..............";
-                      //               testCategory = "category";
-                      //               testWarna = "warna";
-                      //               testLipstik = "lipstik";
-                      //               listLipstikFace = [];
-                      //               testChosenLipstik = "choosen";
-                      //               testLipsArea = "area";
-                      //               listDownloadPath = [];
-                      //               listFaceMLKit = [];
-                      //               listSizeAbsolute = [];
-                      //               listFaceArea = [];
-                      //               print("Look history");
-                      //               print(listDownloadPath);
-                      //               Navigator.push(
-                      //                   context,
-                      //                   MaterialPageRoute(
-                      //                       builder: (context) =>
-                      //                           HistoryPage(firebaseUser: user)));
-                      //             },
-                      //           )
-                      //         : Container(),
-                      //   ],
-                      // ),
-
-                      // Text(user.uid),
-                      // Text(user.isAnonymous
-                      //     ? "ANONIM : ${user.uid}"
-                      //     : "USER : ${user.uid}"),
-
-                      // const SizedBox(
-                      //   height: 30,
-                      // ),
-                      // CarouselSlider(
-                      //   options: CarouselOptions(height: 400.0),
-                      //   items: [1, 2, 3, 4, 5].map((i) {
-                      //     return Builder(
-                      //       builder: (BuildContext context) {
-                      //         return Container(
-                      //             width: MediaQuery.of(context).size.width,
-                      //             margin: EdgeInsets.symmetric(horizontal: 5.0),
-                      //             decoration: BoxDecoration(color: Colors.amber),
-                      //             child: Text(
-                      //               'text $i',
-                      //               style: TextStyle(fontSize: 16.0),
-                      //             ));
-                      //       },
-                      //     );
-                      //   }).toList(),
-                      // ),
-                      (isRecommendationLoading)
-                          ? Center(child: CircularProgressIndicator())
-                          : (_selectedImage == null || pickedImage == null)
-                              ? reusablePhotoFrame(
-                                  Image.asset(
-                                    "assets/images/model.png",
-                                    fit: BoxFit.cover,
-                                    color: colorTheme(colorBlack),
-                                  ),
-                                  sizeFrame)
-                              : kIsWeb
-                                  ? reusablePhotoFrame(
-                                      Image.network(
-                                        _selectedImage!.path,
-                                        fit: BoxFit.cover,
-                                      ),
-                                      sizeFrame)
-                                  : reusablePhotoFrame(
-                                      Image.file(
-                                        File(_selectedImage!.path),
-                                        fit: BoxFit.cover,
-                                      ),
-                                      sizeFrame),
-                      const SizedBox(
-                        height: 30,
-                      ),
-
-                      Column(
-                        children: [
-                          Text(
-                            "Take a photo / choose from gallery",
-                            style: TextStyle(
-                                color: colorTheme(colorBlack),
-                                fontSize: 15,
-                                fontWeight: FontWeight.bold),
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      imageFromCamera();
-                                      String testLink = "..............";
-
-                                      setState(() {});
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      primary: colorTheme(colorShadow),
-                                    ),
-                                    child: Icon(
-                                      Icons.photo_camera_outlined,
-                                      size: sizeFrame / 4,
-                                      color: colorTheme(colorWhite),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text("Camera",
-                                      style: TextStyle(
-                                          color: colorTheme(colorBlack),
-                                          fontSize: 15,
-                                          fontWeight: ui.FontWeight.w500),
-                                      textAlign: TextAlign.center)
-                                ],
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Column(
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      imageFromGallery();
-                                      String testLink = "..............";
-
-                                      setState(() {});
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      primary: colorTheme(colorShadow),
-                                    ),
-                                    child: Icon(
-                                      Icons.photo_library_outlined,
-                                      size: sizeFrame / 4,
-                                      color: colorTheme(colorWhite),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 5,
-                                  ),
-                                  Text("Gallery",
-                                      style: TextStyle(
-                                          color: colorTheme(colorBlack),
-                                          fontSize: 15,
-                                          fontWeight: ui.FontWeight.w500),
-                                      textAlign: TextAlign.center)
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                        ],
-                      ),
-                      (_selectedImage != null && pickedImage != null)
-                          ? reusableButtonLog(
-                              context,
-                              "START",
-                              hexStringToColor("d3445d"),
-                              hexStringToColor("ffffff"), () async {
-                              print("button start");
-                              setState(() {
-                                listFaceArea = [];
-                                listDownloadPath = [];
-                                isRecommendationLoading = true;
-                              });
-                              imageOriURL = await DatabaseService.uploadImage(
-                                  user.uid, pickedImage!);
-                              print("upload");
-                              DatabaseService.createOrUpdateListImagesOri(
-                                  user.uid,
-                                  imageURL: imageOriURL);
-                              print("aaaaaaaaaa");
-                              final res = await getRecommendation(
-                                  user.uid,
-                                  imageOriURL,
-                                  _selectedImage!.path.split('/').last);
-                              print("responseeee");
-                              print(res.runtimeType);
-                              final val = jsonDecode(res.body);
-                              print("vallll");
-                              print(val);
-
-                              if (val['faceDetected']) {
-                                if (val['listFaceUrl'][0] != "") {
-                                  print("masukk");
-                                  print(val['listFaceUrl']);
-                                  listFaceUrl = val['listFaceUrl'];
-                                  countFace = listFaceUrl.length;
-
-                                  listSaved = [
-                                    for (var i = 0; i < countFace; i++) false
-                                  ];
-                                  listNameHistory = [
-                                    for (var i = 0; i < countFace; i++) ""
-                                  ];
-
-                                  listFaceCategory = val['listFaceCategory'];
-                                  print(listFaceUrl);
-                                  print(listFaceUrl.length);
-                                  print(listFaceUrl[0]);
-                                  recommendationStatus = true;
-                                  imageRecomendationURL = listFaceUrl[0];
-
-                                  testLink = listFaceUrl[0];
-                                  testCategory = listFaceCategory[0];
-                                  print(testCategory);
-
-                                  getLipstik(testCategory);
-
-                                  print(
-                                      "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
-                                  print(val['listAreaFaces'].toString());
-                                  listFaceArea = val['listAreaFaces'];
-                                  faceArea = listFaceArea[0];
-
-                                  if (kIsWeb) {
-                                    print(
-                                        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                                    print(val['listAreaLips'].toString());
-                                    listFaceLipsArea = val['listAreaLips'];
-                                    testLipsArea =
-                                        listFaceLipsArea[0].toString();
-                                    lipsArea = listFaceLipsArea[0];
-                                    listFaceLipsLabel = val['listLabels'];
-                                    lipsLabel = listFaceLipsLabel[0];
-                                    listFaceLipsCluster =
-                                        val['listChoosenCluster'];
-                                    lipsCluster = listFaceLipsCluster[0];
-                                  } else {
-                                    // download image
-                                    print("downloaddd");
-                                    // WEB GAK BISA
-                                    for (String url in listFaceUrl) {
-                                      await download(url);
-                                      setState(() {});
-                                    }
-                                    print("selesaii downloadd");
-                                    print(listDownloadPath);
-
-                                    print("detecttt");
-                                    var counterIndex = 0;
-                                    // WEB GAK BISA
-                                    for (String path in listDownloadPath) {
-                                      print("path");
-                                      print(path);
-                                      String tempPath =
-                                          listDownloadPath[counterIndex];
-                                      print("temp path");
-                                      print(tempPath);
-                                      print("list face");
-                                      print(listFaceArea);
-                                      print(counterIndex);
-                                      faceArea = listFaceArea[counterIndex];
-
-                                      await processImage(
-                                          InputImage.fromFilePath(
-                                              File(tempPath).path),
-                                          faceArea);
-                                      counterIndex++;
-                                    }
-                                    print(counterIndex.toString());
-                                    print(listFaceMLKit.toString());
-
-                                    // SET FIRST
-                                    faceMLKit = listFaceMLKit[0];
-                                    faceArea = listFaceArea[0];
-                                    // WEB GAK BISAprint("MASUK PAINTER");
-                                    painter = FaceDetectorPainter(
-                                        faceMLKit,
-                                        faceArea,
-                                        lipColor,
-                                        MediaQuery.of(context).size.width *
-                                            0.8);
-                                  }
-                                }
-                              } else {
-                                print("no face detected");
-                              }
-
-                              print(res.toString());
-                              print(imageRecomendationURL);
-                              setState(() {
-                                isRecommendationLoading = false;
-                                if (val['faceDetected']) {
-                                  pickedImage = null;
-                                  _selectedImage = null;
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => ResultPage(
-                                                firebaseUser: user,
-                                              )));
-                                } else {
-                                  _dialogBuilder(context);
-                                }
-                              });
-                            })
-                          : Container(),
-                      // reusableButtonLog(
-                      //     context,
-                      //     "How to Use?",
-                      //     hexStringToColor("db9196"),
-                      //     hexStringToColor("ffffff"), () {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => GuidebookPage()));
-                      // })
-                      // (_selectedImage != null && pickedImage != null)
-                      //     ? ElevatedButton(
-                      //         onPressed: () {},
-                      //         child: const Text("Cari Rekomendasi"),
-                      //       )
-                      //     : Container(),
-                      // ElevatedButton(
-                      //   child: Icon(Icons.book_outlined),
-                      //   onPressed: () {},
-                      // ),
-
-                      // Text(user.isAnonymous
-                      //     ? "ANONIM : ${user.uid}"
-                      //     : "USER : ${user.uid}"),
-
-                      // Text(user.isAnonymous
-                      //     ? "ANONIM : ${user.uid}"
-                      //     : "USER : ${user.uid}"),
-                      // Text(user.isAnonymous
-                      //     ? "ANONIM : ${user.uid}"
-                      //     : "USER : ${user.uid}"),
-                      // Text(user.isAnonymous
-                      //     ? "ANONIM : ${user.uid}"
-                      //     : "USER : ${user.uid}"),
-                      // Text(user.isAnonymous
-                      //     ? "ANONIM : ${user.uid}"
-                      //     : "USER : ${user.uid}"),
-                      // Text(user.isAnonymous
-                      //     ? "ANONIM : ${user.uid}"
-                      //     : "USER : ${user.uid}"),
-                      // Text("AAAAAAAAAAAAAA"),
-                      // reusableButtonLog(
-                      //     context,
-                      //     "How to Use?",
-                      //     hexStringToColor("db9196"),
-                      //     hexStringToColor("ffffff"), () {
-                      //   Navigator.push(
-                      //       context,
-                      //       MaterialPageRoute(
-                      //           builder: (context) => GuidebookPage()));
-                      // }),
-                    ],
-                  ),
+      body: (isRecommendationLoading)
+          ? Container(
+              decoration: BoxDecoration(color: colorTheme(colorHighlight)),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      color: colorTheme(colorAccent),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Please wait...",
+                      style: TextStyle(
+                          color: colorTheme(colorBlack),
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "Loading may take up to 3 minutes",
+                      style: TextStyle(
+                          color: colorTheme(colorBlack),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    )
+                  ],
                 ),
               ),
+            )
+          : Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              // decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
+              decoration: BoxDecoration(color: colorTheme(colorHighlight)),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(
+                            sizePadding, 10, sizePadding, 0),
+                        child: Column(
+                          children: <Widget>[
+                            (_selectedImage == null || pickedImage == null)
+                                ? reusablePhotoFrame(
+                                    Image.asset(
+                                      "assets/images/model.png",
+                                      fit: BoxFit.cover,
+                                      color: colorTheme(colorBlack),
+                                    ),
+                                    sizeFrame)
+                                : kIsWeb
+                                    ? reusablePhotoFrame(
+                                        Image.network(
+                                          _selectedImage!.path,
+                                          fit: BoxFit.cover,
+                                        ),
+                                        sizeFrame)
+                                    : reusablePhotoFrame(
+                                        Image.file(
+                                          File(_selectedImage!.path),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        sizeFrame),
+
+                            Column(
+                              children: [
+                                const SizedBox(
+                                  height: 30,
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      "Take a photo / choose from gallery",
+                                      style: TextStyle(
+                                          color: colorTheme(colorBlack),
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                imageFromCamera();
+                                                String testLink =
+                                                    "..............";
+
+                                                setState(() {});
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary:
+                                                    colorTheme(colorShadow),
+                                              ),
+                                              child: Icon(
+                                                Icons.photo_camera_outlined,
+                                                size: sizeFrame / 4,
+                                                color: colorTheme(colorWhite),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text("Camera",
+                                                style: TextStyle(
+                                                    color:
+                                                        colorTheme(colorBlack),
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        ui.FontWeight.w500),
+                                                textAlign: TextAlign.center)
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        Column(
+                                          children: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                imageFromGallery();
+                                                String testLink =
+                                                    "..............";
+
+                                                setState(() {});
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                primary:
+                                                    colorTheme(colorShadow),
+                                              ),
+                                              child: Icon(
+                                                Icons.photo_library_outlined,
+                                                size: sizeFrame / 4,
+                                                color: colorTheme(colorWhite),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text("Gallery",
+                                                style: TextStyle(
+                                                    color:
+                                                        colorTheme(colorBlack),
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        ui.FontWeight.w500),
+                                                textAlign: TextAlign.center)
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 30,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            (_selectedImage != null && pickedImage != null)
+                                ? reusableButtonLog(
+                                    context,
+                                    "START",
+                                    colorTheme(colorDark),
+                                    colorTheme(colorWhite), () async {
+                                    print("button start");
+                                    setState(() {
+                                      listFaceArea = [];
+                                      listDownloadPath = [];
+                                      isRecommendationLoading = true;
+                                    });
+                                    imageOriURL =
+                                        await DatabaseService.uploadImage(
+                                            user.uid, pickedImage!);
+                                    print("upload");
+                                    DatabaseService.createOrUpdateListImagesOri(
+                                        user.uid,
+                                        imageURL: imageOriURL);
+                                    print("aaaaaaaaaa");
+                                    final res = await getRecommendation(
+                                        user.uid,
+                                        imageOriURL,
+                                        _selectedImage!.path.split('/').last);
+                                    print("responseeee");
+                                    print(res.runtimeType);
+                                    final val = jsonDecode(res.body);
+                                    print("vallll");
+                                    print(val);
+
+                                    if (val['faceDetected']) {
+                                      if (val['listFaceUrl'][0] != "") {
+                                        print("masukk");
+                                        print(val['listFaceUrl']);
+                                        listFaceUrl = val['listFaceUrl'];
+                                        countFace = listFaceUrl.length;
+
+                                        listSaved = [
+                                          for (var i = 0; i < countFace; i++)
+                                            false
+                                        ];
+                                        listNameHistory = [
+                                          for (var i = 0; i < countFace; i++) ""
+                                        ];
+
+                                        listFaceCategory =
+                                            val['listFaceCategory'];
+                                        print(listFaceUrl);
+                                        print(listFaceUrl.length);
+                                        print(listFaceUrl[0]);
+                                        recommendationStatus = true;
+                                        imageRecomendationURL = listFaceUrl[0];
+
+                                        testLink = listFaceUrl[0];
+                                        testCategory = listFaceCategory[0];
+                                        print(testCategory);
+
+                                        getLipstik(testCategory);
+
+                                        print(
+                                            "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                                        print(val['listAreaFaces'].toString());
+                                        listFaceArea = val['listAreaFaces'];
+                                        faceArea = listFaceArea[0];
+
+                                        if (kIsWeb) {
+                                          print(
+                                              "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                                          print(val['listAreaLips'].toString());
+                                          listFaceLipsArea =
+                                              val['listAreaLips'];
+                                          testLipsArea =
+                                              listFaceLipsArea[0].toString();
+                                          lipsArea = listFaceLipsArea[0];
+                                          listFaceLipsLabel = val['listLabels'];
+                                          lipsLabel = listFaceLipsLabel[0];
+                                          listFaceLipsCluster =
+                                              val['listChoosenCluster'];
+                                          lipsCluster = listFaceLipsCluster[0];
+                                        } else {
+                                          // download image
+                                          print("downloaddd");
+                                          // WEB GAK BISA
+                                          for (String url in listFaceUrl) {
+                                            await download(url);
+                                            setState(() {});
+                                          }
+                                          print("selesaii downloadd");
+                                          print(listDownloadPath);
+
+                                          print("detecttt");
+                                          var counterIndex = 0;
+                                          // WEB GAK BISA
+                                          for (String path
+                                              in listDownloadPath) {
+                                            print("path");
+                                            print(path);
+                                            String tempPath =
+                                                listDownloadPath[counterIndex];
+                                            print("temp path");
+                                            print(tempPath);
+                                            print("list face");
+                                            print(listFaceArea);
+                                            print(counterIndex);
+                                            faceArea =
+                                                listFaceArea[counterIndex];
+
+                                            await processImage(
+                                                InputImage.fromFilePath(
+                                                    File(tempPath).path),
+                                                faceArea);
+                                            counterIndex++;
+                                          }
+                                          print(counterIndex.toString());
+                                          print(listFaceMLKit.toString());
+
+                                          // SET FIRST
+                                          faceMLKit = listFaceMLKit[0];
+                                          faceArea = listFaceArea[0];
+                                          // WEB GAK BISAprint("MASUK PAINTER");
+                                          painter = FaceDetectorPainter(
+                                              faceMLKit,
+                                              faceArea,
+                                              lipColor,
+                                              MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.8);
+                                        }
+                                      }
+                                    } else {
+                                      print("no face detected");
+                                    }
+
+                                    print(res.toString());
+                                    print(imageRecomendationURL);
+                                    setState(() {
+                                      isRecommendationLoading = false;
+                                      if (val['faceDetected']) {
+                                        pickedImage = null;
+                                        _selectedImage = null;
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ResultPage(
+                                                      firebaseUser: user,
+                                                    )));
+                                      } else {
+                                        _dialogBuilder(context);
+                                      }
+                                    });
+                                  })
+                                : Container(),
+                            // reusableButtonLog(
+                            //     context,
+                            //     "How to Use?",
+                            //     hexStringToColor("db9196"),
+                            //     hexStringToColor("ffffff"), () {
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => GuidebookPage()));
+                            // })
+                            // (_selectedImage != null && pickedImage != null)
+                            //     ? ElevatedButton(
+                            //         onPressed: () {},
+                            //         child: const Text("Cari Rekomendasi"),
+                            //       )
+                            //     : Container(),
+                            // ElevatedButton(
+                            //   child: Icon(Icons.book_outlined),
+                            //   onPressed: () {},
+                            // ),
+
+                            // Text(user.isAnonymous
+                            //     ? "ANONIM : ${user.uid}"
+                            //     : "USER : ${user.uid}"),
+
+                            // Text(user.isAnonymous
+                            //     ? "ANONIM : ${user.uid}"
+                            //     : "USER : ${user.uid}"),
+                            // Text(user.isAnonymous
+                            //     ? "ANONIM : ${user.uid}"
+                            //     : "USER : ${user.uid}"),
+                            // Text(user.isAnonymous
+                            //     ? "ANONIM : ${user.uid}"
+                            //     : "USER : ${user.uid}"),
+                            // Text(user.isAnonymous
+                            //     ? "ANONIM : ${user.uid}"
+                            //     : "USER : ${user.uid}"),
+                            // Text(user.isAnonymous
+                            //     ? "ANONIM : ${user.uid}"
+                            //     : "USER : ${user.uid}"),
+                            // Text("AAAAAAAAAAAAAA"),
+                            // reusableButtonLog(
+                            //     context,
+                            //     "How to Use?",
+                            //     hexStringToColor("db9196"),
+                            //     hexStringToColor("ffffff"), () {
+                            //   Navigator.push(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (context) => GuidebookPage()));
+                            // }),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  user.isAnonymous
+                      ? ElevatedButton(
+                          child: Text("LOG OUT"),
+                          onPressed: () async {
+                            await AuthServices.logOut();
+                          })
+                      : Container(),
+                  Text(
+                    user.isAnonymous
+                        ? "ANONIM : ${user.uid}"
+                        : "USER : ${user.uid}",
+                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Container(
+                  //       width: MediaQuery.of(context).size.width * 0.8,
+                  //       child: Text(
+                  //         user.isAnonymous
+                  //             ? "ANONIM : ${user.uid}aaaaaaaaaaa"
+                  //             : "USER : ${user.uid}",
+                  //         softWrap: true,
+                  //       ),
+                  //     ),
+                  //     Expanded(
+                  //       child: IconButton(
+                  //         icon: Icon(Icons.logout),
+                  //         onPressed: () async {
+                  //           await AuthServices.logOut();
+                  //         },
+                  //       ),
+                  //     )
+                  //   ],
+                  // ),
+                ],
+              ),
             ),
-            user.isAnonymous
-                ? ElevatedButton(
-                    child: Text("LOG OUT"),
-                    onPressed: () async {
-                      await AuthServices.logOut();
-                    })
-                : Container(),
-            Text(
-              user.isAnonymous ? "ANONIM : ${user.uid}" : "USER : ${user.uid}",
-            ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //   children: [
-            //     Container(
-            //       width: MediaQuery.of(context).size.width * 0.8,
-            //       child: Text(
-            //         user.isAnonymous
-            //             ? "ANONIM : ${user.uid}aaaaaaaaaaa"
-            //             : "USER : ${user.uid}",
-            //         softWrap: true,
-            //       ),
-            //     ),
-            //     Expanded(
-            //       child: IconButton(
-            //         icon: Icon(Icons.logout),
-            //         onPressed: () async {
-            //           await AuthServices.logOut();
-            //         },
-            //       ),
-            //     )
-            //   ],
-            // ),
-          ],
-        ),
-      ),
 
       // bottomNavigationBar: (!user.isAnonymous)
       //     ? BottomNavigationBar(
