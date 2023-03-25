@@ -14,7 +14,7 @@ Image logoWidget(String imageName) {
 Text reusableTextTitle(String title) {
   return Text(title,
       style: TextStyle(
-          color: Colors.white.withOpacity(1.0),
+          color: colorTheme(colorWhite),
           fontSize: 25,
           fontWeight: FontWeight.bold));
 }
@@ -26,18 +26,18 @@ TextField reusableTextFieldLog(String text, IconData icon, bool isPasswordType,
     obscureText: isPasswordType,
     enableSuggestions: !isPasswordType,
     autocorrect: !isPasswordType,
-    cursorColor: Colors.white,
-    style: TextStyle(color: Colors.white.withOpacity(1.0)),
+    cursorColor: colorTheme(colorBlack),
+    style: TextStyle(color: colorTheme(colorBlack)),
     decoration: InputDecoration(
       prefixIcon: Icon(
         icon,
-        color: Colors.white,
+        color: colorTheme(colorBlack),
       ),
       labelText: text,
-      labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
+      labelStyle: TextStyle(color: colorTheme(colorBlack).withOpacity(0.6)),
       filled: true,
       floatingLabelBehavior: FloatingLabelBehavior.never,
-      fillColor: Colors.white.withOpacity(0.3),
+      fillColor: colorTheme(colorWhite).withOpacity(0.5),
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10.0),
           borderSide: const BorderSide(width: 0, style: BorderStyle.none)),
@@ -91,14 +91,15 @@ Row reusableLogOption(
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Text("$description ", style: TextStyle(color: Colors.white70)),
+      Text("$description ", style: TextStyle(color: colorTheme(colorBlack))),
       GestureDetector(
         onTap: () {
           onTap();
         },
         child: Text(
           logOption,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: colorTheme(colorAccent), fontWeight: FontWeight.bold),
         ),
       )
     ],
@@ -111,7 +112,7 @@ Container reusablePhotoFrame(Image image, double size) {
     height: size,
     decoration: BoxDecoration(
       shape: BoxShape.rectangle,
-      border: Border.all(color: hexStringToColor("1b1c1e"), width: 5),
+      border: Border.all(color: colorTheme(colorBlack), width: 5),
     ),
     child: image,
   );

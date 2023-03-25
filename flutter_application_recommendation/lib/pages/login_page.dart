@@ -15,7 +15,11 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
+  var snackBar = SnackBar(
+    content: const Text('Yay! A SnackBar!'),
+  );
 
+// START WIDGET
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,10 +29,9 @@ class _LoginPageState extends State<LoginPage> {
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-            // hexStringToColor("f9e8e6"),
-            // hexStringToColor("f8b8c1"),
-            hexStringToColor("db9196"),
-            hexStringToColor("d3445d"),
+            colorTheme(colorShadow),
+            colorTheme(colorMidtone),
+            colorTheme(colorHighlight),
           ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
         ),
         child: Padding(
@@ -61,22 +64,85 @@ class _LoginPageState extends State<LoginPage> {
                         reusableButtonLog(
                             context,
                             "SIGN IN",
-                            hexStringToColor("f9e8e6"),
-                            hexStringToColor("1b1c1e"), () async {
-                          await AuthServices.logInEmail(
+                            colorTheme(colorDark),
+                            // hexStringToColor("5a802a"),
+                            colorTheme(colorHighlight), () async {
+                          print("TRYYYY");
+                          var error = await AuthServices.logInEmail(
                               _emailTextController.text,
                               _passwordTextController.text);
+                          var message = "Error Sign In";
+                          print("END TRYYY");
+                          print(error);
+                          // if (error.toString() ==
+                          //     "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.") {
+                          //   message = "password wrong";
+                          // }
+                          switch (error.toString()) {
+                            case "[firebase_auth/unknown] Given String is empty or null":
+                              message = "Please input email & password";
+                              break;
+                            case "[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.":
+                              message = "Email is not registered";
+                              break;
+                            case "[firebase_auth/invalid-email] The email address is badly formatted.":
+                              message = "Email is not valid";
+                              break;
+                            case "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.":
+                              message = "Wrong password";
+                              break;
+                          }
+
+                          snackBar = SnackBar(
+                            content: Row(
+                              children: [
+                                Icon(
+                                  Icons.warning,
+                                  color: colorTheme(colorWhite),
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(message),
+                              ],
+                            ),
+                            backgroundColor: colorTheme(colorRed),
+                          );
+                          // if (error.runtimeType.toString() == "User") {
+                          //   message = "Successfully Sign In";
+                          //   snackBar = SnackBar(
+                          //     content: Row(
+                          //       children: [
+                          //         Icon(
+                          //           Icons.check_circle,
+                          //           color: Colors.white,
+                          //         ),
+                          //         SizedBox(
+                          //           width: 10,
+                          //         ),
+                          //         Text(message),
+                          //       ],
+                          //     ),
+                          //     backgroundColor: Colors.green,
+                          //   );
+                          // }
+
+                          // print(error.runtimeType);
+                          if (error.runtimeType.toString() != "User") {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackBar);
+                          } else {}
                         }),
                         const SizedBox(
                           height: 20,
                         ),
-                        reusableButtonLog(
-                            context,
-                            "SKIP",
-                            hexStringToColor("db9196"),
-                            hexStringToColor("f9e8e6"), () async {
-                          await AuthServices.logInAnonymous();
-                        }),
+                        // reusableButtonLog(
+                        //     context,
+                        //     "SKIP",
+                        //     hexStringToColor("db9196"),
+                        //     hexStringToColor("f9e8e6"), () async {
+                        //   await AuthServices.logInAnonymous();
+                        // }),
                         // Text("OR"),
                         // Text("Don't have an account?"),
 
@@ -142,26 +208,26 @@ class _LoginPageState extends State<LoginPage> {
                                     builder: (context) => RegistrationPage()));
                           },
                         ),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
-                        // Text(
-                        //   "or",
-                        //   style: TextStyle(
-                        //     color: Colors.white.withOpacity(1.0),
-                        //   ),
-                        // ),
-                        // const SizedBox(
-                        //   height: 10,
-                        // ),
-                        // reusableLogOption(
-                        //   context,
-                        //   "Sign In",
-                        //   "Anonymously",
-                        //   () async {
-                        //     await AuthServices.logInAnonymous();
-                        //   },
-                        // )
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "or",
+                          style: TextStyle(
+                            color: colorTheme(colorBlack),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        reusableLogOption(
+                          context,
+                          "Sign In",
+                          "Anonymously",
+                          () async {
+                            await AuthServices.logInAnonymous();
+                          },
+                        )
                       ],
                     ),
                   ),

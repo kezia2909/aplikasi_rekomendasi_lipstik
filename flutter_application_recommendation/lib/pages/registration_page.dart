@@ -21,6 +21,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
   TextEditingController _firstnameTextController = TextEditingController();
   TextEditingController _lastnameTextController = TextEditingController();
 
+  var snackBar = SnackBar(
+    content: const Text('Yay! A SnackBar!'),
+  );
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -40,6 +44,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   //   });
   // }
 
+// START WIDGET
   @override
   Widget build(BuildContext context) {
     User? firebaseUser = Provider.of<User?>(context);
@@ -59,8 +64,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
               height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(
                   gradient: LinearGradient(colors: [
-                hexStringToColor("db9196"),
-                hexStringToColor("d3445d"),
+                colorTheme(colorShadow),
+                colorTheme(colorMidtone),
+                colorTheme(colorHighlight),
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
@@ -117,13 +123,56 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               reusableButtonLog(
                                   context,
                                   "SIGN UP",
-                                  hexStringToColor("f9e8e6"),
-                                  hexStringToColor("1b1c1e"), () async {
-                                await AuthServices.registAccount(
+                                  colorTheme(colorDark),
+                                  colorTheme(colorHighlight), () async {
+                                var error = await AuthServices.registAccount(
                                     _firstnameTextController.text,
                                     _lastnameTextController.text,
                                     _emailTextController.text,
                                     _passwordTextController.text);
+
+                                var message = "Error Sign Up";
+                                print("TEST ERROR");
+                                print(error);
+                                print(error.runtimeType.toString());
+
+                                switch (await error.toString()) {
+                                  case "[firebase_auth/unknown] Given String is empty or null":
+                                    print('ERORR ZERO');
+                                    message = "Please input all data";
+                                    break;
+                                  case "[firebase_auth/invalid-email] The email address is badly formatted.":
+                                    message = "Email is not valid";
+                                    break;
+                                  case "[firebase_auth/email-already-in-use] The email address is already in use by another account.":
+                                    message = "Email is already registered";
+                                    break;
+                                  case "[firebase_auth/weak-password] Password should be at least 6 characters":
+                                    message = "Password at least 6 characters";
+                                    break;
+                                }
+                                snackBar = SnackBar(
+                                  content: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.warning,
+                                        color: colorTheme(colorWhite),
+                                      ),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      Text(message),
+                                    ],
+                                  ),
+                                  backgroundColor: colorTheme(colorRed),
+                                );
+
+                                if (error.runtimeType.toString() != "User") {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackBar);
+                                } else {
+                                  Navigator.pop(context);
+                                }
                               }),
                               const SizedBox(
                                 height: 20,
@@ -165,10 +214,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 "Already have an account?",
                                 "Sign In",
                                 () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => LoginPage()));
+                                  Navigator.pop(context);
+                                  // Navigator.push(
+                                  //     context,
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => LoginPage()));
                                 },
                               ),
                               // const SizedBox(

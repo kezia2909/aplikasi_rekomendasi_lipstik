@@ -51,7 +51,17 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
         sizePadding = MediaQuery.of(context).size.width * 0.1;
       }
       sizeFrame = (MediaQuery.of(context).size.width - sizePadding * 2);
+    } else {
+      if (MediaQuery.of(context).size.height >= 700) {
+        print("aaaaaa${MediaQuery.of(context).size.height}");
+        sizeFrame = 350;
+      } else {
+        print("bbbbbbbbbbb${MediaQuery.of(context).size.height}");
+        sizeFrame = MediaQuery.of(context).size.height * 0.5;
+      }
+      sizePadding = (MediaQuery.of(context).size.width - sizeFrame) / 2;
     }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: hexStringToColor("f9e8e6"),

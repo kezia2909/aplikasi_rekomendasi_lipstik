@@ -23,11 +23,12 @@ class AuthServices {
       User? firebaseUser = result.user;
       DatabaseService.createOrUpdateUser(firebaseUser!.uid,
           firstname: firstname, lastname: lastname, email: email);
+
       // addUsersDetails(firstname, lastname, email);
       return firebaseUser;
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } catch (error) {
+      print(error.toString());
+      return error;
     }
   }
 
@@ -37,9 +38,9 @@ class AuthServices {
           email: email, password: password);
       User? firebaseUser = result.user;
       return firebaseUser;
-    } catch (e) {
-      print(e.toString());
-      return null;
+    } catch (error) {
+      print(error.toString());
+      return error;
     }
   }
 

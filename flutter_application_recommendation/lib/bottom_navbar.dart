@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/admin_page.dart';
 import 'package:flutter_application_recommendation/pages/guidebook_page.dart';
+import 'package:flutter_application_recommendation/pages/history_page.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
 // import 'package:flutter_application_recommendation/pages/home_page_copy.dart';
 // import 'package:flutter_application_recommendation/pages/home_page_try.dart';
@@ -28,6 +29,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
   Widget build(BuildContext context) {
     final userScreens = [
       HomePage(firebaseUser: user),
+      HistoryPage(firebaseUser: user),
       const GuidebookPage(),
       ProfilePage(firebaseUser: user),
     ];
@@ -56,8 +58,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
                   label: 'guidebook',
                 ),
               ],
-              unselectedItemColor: hexStringToColor("db9196"),
-              selectedItemColor: hexStringToColor("d3445d"),
+              unselectedItemColor: colorTheme(colorShadow),
+              selectedItemColor: colorTheme(colorAccent),
             ),
           )
         : Scaffold(
@@ -75,6 +77,10 @@ class _BottomNavbarState extends State<BottomNavbar> {
                   label: 'home',
                 ),
                 BottomNavigationBarItem(
+                  icon: Icon(Icons.history),
+                  label: 'history',
+                ),
+                BottomNavigationBarItem(
                   icon: Icon(Icons.book),
                   label: 'guidebook',
                 ),
@@ -83,8 +89,8 @@ class _BottomNavbarState extends State<BottomNavbar> {
                   label: 'profile',
                 ),
               ],
-              unselectedItemColor: hexStringToColor("db9196"),
-              selectedItemColor: hexStringToColor("d3445d"),
+              unselectedItemColor: colorTheme(colorShadow),
+              selectedItemColor: colorTheme(colorAccent),
             ),
           );
   }

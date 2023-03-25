@@ -25,6 +25,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path/path.dart' as path;
 
+// START GLOBAL
 // bottom navbar
 int selectedIndex = 0;
 
@@ -198,7 +199,7 @@ Future<void> download(String _url) async {
 
 // late User global_firebaseUser;
 
-// PRIVATE
+// START PRIVATE
 
 class HomePage extends StatefulWidget {
   final User firebaseUser;
@@ -424,6 +425,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+// START WIDGET
   @override
   Widget build(BuildContext context) {
     if (MediaQuery.of(context).size.width <
@@ -437,6 +439,15 @@ class _HomePageState extends State<HomePage> {
         sizePadding = MediaQuery.of(context).size.width * 0.1;
       }
       sizeFrame = MediaQuery.of(context).size.width - sizePadding * 2;
+    } else {
+      if (MediaQuery.of(context).size.height >= 700) {
+        print("aaaaaa${MediaQuery.of(context).size.height}");
+        sizeFrame = 350;
+      } else {
+        print("bbbbbbbbbbb${MediaQuery.of(context).size.height}");
+        sizeFrame = MediaQuery.of(context).size.height * 0.5;
+      }
+      sizePadding = (MediaQuery.of(context).size.width - sizeFrame) / 2;
     }
     // ? (MediaQuery.of(context).size.width * 0.1 < 20)
     //     ? size = MediaQuery.of(context).size.width - 40
@@ -445,7 +456,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: hexStringToColor("f9e8e6"),
+        backgroundColor: colorTheme(colorHighlight),
         elevation: 0,
         centerTitle: true,
         title: Text(
@@ -453,47 +464,47 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: hexStringToColor("d3445d")),
+              color: colorTheme(colorAccent)),
         ),
-        actions: <Widget>[
-          (!user.isAnonymous)
-              ? IconButton(
-                  icon: Icon(Icons.history, color: hexStringToColor("d3445d")),
-                  onPressed: () {
-                    recommendationStatus = false;
-                    // _selectedImage = File(pickedImage!.path);
-                    listFaceUrl = [];
-                    listSaved = [];
-                    listNameHistory = [];
-                    listFaceCategory = [];
-                    testLink = "..............";
-                    testCategory = "category";
-                    testWarna = "warna";
-                    testLipstik = "lipstik";
-                    listLipstikFace = [];
-                    testChosenLipstik = "choosen";
-                    testLipsArea = "area";
-                    listDownloadPath = [];
-                    listFaceMLKit = [];
-                    listSizeAbsolute = [];
-                    listFaceArea = [];
-                    print("Look history");
-                    print(listDownloadPath);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                HistoryPage(firebaseUser: user)));
-                  },
-                )
-              : Container(),
-        ],
+        // actions: <Widget>[
+        //   (!user.isAnonymous)
+        //       ? IconButton(
+        //           icon: Icon(Icons.history, color: colorTheme(colorDark)),
+        //           onPressed: () {
+        //             recommendationStatus = false;
+        //             // _selectedImage = File(pickedImage!.path);
+        //             listFaceUrl = [];
+        //             listSaved = [];
+        //             listNameHistory = [];
+        //             listFaceCategory = [];
+        //             testLink = "..............";
+        //             testCategory = "category";
+        //             testWarna = "warna";
+        //             testLipstik = "lipstik";
+        //             listLipstikFace = [];
+        //             testChosenLipstik = "choosen";
+        //             testLipsArea = "area";
+        //             listDownloadPath = [];
+        //             listFaceMLKit = [];
+        //             listSizeAbsolute = [];
+        //             listFaceArea = [];
+        //             print("Look history");
+        //             print(listDownloadPath);
+        //             Navigator.push(
+        //                 context,
+        //                 MaterialPageRoute(
+        //                     builder: (context) =>
+        //                         HistoryPage(firebaseUser: user)));
+        //           },
+        //         )
+        //       : Container(),
+        // ],
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         // decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
-        decoration: BoxDecoration(color: hexStringToColor("fcedea")),
+        decoration: BoxDecoration(color: colorTheme(colorHighlight)),
         child: Column(
           children: [
             Expanded(
@@ -577,7 +588,7 @@ class _HomePageState extends State<HomePage> {
                                   Image.asset(
                                     "assets/images/model.png",
                                     fit: BoxFit.cover,
-                                    color: hexStringToColor("1f1f1f"),
+                                    color: colorTheme(colorBlack),
                                   ),
                                   sizeFrame)
                               : kIsWeb
@@ -599,10 +610,10 @@ class _HomePageState extends State<HomePage> {
 
                       Column(
                         children: [
-                          const Text(
+                          Text(
                             "Take a photo / choose from gallery",
                             style: TextStyle(
-                                color: Colors.black,
+                                color: colorTheme(colorBlack),
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold),
                             textAlign: TextAlign.center,
@@ -623,27 +634,27 @@ class _HomePageState extends State<HomePage> {
                                       setState(() {});
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      primary: hexStringToColor("d3445d"),
+                                      primary: colorTheme(colorShadow),
                                     ),
                                     child: Icon(
                                       Icons.photo_camera_outlined,
                                       size: sizeFrame / 4,
-                                      color: hexStringToColor("ffffff"),
+                                      color: colorTheme(colorWhite),
                                     ),
                                   ),
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  const Text("Camera",
+                                  Text("Camera",
                                       style: TextStyle(
-                                          color: Colors.black,
+                                          color: colorTheme(colorBlack),
                                           fontSize: 15,
                                           fontWeight: ui.FontWeight.w500),
                                       textAlign: TextAlign.center)
                                 ],
                               ),
                               const SizedBox(
-                                width: 30,
+                                width: 20,
                               ),
                               Column(
                                 children: [
@@ -655,17 +666,20 @@ class _HomePageState extends State<HomePage> {
                                       setState(() {});
                                     },
                                     style: ElevatedButton.styleFrom(
-                                        primary: Colors.transparent,
-                                        elevation: 0),
+                                      primary: colorTheme(colorShadow),
+                                    ),
                                     child: Icon(
                                       Icons.photo_library_outlined,
                                       size: sizeFrame / 4,
-                                      color: hexStringToColor("d3445d"),
+                                      color: colorTheme(colorWhite),
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
                                   ),
                                   Text("Gallery",
                                       style: TextStyle(
-                                          color: Colors.black,
+                                          color: colorTheme(colorBlack),
                                           fontSize: 15,
                                           fontWeight: ui.FontWeight.w500),
                                       textAlign: TextAlign.center)
@@ -843,11 +857,6 @@ class _HomePageState extends State<HomePage> {
                       //   child: Icon(Icons.book_outlined),
                       //   onPressed: () {},
                       // ),
-                      // ElevatedButton(
-                      //     child: Text("LOG OUT"),
-                      //     onPressed: () async {
-                      //       await AuthServices.logOut();
-                      //     }),
 
                       // Text(user.isAnonymous
                       //     ? "ANONIM : ${user.uid}"
@@ -884,6 +893,13 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            user.isAnonymous
+                ? ElevatedButton(
+                    child: Text("LOG OUT"),
+                    onPressed: () async {
+                      await AuthServices.logOut();
+                    })
+                : Container(),
             Text(
               user.isAnonymous ? "ANONIM : ${user.uid}" : "USER : ${user.uid}",
             ),

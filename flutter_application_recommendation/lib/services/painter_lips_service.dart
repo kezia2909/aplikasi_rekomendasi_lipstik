@@ -6,6 +6,7 @@ class LipsPainter extends CustomPainter {
   final List<dynamic> lipsLabel;
   final List<dynamic> lipsCluster;
   final List<Rect> rects = [];
+  final double sizeForScale;
 
   final List<dynamic> face;
   var scaleW;
@@ -13,12 +14,14 @@ class LipsPainter extends CustomPainter {
 
   final Color color;
 
-  LipsPainter(
-      {required this.lips,
-      required this.lipsLabel,
-      required this.lipsCluster,
-      required this.face,
-      required this.color});
+  LipsPainter({
+    required this.lips,
+    required this.lipsLabel,
+    required this.lipsCluster,
+    required this.face,
+    required this.color,
+    required this.sizeForScale,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -27,8 +30,8 @@ class LipsPainter extends CustomPainter {
     // print(face);
     // print(lips);
 
-    scaleW = 200 / face[2];
-    scaleH = 200 / face[3];
+    scaleW = sizeForScale / face[2];
+    scaleH = sizeForScale / face[3];
 
     final Paint paint_new = Paint()
       ..style = PaintingStyle.fill
