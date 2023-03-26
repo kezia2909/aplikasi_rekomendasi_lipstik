@@ -92,7 +92,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
                   label: 'guidebook',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.people),
+                  icon: Icon(Icons.person),
                   label: 'profile',
                 ),
               ],

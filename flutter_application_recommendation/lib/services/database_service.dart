@@ -21,6 +21,10 @@ class DatabaseService {
     });
   }
 
+  static Stream<DocumentSnapshot<Object?>> getUser({required String userId}) {
+    return userCollection.doc(userId).snapshots();
+  }
+
   static CollectionReference listImagesOriCollection =
       FirebaseFirestore.instance.collection('list_images_ori');
 

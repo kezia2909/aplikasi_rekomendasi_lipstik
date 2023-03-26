@@ -117,3 +117,51 @@ Container reusablePhotoFrame(Image image, double size) {
     child: image,
   );
 }
+
+Container reusableDataProfile(
+    IconData icon, String title, String description, Function onTap) {
+  return Container(
+    padding: EdgeInsets.all(10.0),
+    decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10.0) //
+            ),
+        color: colorTheme(colorWhite)),
+    child: Row(
+      children: [
+        Icon(icon, size: 30, color: colorTheme(colorBlack)),
+        SizedBox(
+          width: 20,
+        ),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                    color: colorTheme(colorBlack),
+                    fontSize: 18,
+                    fontWeight: FontWeight.w300),
+                textAlign: TextAlign.left,
+              ),
+              Text(
+                description,
+                style: TextStyle(
+                    color: colorTheme(colorBlack),
+                    fontSize: 20,
+                    fontWeight: FontWeight.normal),
+                textAlign: TextAlign.left,
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          child: Icon(Icons.edit, size: 30, color: colorTheme(colorShadow)),
+          onTap: () {
+            onTap();
+          },
+        ),
+      ],
+    ),
+  );
+}

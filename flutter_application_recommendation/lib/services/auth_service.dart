@@ -5,15 +5,6 @@ import 'package:flutter_application_recommendation/services/database_service.dar
 class AuthServices {
   static FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // static Future addUsersDetails(
-  //     String firstname, String lastname, String email) async {
-  //   await FirebaseFirestore.instance.collection('users').add({
-  //     'first name': firstname,
-  //     'last name': lastname,
-  //     'email': email,
-  //   });
-  // }
-
   static Future registAccount(
       String firstname, String lastname, String email, String password) async {
     try {

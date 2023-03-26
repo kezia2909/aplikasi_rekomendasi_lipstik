@@ -513,6 +513,8 @@ class _HomePageState extends State<HomePage> {
       ),
       body: (isRecommendationLoading)
           ? Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
               decoration: BoxDecoration(color: colorTheme(colorHighlight)),
               child: Center(
                 child: Column(
@@ -547,6 +549,41 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             )
+          // ? Container(
+          //     decoration: BoxDecoration(color: colorTheme(colorHighlight)),
+          //     child: Center(
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           CircularProgressIndicator(
+          //             color: colorTheme(colorAccent),
+          //           ),
+          //           SizedBox(
+          //             height: 10,
+          //           ),
+          //           Text(
+          //             "Please wait...",
+          //             style: TextStyle(
+          //                 color: colorTheme(colorBlack),
+          //                 fontSize: 15,
+          //                 fontWeight: FontWeight.bold),
+          //             textAlign: TextAlign.center,
+          //           ),
+          //           SizedBox(
+          //             height: 10,
+          //           ),
+          //           Text(
+          //             "Loading may take up to 3 minutes",
+          //             style: TextStyle(
+          //                 color: colorTheme(colorBlack),
+          //                 fontSize: 15,
+          //                 fontWeight: FontWeight.w500),
+          //             textAlign: TextAlign.center,
+          //           )
+          //         ],
+          //       ),
+          //     ),
+          //   )
           : Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
@@ -894,11 +931,13 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   user.isAnonymous
-                      ? ElevatedButton(
-                          child: Text("LOG OUT"),
-                          onPressed: () async {
-                            await AuthServices.logOut();
-                          })
+                      ? reusableButtonLog(
+                          context,
+                          "SIGN OUT",
+                          colorTheme(colorAccent),
+                          colorTheme(colorWhite), () async {
+                          await AuthServices.logOut();
+                        })
                       : Container(),
                   Text(
                     user.isAnonymous
