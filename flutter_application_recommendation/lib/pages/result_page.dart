@@ -264,29 +264,46 @@ class _ResultPageState extends State<ResultPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-            title: Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                icon: Icon(Icons.close),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
+            contentPadding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 24.0),
+            buttonPadding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+            actionsOverflowButtonSpacing: 0.0,
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: Text('Sign In / Sign Up')),
+                IconButton(
+                  color: colorTheme(colorBlack),
+                  padding: EdgeInsets.all(0),
+                  alignment: Alignment.topRight,
+                  icon: Icon(Icons.close),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    textFieldNameHistoryController.clear();
+                  },
+                ),
+              ],
             ),
-            content: Text('Login/regist to save your data'),
+            content: Text(
+              'Please sign in to your account / sign up new account to save your data',
+              style: TextStyle(color: colorTheme(colorBlack)),
+            ),
             // content: TextField(
             //   controller: textFieldNameHistoryController,
             //   decoration: InputDecoration(hintText: "Text Field in Dialog"),
             // ),
+
             actions: <Widget>[
-              ElevatedButton(
-                child: Text('LOGIN'),
-                onPressed: () async {
+              reusableButtonLog(
+                context,
+                "Get started",
+                colorTheme(colorAccent),
+                colorTheme(colorWhite),
+                () async {
                   Navigator.pop(context);
                   user = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => LoginFromAnonymousPage(
+                          builder: (context) => RegistrationFromAnonymousPage(
                                 firebaseUser: user,
                               )));
                   setState(() {});
@@ -295,14 +312,20 @@ class _ResultPageState extends State<ResultPage> {
                   setState(() {});
                 },
               ),
-              ElevatedButton(
-                child: Text('REGIST'),
-                onPressed: () async {
+              SizedBox(
+                height: 10,
+              ),
+              reusableButtonLog(
+                context,
+                "I already have an account",
+                colorTheme(colorShadow),
+                colorTheme(colorWhite),
+                () async {
                   Navigator.pop(context);
                   user = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => RegistrationFromAnonymousPage(
+                          builder: (context) => LoginFromAnonymousPage(
                                 firebaseUser: user,
                               )));
                   setState(() {});

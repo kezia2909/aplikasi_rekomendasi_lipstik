@@ -322,11 +322,11 @@ class _HistoryPageState extends State<HistoryPage> {
                                   children: [
                                     CircleAvatar(
                                       backgroundColor: colorTheme(colorBlack),
-                                      radius: 40,
+                                      radius: 36,
                                       child: CircleAvatar(
                                           backgroundColor:
                                               colorTheme(colorShadow),
-                                          radius: 39,
+                                          radius: 35,
                                           backgroundImage: NetworkImage(url)),
                                     ),
                                     SizedBox(
@@ -342,13 +342,13 @@ class _HistoryPageState extends State<HistoryPage> {
                                           Text(name,
                                               style: TextStyle(
                                                   color: colorTheme(colorBlack),
-                                                  fontSize: 35,
+                                                  fontSize: 22,
                                                   fontWeight: FontWeight.w500),
                                               textAlign: TextAlign.left),
                                           Text(category,
                                               style: TextStyle(
                                                   color: colorTheme(colorBlack),
-                                                  fontSize: 20,
+                                                  fontSize: 18,
                                                   fontWeight: FontWeight.w300),
                                               textAlign: TextAlign.left),
                                         ],
@@ -357,19 +357,17 @@ class _HistoryPageState extends State<HistoryPage> {
                                     Row(
                                       children: [
                                         IconButton(
-                                          icon: Icon(
-                                            Icons.delete,
-                                            color: colorTheme(colorRed),
-                                          ),
+                                          icon: Icon(Icons.delete,
+                                              color: colorTheme(colorRed),
+                                              size: 30),
                                           onPressed: () {
                                             _deleteHistory(context, name);
                                           },
                                         ),
                                         IconButton(
-                                          icon: Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: colorTheme(colorDark),
-                                          ),
+                                          icon: Icon(Icons.arrow_forward_ios,
+                                              color: colorTheme(colorDark),
+                                              size: 30),
                                           onPressed: () async {
                                             print(
                                                 "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCAAAAAAAAAAAaaaa==================BBBBBBBBBBB");

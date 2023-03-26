@@ -29,6 +29,8 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
     content: const Text('Yay! A SnackBar!'),
   );
 
+  var message = "Error Sign In";
+
   Future<void> anonymousLogInEmail({
     required User user,
     required String email,
@@ -50,101 +52,150 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
       // REGIST DAN LOGIN
       await user.delete();
       // await AuthServices.logOut();
+      // user = await AuthServices.logInEmail(email, password);
+      var error = await AuthServices.logInEmail(email, password);
+      if (error.runtimeType.toString() != "User") {
+        switch (error.toString()) {
+          case "[firebase_auth/unknown] Given String is empty or null":
+            message = "Please input email & password";
+            break;
+          case "[firebase_auth/user-not-found] There is no user record corresponding to this identifier. The user may have been deleted.":
+            message = "Email is not registered";
+            break;
+          case "[firebase_auth/invalid-email] The email address is badly formatted.":
+            message = "Email is not valid";
+            break;
+          case "[firebase_auth/wrong-password] The password is invalid or the user does not have a password.":
+            message = "Wrong password";
+            break;
+        }
+      }
       user = await AuthServices.logInEmail(email, password);
-
       Navigator.pop(context, await user);
-    } catch (e) {
+    } catch (error) {
       print("GAGAL MASUK ANONYMOUS");
       // user.delete();
       user = await AuthServices.logInAnonymous();
-      print(e.toString());
+      print(error.toString());
+
       snackBar = SnackBar(
-        content: const Text('email atau username salah'),
+        content: Row(
+          children: [
+            Icon(
+              Icons.warning,
+              color: colorTheme(colorWhite),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(message),
+          ],
+        ),
+        backgroundColor: colorTheme(colorRed),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return null;
     }
   }
 
+// START WIDGET
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: colorTheme(colorShadow),
+        foregroundColor: colorTheme(colorHighlight),
         elevation: 0,
-        title: const Text(
-          "Login",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
+        centerTitle: true,
+        // title: Text(
+        //   "SIGN IN",
+        //   style: TextStyle(
+        //     fontSize: 24,
+        //     fontWeight: FontWeight.bold,
+        //   ),
+        // ),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           gradient: LinearGradient(colors: [
-            hexStringToColor("db9196"),
-            hexStringToColor("d3445d"),
+            colorTheme(colorShadow),
+            colorTheme(colorMidtone),
+            colorTheme(colorHighlight),
           ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
         ),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * 0.1, 20, 0),
-            child: Column(
-              children: <Widget>[
-                logoWidget("assets/images/logo.png"),
-                const SizedBox(
-                  height: 30,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+              20, MediaQuery.of(context).size.height * 0, 20, 0),
+          child: Column(
+            children: [
+              logoWidget("assets/images/logo.png"),
+              const SizedBox(
+                height: 20,
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(0),
+                    child: Column(
+                      children: <Widget>[
+                        reusableTextFieldLog("Enter Email",
+                            Icons.person_outline, false, _emailTextController),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        reusableTextFieldLog("Enter Password",
+                            Icons.lock_outline, true, _passwordTextController),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        // reusableButtonLog(context, "LOG IN", () {
+                        //   FirebaseAuth.instance
+                        //       .signInWithEmailAndPassword(
+                        //           email: _emailTextController.text,
+                        //           password: _passwordTextController.text)
+                        //       .then((value) {
+                        //     print("login");
+                        //     Navigator.push(
+                        //         context,
+                        //         MaterialPageRoute(
+                        //             builder: (context) => HomePage(firebaseUser)));
+                        //   }).onError((error, stackTrace) {
+                        //     print("Error ${error.toString()}");
+                        //   });
+                        // }),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        reusableButtonLog(
+                            context,
+                            "SIGN IN",
+                            colorTheme(colorDark),
+                            colorTheme(colorHighlight), () async {
+                          credential = EmailAuthProvider.credential(
+                              email: _emailTextController.text,
+                              password: _passwordTextController.text);
+                          await anonymousLogInEmail(
+                              user: user,
+                              email: _emailTextController.text,
+                              password: _passwordTextController.text);
+                        }),
+                        // reusableButtonLog(context, "SKIP", () async {
+                        //   await AuthServices.logInAnonymous();
+                        // }),
+                        // reusableButtonLog(context, "SUBMIT", () async {
+                        //   await AuthServices.registAccount("coba", "coba",
+                        //       _emailTextController.text, _passwordTextController.text);
+                        // }),
+                        // registrationOption()
+                      ],
+                    ),
+                  ),
                 ),
-                reusableTextFieldLog("Enter Email", Icons.person_outline, false,
-                    _emailTextController),
-                const SizedBox(
-                  height: 20,
-                ),
-                reusableTextFieldLog("Enter Password", Icons.lock_outline, true,
-                    _passwordTextController),
-                const SizedBox(
-                  height: 20,
-                ),
-                // reusableButtonLog(context, "LOG IN", () {
-                //   FirebaseAuth.instance
-                //       .signInWithEmailAndPassword(
-                //           email: _emailTextController.text,
-                //           password: _passwordTextController.text)
-                //       .then((value) {
-                //     print("login");
-                //     Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //             builder: (context) => HomePage(firebaseUser)));
-                //   }).onError((error, stackTrace) {
-                //     print("Error ${error.toString()}");
-                //   });
-                // }),
-                SizedBox(
-                  height: 10,
-                ),
-                reusableButtonLog(context, "LOG IN", hexStringToColor("ffffff"),
-                    hexStringToColor("1b1c1e"), () async {
-                  credential = EmailAuthProvider.credential(
-                      email: _emailTextController.text,
-                      password: _passwordTextController.text);
-                  await anonymousLogInEmail(
-                      user: user,
-                      email: _emailTextController.text,
-                      password: _passwordTextController.text);
-                }),
-                // reusableButtonLog(context, "SKIP", () async {
-                //   await AuthServices.logInAnonymous();
-                // }),
-                // reusableButtonLog(context, "SUBMIT", () async {
-                //   await AuthServices.registAccount("coba", "coba",
-                //       _emailTextController.text, _passwordTextController.text);
-                // }),
-                // registrationOption()
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
