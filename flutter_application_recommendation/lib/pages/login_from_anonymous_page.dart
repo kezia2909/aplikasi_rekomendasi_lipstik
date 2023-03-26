@@ -122,6 +122,9 @@ class _LoginFromAnonymousPageState extends State<LoginFromAnonymousPage> {
                 //     print("Error ${error.toString()}");
                 //   });
                 // }),
+                SizedBox(
+                  height: 10,
+                ),
                 reusableButtonLog(context, "LOG IN", hexStringToColor("ffffff"),
                     hexStringToColor("1b1c1e"), () async {
                   credential = EmailAuthProvider.credential(

@@ -390,7 +390,13 @@ class _HomePageState extends State<HomePage> {
                   _selectedImage = null;
                 });
                 Navigator.of(context).pop();
-                ref!(2);
+
+                if (user.isAnonymous) {
+                  ref!(1);
+                } else {
+                  ref!(2);
+                }
+
                 // Navigator.push(context,
                 //     MaterialPageRoute(builder: (context) => GuidebookPage()));
               },
@@ -925,20 +931,21 @@ class _HomePageState extends State<HomePage> {
                             //       MaterialPageRoute(
                             //           builder: (context) => GuidebookPage()));
                             // }),
+                            user.isAnonymous
+                                ? reusableButtonLog(
+                                    context,
+                                    "SIGN OUT",
+                                    colorTheme(colorAccent),
+                                    colorTheme(colorWhite), () async {
+                                    await AuthServices.logOut();
+                                  })
+                                : Container(),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  user.isAnonymous
-                      ? reusableButtonLog(
-                          context,
-                          "SIGN OUT",
-                          colorTheme(colorAccent),
-                          colorTheme(colorWhite), () async {
-                          await AuthServices.logOut();
-                        })
-                      : Container(),
+
                   Text(
                     user.isAnonymous
                         ? "ANONIM : ${user.uid}"

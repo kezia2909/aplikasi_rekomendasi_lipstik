@@ -40,7 +40,13 @@ class _BottomNavbarState extends State<BottomNavbar> {
       ProfilePage(firebaseUser: user),
     ];
     final anonymScreens = [
-      HomePage(firebaseUser: user),
+      HomePage(
+          firebaseUser: user,
+          ref: (int number) {
+            setState(() {
+              currentIndex = number;
+            });
+          }),
       const GuidebookPage(),
     ];
 
