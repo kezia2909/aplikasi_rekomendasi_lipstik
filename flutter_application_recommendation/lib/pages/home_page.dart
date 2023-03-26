@@ -112,7 +112,7 @@ Future<void> processImage(
     final InputImage inputImage, List<dynamic> face) async {
   print("START PROSEESSS DETECTTTT");
   final faces = await _faceDetector.processImage(inputImage);
-  print("- FACES");
+  print("${faces.length}- FACES");
   String text = "faces found: ${faces.length}\n\n";
   print("- TEXT");
   for (final face in faces) {
@@ -466,14 +466,16 @@ class _HomePageState extends State<HomePage> {
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: colorTheme(colorHighlight),
+        foregroundColor: colorTheme(colorAccent),
+
         elevation: 0,
         centerTitle: true,
-        title: Text(
+        title: const Text(
           "Find Your Color",
           style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: colorTheme(colorAccent)),
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         // actions: <Widget>[
         //   (!user.isAnonymous)

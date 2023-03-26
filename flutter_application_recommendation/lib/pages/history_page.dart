@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/detail_history_page.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
@@ -11,6 +12,8 @@ import 'package:flutter_application_recommendation/services/database_service.dar
 import 'package:flutter_application_recommendation/utils/color_utils.dart';
 import 'package:flutter_application_recommendation/utils/face_detector_painter.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
+
+// START PRIVATE
 
 class HistoryPage extends StatefulWidget {
   final User firebaseUser;
@@ -41,25 +44,79 @@ class _HistoryPageState extends State<HistoryPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Yakin mau delete?'),
+          contentPadding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 24.0),
+          buttonPadding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Text('Confirm Delete')),
+              IconButton(
+                padding: EdgeInsets.all(0),
+                alignment: Alignment.topRight,
+                icon: Icon(
+                  Icons.close,
+                  color: colorTheme(colorBlack),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+          content: Text(
+            "Are you sure you want to delete history of \"$name\"?",
+            style: TextStyle(color: colorTheme(colorBlack)),
+          ),
           actions: <Widget>[
-            ElevatedButton(
-              child: Text('CANCEL'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            ElevatedButton(
-              child: Text('DELETE'),
-              onPressed: () async {
+            // ElevatedButton(
+            //   child: Text('CANCEL'),
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            // ),
+            reusableButtonLog(
+              context,
+              "DELETE",
+              colorTheme(colorAccent),
+              colorTheme(colorWhite),
+              () async {
                 if (await DatabaseService.deleteHistoryRekomendasi(user.uid,
                     nameHistory: name)) {
+                  // snackBar = SnackBar(
+                  //   content: Text('History $name berhasil didelete'),
+                  // );
+                  var message = "History \"$name\" delete successfully";
                   snackBar = SnackBar(
-                    content: Text('History $name berhasil didelete'),
+                    content: Row(
+                      children: [
+                        Icon(
+                          Icons.check,
+                          color: colorTheme(colorWhite),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(message),
+                      ],
+                    ),
+                    backgroundColor: colorTheme(colorShadow),
                   );
                 } else {
+                  var message = "History $name delete failed";
                   snackBar = SnackBar(
-                    content: Text('History $name gagal didelete'),
+                    content: Row(
+                      children: [
+                        Icon(
+                          Icons.warning,
+                          color: colorTheme(colorWhite),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(message),
+                      ],
+                    ),
+                    backgroundColor: colorTheme(colorRed),
                   );
                 }
                 Navigator.pop(context);
@@ -125,13 +182,14 @@ class _HistoryPageState extends State<HistoryPage> {
     super.dispose();
   }
 
+// START WIDGET
   @override
   Widget build(BuildContext context) {
     if (MediaQuery.of(context).size.width <
         MediaQuery.of(context).size.height) {
-      if (MediaQuery.of(context).size.width * 0.1 >= 40) {
+      if (MediaQuery.of(context).size.width * 0.1 >= 20) {
         print("aaaaaa${MediaQuery.of(context).size.width}");
-        sizePadding = 40;
+        sizePadding = 20;
         // sizePadding = MediaQuery.of(context).size.width * 0.1;
       } else {
         print("bbbbbbbbbbb${MediaQuery.of(context).size.width}");
@@ -140,8 +198,8 @@ class _HistoryPageState extends State<HistoryPage> {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: hexStringToColor("f9e8e6"),
-        foregroundColor: hexStringToColor("d3445d"),
+        backgroundColor: colorTheme(colorHighlight),
+        foregroundColor: colorTheme(colorAccent),
         elevation: 0,
         centerTitle: true,
         title: const Text(
@@ -152,7 +210,7 @@ class _HistoryPageState extends State<HistoryPage> {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
+        decoration: BoxDecoration(color: colorTheme(colorHighlight)),
 
         // child: SingleChildScrollView(
         child: Padding(
@@ -183,17 +241,17 @@ class _HistoryPageState extends State<HistoryPage> {
                 onChanged: (String value) {
                   onSearch();
                 },
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: colorTheme(colorWhite)),
                 decoration: InputDecoration(
                   prefixIcon: Icon(
                     Icons.search,
-                    color: Colors.white,
+                    color: colorTheme(colorWhite),
                   ),
                   labelText: "Search History",
-                  labelStyle: TextStyle(color: Colors.white70),
+                  labelStyle: TextStyle(color: colorTheme(colorWhite)),
                   filled: true,
                   floatingLabelBehavior: FloatingLabelBehavior.never,
-                  fillColor: hexStringToColor("d07e64").withOpacity(0.9),
+                  fillColor: colorTheme(colorDark).withOpacity(0.5),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
                       borderSide:
@@ -249,26 +307,68 @@ class _HistoryPageState extends State<HistoryPage> {
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(10.0) //
                                           ),
-                                  color: (index % 2 == 0)
-                                      // ? hexStringToColor("d07e64")
-                                      // : hexStringToColor("f5b39b"),
-                                      ? hexStringToColor("f8b8c1")
-                                          .withOpacity(0.8)
-                                      : hexStringToColor("ffffff")
-                                          .withOpacity(0.8),
+                                  color:
+                                      colorTheme(colorWhite).withOpacity(0.8),
+                                  // color: (index % 2 == 0)
+                                  //     ? colorTheme(colorMidtone)
+                                  //         .withOpacity(0.5)
+                                  //     : colorTheme(colorShadow)
+                                  //         .withOpacity(0.5),
                                 ),
                                 padding: EdgeInsets.all(10.0),
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(name),
+                                    CircleAvatar(
+                                      backgroundColor: colorTheme(colorBlack),
+                                      radius: 40,
+                                      child: CircleAvatar(
+                                          backgroundColor:
+                                              colorTheme(colorShadow),
+                                          radius: 39,
+                                          backgroundImage: NetworkImage(url)),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        // mainAxisAlignment:
+                                        //     MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(name,
+                                              style: TextStyle(
+                                                  color: colorTheme(colorBlack),
+                                                  fontSize: 35,
+                                                  fontWeight: FontWeight.w500),
+                                              textAlign: TextAlign.left),
+                                          Text(category,
+                                              style: TextStyle(
+                                                  color: colorTheme(colorBlack),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w300),
+                                              textAlign: TextAlign.left),
+                                        ],
+                                      ),
+                                    ),
                                     Row(
                                       children: [
                                         IconButton(
                                           icon: Icon(
-                                            Icons.info_rounded,
-                                            color: hexStringToColor("8f503c"),
+                                            Icons.delete,
+                                            color: colorTheme(colorRed),
+                                          ),
+                                          onPressed: () {
+                                            _deleteHistory(context, name);
+                                          },
+                                        ),
+                                        IconButton(
+                                          icon: Icon(
+                                            Icons.arrow_forward_ios,
+                                            color: colorTheme(colorDark),
                                           ),
                                           onPressed: () async {
                                             print(
@@ -278,6 +378,11 @@ class _HistoryPageState extends State<HistoryPage> {
                                               print("WEBBB");
                                             } else {
                                               print("start download");
+                                              listDownloadPath = [];
+                                              listFaceMLKit = [];
+                                              setState(() {});
+                                              print(listDownloadPath);
+
                                               await download(url);
                                               setState(() {});
 
@@ -323,6 +428,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                                             .width *
                                                         0.8);
                                               }
+                                              setState(() {});
                                             }
                                             Navigator.push(
                                               context,
@@ -335,15 +441,6 @@ class _HistoryPageState extends State<HistoryPage> {
                                                 ),
                                               ),
                                             );
-                                          },
-                                        ),
-                                        IconButton(
-                                          icon: Icon(
-                                            Icons.delete,
-                                            color: hexStringToColor("d3445d"),
-                                          ),
-                                          onPressed: () {
-                                            _deleteHistory(context, name);
                                           },
                                         ),
                                       ],

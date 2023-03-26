@@ -64,32 +64,36 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: hexStringToColor("f9e8e6"),
-        foregroundColor: hexStringToColor("d3445d"),
+        backgroundColor: colorTheme(colorHighlight),
+        foregroundColor: colorTheme(colorAccent),
         elevation: 0,
-        title: const Text(
-          "Detail History",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        centerTitle: true,
+        title: Text(
+          nameHistory,
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
+        decoration: BoxDecoration(color: colorTheme(colorHighlight)),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(sizePadding, 10, sizePadding, 0),
             child: Column(
               children: <Widget>[
-                Text("Name : \"$nameHistory\"",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center),
-                SizedBox(
-                  height: 10,
-                ),
+                // Text("Name : \"$nameHistory\"",
+                //     style: TextStyle(
+                //         color: Colors.black,
+                //         fontSize: 20,
+                //         fontWeight: FontWeight.w500),
+                //     textAlign: TextAlign.center),
+                // SizedBox(
+                //   height: 10,
+                // ),
                 Container(
                   width: sizeFrame,
                   height: sizeFrame,
@@ -99,8 +103,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                   // height: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    // border: Border.all(
-                    //     color: Colors.green, width: 0),
+                    border: Border.all(color: colorTheme(colorBlack), width: 5),
                     image: DecorationImage(
                         image: NetworkImage(faceUrl), fit: BoxFit.cover),
                   ),
@@ -117,8 +120,8 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                 Text(
                   "Skin Type : $faceCategory",
                   style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15,
+                      color: colorTheme(colorBlack),
+                      fontSize: 20,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -179,7 +182,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                 Text(
                   testChosenLipstik,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: colorTheme(colorBlack),
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,

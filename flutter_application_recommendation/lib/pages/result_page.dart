@@ -416,7 +416,7 @@ class _ResultPageState extends State<ResultPage> {
                           decoration: BoxDecoration(
                             shape: BoxShape.rectangle,
                             border: Border.all(
-                                color: hexStringToColor("1b1c1e"), width: 5),
+                                color: colorTheme(colorBlack), width: 5),
                             image: DecorationImage(
                                 image: NetworkImage(url), fit: BoxFit.cover),
                           ),
@@ -529,7 +529,7 @@ class _ResultPageState extends State<ResultPage> {
                 Text(
                   testChosenLipstik,
                   style: TextStyle(
-                      color: Colors.black,
+                      color: colorTheme(colorBlack),
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,

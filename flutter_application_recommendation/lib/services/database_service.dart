@@ -72,13 +72,13 @@ class DatabaseService {
           .get()
           .then(
         (result) {
-          print("ADAAAAAa");
+          // print("ADAAAAAa");
           print(result);
           print(result.exists);
           return result.exists;
         },
       ).catchError((error) {
-        print("TIDAK ADAAA");
+        // print("TIDAK ADAAA");
         return false;
       });
 
@@ -135,10 +135,13 @@ class DatabaseService {
           .delete()
           .then(
         (result) {
+          print("DELETE");
           print("oke");
           return true;
         },
       ).catchError((error) {
+        print("DELETE");
+
         print("error");
         print(error);
         return false;

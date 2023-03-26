@@ -15,35 +15,28 @@ class _GuidebookPageState extends State<GuidebookPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: colorTheme(colorHighlight),
+        foregroundColor: colorTheme(colorAccent),
         elevation: 0,
         centerTitle: true,
         title: const Text(
-          "Registration",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          "How to use this app?",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(color: hexStringToColor("f9e8e6")),
+        decoration: BoxDecoration(color: colorTheme(colorHighlight)),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
                 20, MediaQuery.of(context).size.height * 0.1, 20, 0),
             child: Column(
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-                Text("How to use this app?"),
-              ],
+              children: <Widget>[],
             ),
           ),
         ),
