@@ -11,7 +11,6 @@ import 'firebase_options.dart';
 
 var mapping_lists = [];
 var list_lipstik = [];
-var firstOpen = false;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +21,6 @@ void main() async {
   print("start run");
   runApp(const MyApp());
   print("done run");
-  firstOpen = true;
 
   // DATA MAPPING
   FirebaseFirestore firestore = FirebaseFirestore.instance;
