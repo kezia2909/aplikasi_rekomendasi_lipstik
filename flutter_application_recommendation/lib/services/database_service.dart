@@ -13,11 +13,13 @@ class DatabaseService {
   static Future<void> createOrUpdateUser(String id,
       {required String firstname,
       required String lastname,
-      required String email}) async {
+      required String email,
+      required String password}) async {
     await userCollection.doc(id).set({
       'firstname': firstname,
       'lastname': lastname,
       'email': email,
+      'password': password,
     });
   }
 

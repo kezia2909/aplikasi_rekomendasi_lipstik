@@ -13,7 +13,10 @@ class AuthServices {
 
       User? firebaseUser = result.user;
       DatabaseService.createOrUpdateUser(firebaseUser!.uid,
-          firstname: firstname, lastname: lastname, email: email);
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          password: password);
 
       // addUsersDetails(firstname, lastname, email);
       return firebaseUser;

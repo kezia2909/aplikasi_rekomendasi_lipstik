@@ -32,6 +32,7 @@ class _RegistrationFromAnonymousPageState
   var snackBar = SnackBar(
     content: const Text('Yay! A SnackBar!'),
   );
+  var message = "Error Sign Up";
 
   Future<void> anonymousRegistEmail({
     required User user,
@@ -58,20 +59,51 @@ class _RegistrationFromAnonymousPageState
       //     _emailTextController.text,
       //     _passwordTextController.text);
       DatabaseService.createOrUpdateUser(user.uid,
-          firstname: firstname, lastname: lastname, email: email);
+          firstname: firstname,
+          lastname: lastname,
+          email: email,
+          password: password);
 
       // REGIST DAN LOGIN
       await AuthServices.logOut();
       user = await AuthServices.logInEmail(email, password);
 
       Navigator.pop(context, await user);
-    } catch (e) {
+    } catch (error) {
       print("GAGAL MASUK ANONYMOUS");
       // user.delete();
       user = await AuthServices.logInAnonymous();
-      print(e.toString());
+      print(error.toString());
+
+      switch (await error.toString()) {
+        case "[firebase_auth/unknown] Given String is empty or null":
+          print('ERORR ZERO');
+          message = "Please input all data";
+          break;
+        case "[firebase_auth/invalid-email] The email address is badly formatted.":
+          message = "Email is not valid";
+          break;
+        case "[firebase_auth/email-already-in-use] The email address is already in use by another account.":
+          message = "Email is already registered";
+          break;
+        case "[firebase_auth/weak-password] Password should be at least 6 characters":
+          message = "Password at least 6 characters";
+          break;
+      }
       snackBar = SnackBar(
-        content: const Text('email sudah terdaftar'),
+        content: Row(
+          children: [
+            Icon(
+              Icons.warning,
+              color: colorTheme(colorWhite),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(message),
+          ],
+        ),
+        backgroundColor: colorTheme(colorRed),
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return null;
@@ -97,16 +129,22 @@ class _RegistrationFromAnonymousPageState
   //   });
   // }
 
+// START WIDGET
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      // extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: colorTheme(colorShadow),
+        foregroundColor: colorTheme(colorHighlight),
         elevation: 0,
-        title: const Text(
-          "Registration",
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        centerTitle: true,
+        title: Text(
+          "REGISTRATION",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Container(
@@ -114,17 +152,17 @@ class _RegistrationFromAnonymousPageState
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
             gradient: LinearGradient(colors: [
-          hexStringToColor("CB2B93"),
-          hexStringToColor("9546C4"),
-          hexStringToColor("5E61F4"),
+          colorTheme(colorShadow),
+          colorTheme(colorMidtone),
+          colorTheme(colorHighlight),
         ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: SingleChildScrollView(
             child: Padding(
           padding: EdgeInsets.fromLTRB(
-              20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+              20, MediaQuery.of(context).size.height * 0, 20, 0),
           child: Column(children: <Widget>[
             const SizedBox(
-              height: 20,
+              height: 30,
             ),
             reusableTextFieldLog("Enter First Name", Icons.person_outline,
                 false, _firstnameTextController),
@@ -167,8 +205,8 @@ class _RegistrationFromAnonymousPageState
             //     print("Error ${error.toString()}");
             //   }));
             // }),
-            reusableButtonLog(context, "SUBMIT", hexStringToColor("ffffff"),
-                hexStringToColor("1b1c1e"), () async {
+            reusableButtonLog(context, "SIGN UP", colorTheme(colorDark),
+                colorTheme(colorHighlight), () async {
               await anonymousRegistEmail(
                   user: user,
                   firstname: _firstnameTextController.text,
