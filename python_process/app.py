@@ -12,6 +12,8 @@ from detect_face import detectFace
 from upload_images import uploadToFirebase
 from kmeans_face import kmeansFace
 from detect_lips import detectLips
+from resize_image import resizeImage
+from preprocessing import preProcessing
 from global_variable import temp_list_area_lips
 from global_variable import temp_list_labels
 from global_variable import temp_list_choosen_cluster
@@ -50,8 +52,14 @@ def index():
     list_cluster_lips = []
     list_area_faces = []
 
+    fileName = name+".jpg"
+
+    resizeImage(fileName)
+    preProcessing(fileName)
+    
+
     # CROP IMAGE
-    list_area_faces = detectFace(name+".jpg")
+    list_area_faces = detectFace(fileName)
     counter = len(list_area_faces)
 
     if request.json['check_using_lips'] :
