@@ -232,8 +232,6 @@ class FaceDetectorPainter extends CustomPainter {
       // paintContour(FaceContourType.noseBottom);
       // paintContour(FaceContourType.leftCheek);
       // paintContour(FaceContourType.rightCheek);
-
-      // paintLandmark(FaceLandmarkType.leftCheek);
     }
   }
 
