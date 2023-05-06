@@ -131,7 +131,7 @@ def maskingSkin(inputArr, fileName, inputType, outputType):
     # NEW_FIGURE = plt.figure("MASKING")
     # plt.imshow(SAVERGB)
     # NEW_FIGURE.savefig("./Images_Masking/"+fileName)
-    cv2.imwrite('./Images_Masking/'+fileName, SAVEBGR)
+    cv2.imwrite('./python_process/Images_Masking/'+fileName, SAVEBGR)
 
 
     # print("channel_L : ", channel_L)
