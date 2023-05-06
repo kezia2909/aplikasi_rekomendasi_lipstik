@@ -6,169 +6,112 @@ class DataSeederService {
 
   static createListLipstik() {
     listLipstik.doc("1").set({
-      'kategori': "warm nude",
-      'nama_lipstik': "Clay Crush",
-      'kode_warna': "C77362",
+      'kategori': "dark mauve",
+      'nama_lipstik': "Witty",
+      'kode_lipstik': "40",
+      'kode_warna': "90484c",
     });
     listLipstik.doc("2").set({
-      'kategori': "deep plum",
-      'nama_lipstik': "MPK 23",
-      'kode_warna': "7E2343",
+      'kategori': "pink",
+      'nama_lipstik': "Coy",
+      'kode_lipstik': "20",
+      'kode_warna': "c74a68",
     });
     listLipstik.doc("3").set({
-      'kategori': "mauve",
-      'nama_lipstik': "Blushing Pout",
-      'kode_warna': "C87192",
+      'kategori': "blue-red",
+      'nama_lipstik': "Wicked",
+      'kode_lipstik': "50",
+      'kode_warna': "b80023",
     });
     listLipstik.doc("4").set({
       'kategori': "wine red",
-      'nama_lipstik': "Burgundy Blush",
-      'kode_warna': "7D4448",
+      'nama_lipstik': "Unrivaled",
+      'kode_lipstik': "30",
+      'kode_warna': "880a2b",
     });
     listLipstik.doc("5").set({
-      'kategori': "terracotta",
-      'nama_lipstik': "Chili Nude",
-      'kode_warna': "C34C36",
+      'kategori': "light coral",
+      'nama_lipstik': "Mischievous",
+      'kode_lipstik': "60",
+      'kode_warna': "c94d46",
     });
     listLipstik.doc("6").set({
-      'kategori': "orange",
-      'nama_lipstik': "Craving Coral",
-      'kode_warna': "F85025",
+      'kategori': "peachy pink",
+      'nama_lipstik': "Peachy",
+      'kode_lipstik': "15",
+      'kode_warna': "c75457",
     });
     listLipstik.doc("7").set({
-      'kategori': "peachy pink",
-      'nama_lipstik': "Daringly Nude",
-      'kode_warna': "D68572",
+      'kategori': "peachy warm",
+      'nama_lipstik': "Saucy",
+      'kode_lipstik': "65",
+      'kode_warna': "b74948",
     });
     listLipstik.doc("8").set({
-      'kategori': "wine red",
-      'nama_lipstik': "Divine Wine",
-      'kode_warna': "863741",
+      'kategori': "plum",
+      'nama_lipstik': "Lippy",
+      'kode_lipstik': "10",
+      'kode_warna': "95101f",
     });
     listLipstik.doc("9").set({
-      'kategori': "dark mauve",
-      'nama_lipstik': "Lust for Blush",
-      'kode_warna': "B76384",
+      'kategori': "rosy beige",
+      'nama_lipstik': "Cheeky",
+      'kode_lipstik': "35",
+      'kode_warna': "af5b59",
     });
     listLipstik.doc("10").set({
-      'kategori': "pink",
-      'nama_lipstik': "Mesmerizing Magenta",
-      'kode_warna': "E0478D",
+      'kategori': "pale pink",
+      'nama_lipstik': "Charmed",
+      'kode_lipstik': "100",
+      'kode_warna': "c96d6c",
     });
     listLipstik.doc("11").set({
-      'kategori': "peachy nude",
-      'nama_lipstik': "Nude Embrace",
-      'kode_warna': "C78265",
+      'kategori': "terracotta",
+      'nama_lipstik': "Extra",
+      'kode_lipstik': "130",
+      'kode_warna': "973a2c",
     });
     listLipstik.doc("12").set({
-      'kategori': "nude brown",
-      'nama_lipstik': "Nude Nuance",
-      'kode_warna': "B76557",
+      'kategori': "peachy nude",
+      'nama_lipstik': "Intriguing",
+      'kode_lipstik': "63",
+      'kode_warna': "cc725f",
     });
     listLipstik.doc("13").set({
-      'kategori': "blue-red",
-      'nama_lipstik': "Rich Ruby",
-      'kode_warna': "BE2734",
+      'kategori': "nude pink",
+      'nama_lipstik': "Irresistable",
+      'kode_lipstik': "62",
+      'kode_warna': "ae544c",
     });
     listLipstik.doc("14").set({
-      'kategori': "orange-red",
-      'nama_lipstik': "Siren Scarlet",
-      'kode_warna': "E00809",
+      'kategori': "warm nude",
+      'nama_lipstik': "Keen",
+      'kode_lipstik': "125",
+      'kode_warna': "ba453c",
     });
     listLipstik.doc("15").set({
-      'kategori': "nude brown",
-      'nama_lipstik': "Touch of Spice",
-      'kode_warna': "B46366",
+      'kategori': "warm pink",
+      'nama_lipstik': "Peppy",
+      'kode_lipstik': "115",
+      'kode_warna': "aa464e",
     });
     listLipstik.doc("16").set({
-      'kategori': "purple",
-      'nama_lipstik': "Vibrant Violet",
-      'kode_warna': "842C8D",
+      'kategori': "nude brown",
+      'nama_lipstik': "Punchy",
+      'kode_lipstik': "120",
+      'kode_warna': "95594f",
     });
     listLipstik.doc("17").set({
-      'kategori': "wine red",
-      'nama_lipstik': "Code Red",
-      'kode_warna': "741321",
+      'kategori': "orange-red",
+      'nama_lipstik': "Red Hot",
+      'kode_lipstik': "25",
+      'kode_warna': "e1100f",
     });
     listLipstik.doc("18").set({
-      'kategori': "peachy pink",
-      'nama_lipstik': "Just A Teaser",
-      'kode_warna': "DA806A",
-    });
-    listLipstik.doc("19").set({
-      'kategori': "deep plum",
-      'nama_lipstik': "Pretty Please",
-      'kode_warna': "712632",
-    });
-    listLipstik.doc("20").set({
-      'kategori': "nude brown",
-      'nama_lipstik': "Smitten",
-      'kode_warna': "B06370",
-    });
-    listLipstik.doc("21").set({
-      'kategori': "warm pink",
-      'nama_lipstik': "MPK09",
-      'kode_warna': "c15459",
-    });
-    listLipstik.doc("22").set({
       'kategori': "terracotta",
-      'nama_lipstik': "MOR05",
-      'kode_warna': "d04145",
-    });
-    listLipstik.doc("23").set({
-      'kategori': "pink",
-      'nama_lipstik': "MPK10",
-      'kode_warna': "d7566c",
-    });
-    listLipstik.doc("24").set({
-      'kategori': "terracotta",
-      'nama_lipstik': "MRD05",
-      'kode_warna': "b23e3f",
-    });
-    listLipstik.doc("25").set({
-      'kategori': "pink",
-      'nama_lipstik': "MPK12",
-      'kode_warna': "da5e82",
-    });
-    listLipstik.doc("26").set({
-      'kategori': "plum",
-      'nama_lipstik': "MPK11",
-      'kode_warna': "93234b",
-    });
-    listLipstik.doc("27").set({
-      'kategori': "blue-red",
-      'nama_lipstik': "MRD04",
-      'kode_warna': "C91B23",
-    });
-    listLipstik.doc("28").set({
-      'kategori': "fuschia",
-      'nama_lipstik': "MPK06",
-      'kode_warna': "B21066",
-    });
-    listLipstik.doc("29").set({
-      'kategori': "blue-red",
-      'nama_lipstik': "MOR03",
-      'kode_warna': "CC2B23",
-    });
-    listLipstik.doc("30").set({
-      'kategori': "beige",
-      'nama_lipstik': "MNU02",
-      'kode_warna': "EAA794",
-    });
-    listLipstik.doc("31").set({
-      'kategori': "light coral",
-      'nama_lipstik': "MNU03",
-      'kode_warna': "FF9A7A",
-    });
-    listLipstik.doc("32").set({
-      'kategori': "rosy pink",
-      'nama_lipstik': "MPK04",
-      'kode_warna': "C66583",
-    });
-    listLipstik.doc("33").set({
-      'kategori': "pale pink",
-      'nama_lipstik': "MNU04",
-      'kode_warna': "DE8797",
+      'nama_lipstik': "Risky",
+      'kode_lipstik': "61",
+      'kode_warna': "ab362d",
     });
   }
 
@@ -179,104 +122,187 @@ class DataSeederService {
     dataMapping.doc("fair_cool").set({
       "skintone": "fair",
       "undetone": "cool",
-      "warna": FieldValue.arrayUnion(
-          ['mauve', 'pale pink', 'beige', 'pink', 'fuschia', 'purple'])
-    });
-    dataMapping.doc("fair_warm").set({
-      "skintone": "fair",
-      "undetone": "warm",
-      "warna": FieldValue.arrayUnion(
-          ["light coral", "peachy nude", "peachy pink", "warm nude"])
-    });
-    dataMapping.doc("fair_neutral").set({
-      "skintone": "fair",
-      "undetone": "neutral",
       "warna": FieldValue.arrayUnion([
         "mauve",
         "pale pink",
         "beige",
         "pink",
+        "fuschia",
+        "purple",
+        "rosy beige",
+      ])
+    });
+    dataMapping.doc("fair_warm").set({
+      "skintone": "fair",
+      "undetone": "warm",
+      "warna": FieldValue.arrayUnion([
         "light coral",
         "peachy nude",
-        "peachy pink"
+        "peachy pink",
+        "warm nude",
+        "nude pink",
+        "peachy warm",
+      ])
+    });
+    dataMapping.doc("fair_netral").set({
+      "skintone": "fair",
+      "undetone": "netral",
+      "warna": FieldValue.arrayUnion([
+        "mauve",
+        "pale pink",
+        "beige",
+        "pink",
+        "peachy nude",
+        "rosy beige",
+        "nude pink",
+        "peachy warm",
       ])
     });
 
     dataMapping.doc("light_cool").set({
       "skintone": "light",
       "undetone": "cool",
-      "warna":
-          FieldValue.arrayUnion(["mauve", "rosy pink", "fuschia", "purple"])
+      "warna": FieldValue.arrayUnion([
+        "mauve",
+        "rosy pink",
+        "fuschia",
+        "purple",
+        "nude brown",
+        "peachy nude",
+        "pale pink",
+      ])
     });
     dataMapping.doc("light_warm").set({
       "skintone": "light",
       "undetone": "warm",
-      "warna": FieldValue.arrayUnion(["warm pink", "rosy beige", "warm nude"])
+      "warna": FieldValue.arrayUnion([
+        "warm pink",
+        "rosy beige",
+        "warm nude",
+        "pink",
+        "peachy nude",
+      ])
     });
-    dataMapping.doc("light_neutral").set({
+    dataMapping.doc("light_netral").set({
       "skintone": "light",
-      "undetone": "neutral",
-      "warna": FieldValue.arrayUnion(
-          ["mauve", "rosy pink", "warm pink", "rosy beige"])
+      "undetone": "netral",
+      "warna": FieldValue.arrayUnion([
+        "mauve",
+        "rosy pink",
+        "warm pink",
+        "rosy beige",
+        "pink",
+        "peachy nude",
+        "pale pink",
+        "peachy warm",
+      ])
     });
 
     dataMapping.doc("medium_cool").set({
       "skintone": "medium",
       "undetone": "cool",
-      "warna":
-          FieldValue.arrayUnion(["dark mauve", "blue-red", "fuschia", "purple"])
+      "warna": FieldValue.arrayUnion([
+        "dark mauve",
+        "blue-red",
+        "fuschia",
+        "purple",
+        "peachy nude",
+      ])
     });
     dataMapping.doc("medium_warm").set({
       "skintone": "medium",
       "undetone": "warm",
-      "warna": FieldValue.arrayUnion(["orange-red", "nude beige", "warm nude"])
+      "warna": FieldValue.arrayUnion([
+        "orange-red",
+        "nude beige",
+        "warm nude",
+        "blue-red",
+        "peachy nude",
+        "terracotta",
+      ])
     });
-    dataMapping.doc("medium_neutral").set({
+    dataMapping.doc("medium_netral").set({
       "skintone": "medium",
-      "undetone": "neutral",
-      "warna": FieldValue.arrayUnion(
-          ["dark mauve", "blue-red", "orange-red", "nude beige"])
+      "undetone": "netral",
+      "warna": FieldValue.arrayUnion([
+        "dark mauve",
+        "blue-red",
+        "orange-red",
+        "nude beige",
+        "peachy pink",
+        "peachy nude",
+        "warm nude",
+        "terracotta",
+      ])
     });
 
     dataMapping.doc("tan_cool").set({
       "skintone": "tan",
       "undetone": "cool",
-      "warna":
-          FieldValue.arrayUnion(["plum", "dark mauve", "fuschia", "purple"])
+      "warna": FieldValue.arrayUnion([
+        "plum",
+        "dark mauve",
+        "fuschia",
+        "purple",
+      ])
     });
     dataMapping.doc("tan_warm").set({
       "skintone": "tan",
       "undetone": "warm",
-      "warna": FieldValue.arrayUnion(["terracotta", "nude brown"])
+      "warna": FieldValue.arrayUnion([
+        "terracotta",
+        "nude brown",
+        "nude pink",
+      ])
     });
-    dataMapping.doc("tan_neutral").set({
+    dataMapping.doc("tan_netral").set({
       "skintone": "tan",
-      "undetone": "neutral",
-      "warna": FieldValue.arrayUnion(
-          ["plum", "dark mauve", "terracotta", "nude brown"])
+      "undetone": "netral",
+      "warna": FieldValue.arrayUnion([
+        "plum",
+        "dark mauve",
+        "terracotta",
+        "nude brown",
+        "warm nude",
+        "nude pink",
+      ])
     });
 
     dataMapping.doc("deep_cool").set({
       "skintone": "deep",
       "undetone": "cool",
-      "warna": FieldValue.arrayUnion(
-          ["deep plum", "wine red", "dark chocolate", "fuschia", "purple"])
-    });
-    dataMapping.doc("deep_warm").set({
-      "skintone": "deep",
-      "undetone": "warm",
-      "warna": FieldValue.arrayUnion(["orange", "orange-red", "brown"])
-    });
-    dataMapping.doc("deep_neutral").set({
-      "skintone": "deep",
-      "undetone": "neutral",
       "warna": FieldValue.arrayUnion([
         "deep plum",
         "wine red",
         "dark chocolate",
+        "fuschia",
+        "purple",
+        "plum",
+      ])
+    });
+    dataMapping.doc("deep_warm").set({
+      "skintone": "deep",
+      "undetone": "warm",
+      "warna": FieldValue.arrayUnion([
         "orange",
         "orange-red",
-        "brown"
+        "brown",
+        "nude brown",
+        "terracotta",
+      ])
+    });
+    dataMapping.doc("deep_netral").set({
+      "skintone": "deep",
+      "undetone": "netral",
+      "warna": FieldValue.arrayUnion([
+        "deep plum",
+        "wine red",
+        "dark chocolate",
+        "brown",
+        "nude brown",
+        "blue-red",
+        "plum",
+        "terracotta",
       ])
     });
   }

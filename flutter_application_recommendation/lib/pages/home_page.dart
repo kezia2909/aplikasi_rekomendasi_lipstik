@@ -898,7 +898,8 @@ class _HomePageState extends State<HomePage> {
                                                 MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.8);
+                                                    0.8,
+                                                5.0);
                                           }
                                         }
                                       } else {

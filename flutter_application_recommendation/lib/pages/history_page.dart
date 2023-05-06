@@ -424,7 +424,8 @@ class _HistoryPageState extends State<HistoryPage> {
                                                     MediaQuery.of(context)
                                                             .size
                                                             .width *
-                                                        0.8);
+                                                        0.8,
+                                                    5.0);
                                               }
                                               setState(() {});
                                             }

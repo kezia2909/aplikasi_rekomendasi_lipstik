@@ -103,7 +103,8 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                   // height: MediaQuery.of(context).size.width * 0.8,
                   decoration: BoxDecoration(
                     shape: BoxShape.rectangle,
-                    border: Border.all(color: colorTheme(colorBlack), width: 5),
+                    border:
+                        Border.all(color: colorTheme(colorBlack), width: 5.0),
                     image: DecorationImage(
                         image: NetworkImage(faceUrl), fit: BoxFit.cover),
                   ),
@@ -111,7 +112,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                       ? Container()
                       : CustomPaint(
                           painter: FaceDetectorPainter(
-                              faceMLKit, faceArea, lipColor, sizeFrame),
+                              faceMLKit, faceArea, lipColor, sizeFrame, 5.0),
                         ),
                 ),
                 SizedBox(
@@ -145,7 +146,7 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                       // FOR LIPS
                       final bufferLip = StringBuffer();
                       if (hexString.length == 6 || hexString.length == 7)
-                        bufferLip.write('80');
+                        bufferLip.write('99');
                       bufferLip.write(hexString.replaceFirst('#', ''));
                       return GestureDetector(
                         onTap: () {

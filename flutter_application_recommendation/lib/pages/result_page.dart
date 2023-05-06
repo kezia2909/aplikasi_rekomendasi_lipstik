@@ -424,7 +424,7 @@ class _ResultPageState extends State<ResultPage> {
                         faceMLKit = listFaceMLKit[index];
                         print("MASUK PAINTER");
                         painter = FaceDetectorPainter(
-                            faceMLKit, faceArea, lipColor, sizeFrame);
+                            faceMLKit, faceArea, lipColor, sizeFrame, 5.0);
                       }
 
                       setState(() {});
@@ -454,8 +454,8 @@ class _ResultPageState extends State<ResultPage> {
                                       sizeForScale: sizeFrame),
                                 )
                               : CustomPaint(
-                                  painter: FaceDetectorPainter(
-                                      faceMLKit, faceArea, lipColor, sizeFrame),
+                                  painter: FaceDetectorPainter(faceMLKit,
+                                      faceArea, lipColor, sizeFrame, 5.0),
                                 ),
                         );
                       },
@@ -514,7 +514,7 @@ class _ResultPageState extends State<ResultPage> {
                       // FOR LIPS
                       final bufferLip = StringBuffer();
                       if (hexString.length == 6 || hexString.length == 7)
-                        bufferLip.write('80');
+                        bufferLip.write('99');
                       bufferLip.write(hexString.replaceFirst('#', ''));
                       return GestureDetector(
                         onTap: () {
