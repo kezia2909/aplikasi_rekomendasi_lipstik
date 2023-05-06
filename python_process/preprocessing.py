@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from rgb2hsi import rgb2hsi
 from hsi2rgb import hsi2rgb
+from global_variable import bool_resize
 
 # %%%%% Section 2 : Conventional image enhancement method %%%%%
 
@@ -13,7 +14,12 @@ def im2double(im):
 def preProcessing(fileName):
     # % just load and plot an image for test
     print("MASUK PREPROCESSING")
-    oriImage = cv2.imread(str('./python_process/Images_Resize/'+fileName))
+    # oriImage = cv2.imread(str('./python_process/Images_Resize/'+fileName))
+    if bool_resize : 
+        oriImage = cv2.imread(str('./python_process/Images_Resize/'+fileName))
+    else :
+        oriImage = cv2.imread(str('./python_process/Images_Ori/'+fileName))
+        
     image = oriImage
     # print("SIZE ORI : ", image.shape)
 

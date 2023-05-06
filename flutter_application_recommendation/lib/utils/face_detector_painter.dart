@@ -41,7 +41,7 @@ class FaceDetectorPainter extends CustomPainter {
         var path = Path();
         var path2 = Path();
         var paint = Paint()
-          ..color = color
+          ..color = color.withOpacity(0.8)
           ..strokeWidth = 1;
 
         var paint2 = Paint()

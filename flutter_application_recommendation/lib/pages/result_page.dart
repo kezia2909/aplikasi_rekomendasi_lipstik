@@ -514,7 +514,7 @@ class _ResultPageState extends State<ResultPage> {
                       // FOR LIPS
                       final bufferLip = StringBuffer();
                       if (hexString.length == 6 || hexString.length == 7)
-                        bufferLip.write('99');
+                        bufferLip.write('ff');
                       bufferLip.write(hexString.replaceFirst('#', ''));
                       return GestureDetector(
                         onTap: () {
