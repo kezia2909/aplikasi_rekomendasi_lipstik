@@ -135,24 +135,89 @@ class _HistoryPageState extends State<HistoryPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Yakin mau reset?'),
+          contentPadding: const EdgeInsets.fromLTRB(24.0, 0.0, 24.0, 24.0),
+          buttonPadding: const EdgeInsets.fromLTRB(20.0, 0.0, 20.0, 0.0),
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Text('Confirm Reset')),
+              IconButton(
+                padding: EdgeInsets.all(0),
+                alignment: Alignment.topRight,
+                icon: Icon(
+                  Icons.close,
+                  color: colorTheme(colorBlack),
+                ),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+          content: Text(
+            "Are you sure you want to reset? All of your history will be delete",
+            style: TextStyle(color: colorTheme(colorBlack)),
+          ),
           actions: <Widget>[
-            ElevatedButton(
-              child: Text('CANCEL'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            ElevatedButton(
-              child: Text('DELETE'),
-              onPressed: () async {
+            // ElevatedButton(
+            //   child: Text('DELETE'),
+            //   onPressed: () async {
+            //     if (await DatabaseService.resetHistoryRekomendasi(user.uid)) {
+            //       snackBar = SnackBar(
+            //         content: Text('History berhasil direset'),
+            //       );
+            //     } else {
+            //       snackBar = SnackBar(
+            //         content: Text('History gagal direset'),
+            //       );
+            //     }
+            //     Navigator.pop(context);
+
+            //     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            //   },
+            // ),
+            reusableButtonLog(
+              context,
+              "RESET",
+              colorTheme(colorAccent),
+              colorTheme(colorWhite),
+              () async {
                 if (await DatabaseService.resetHistoryRekomendasi(user.uid)) {
+                  // snackBar = SnackBar(
+                  //   content: Text('History $name berhasil didelete'),
+                  // );
+                  var message = "History reset successfully";
                   snackBar = SnackBar(
-                    content: Text('History berhasil direset'),
+                    content: Row(
+                      children: [
+                        Icon(
+                          Icons.check,
+                          color: colorTheme(colorWhite),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(message),
+                      ],
+                    ),
+                    backgroundColor: colorTheme(colorShadow),
                   );
                 } else {
+                  var message = "History reset failed";
                   snackBar = SnackBar(
-                    content: Text('History gagal direset'),
+                    content: Row(
+                      children: [
+                        Icon(
+                          Icons.warning,
+                          color: colorTheme(colorWhite),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(message),
+                      ],
+                    ),
+                    backgroundColor: colorTheme(colorRed),
                   );
                 }
                 Navigator.pop(context);
@@ -206,6 +271,22 @@ class _HistoryPageState extends State<HistoryPage> {
           "History",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+        iconTheme: IconThemeData(
+          color: colorTheme(colorAccent), // <-- SEE HERE
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: IconButton(
+                onPressed: () {
+                  _resetHistory(context);
+                },
+                icon: Icon(
+                  Icons.delete_forever_outlined,
+                  size: 30,
+                )),
+          )
+        ],
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
