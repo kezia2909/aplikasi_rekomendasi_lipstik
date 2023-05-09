@@ -33,6 +33,7 @@ bool_cluster_CIELAB = False
 
 bool_cluster_CIELAB = True
 
+bool_noBackground = False
 
 
 

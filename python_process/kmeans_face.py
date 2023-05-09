@@ -12,6 +12,9 @@ from global_variable import bool_CIELAB
 from global_variable import bool_masking
 from global_variable import bool_maxCluster
 import math
+from global_variable import bool_noBackground
+from changeBackground import changeBackground
+
 
 
 def convertRGB2LAB(img_arr):
@@ -508,7 +511,15 @@ def getCMap(numClusters, choosenCluster):
 # KMEANS - CIELAB
 def kmeansFaceCIELAB(fileName):
     clusterUse = numClusters
-    img_arr = cv2.imread("./python_process/Images_New/"+fileName)
+    if bool_noBackground:
+        if changeBackground(fileName):
+            img_arr = cv2.imread("./python_process/Images_NoBackground/"+fileName)
+        else:
+            img_arr = cv2.imread("./python_process/Images_New/"+fileName)
+    else:
+        img_arr = cv2.imread("./python_process/Images_New/"+fileName)
+    
+    # img_arr = cv2.imread("./python_process/Images_New/"+fileName)
     # img_arr = cv2.imread("./Images_Ori/dataset 1 frontal face/"+"21 - Copy.jpeg")
     print("img_arr shape : ", img_arr.shape)
     print("img_arr: ", img_arr)
@@ -549,19 +560,19 @@ def kmeansFaceCIELAB(fileName):
 
 
     print("percentage-3 : ", percentage)
-    if(percentage<=44):
-        print("start cluster 2")
-        # KMEANS CLUSTER 2
-        kmeans_model_Lab = KMeans(n_clusters=2, random_state=0) 
-        cluster_labels_Lab = kmeans_model_Lab.fit_predict(reshapedLab)
-        labels_count_Lab = Counter(cluster_labels_Lab)
-        print("labels_count_Lab : ", labels_count_Lab)
+    # if(percentage<=44):
+    #     print("start cluster 2")
+    #     # KMEANS CLUSTER 2
+    #     kmeans_model_Lab = KMeans(n_clusters=2, random_state=0) 
+    #     cluster_labels_Lab = kmeans_model_Lab.fit_predict(reshapedLab)
+    #     labels_count_Lab = Counter(cluster_labels_Lab)
+    #     print("labels_count_Lab : ", labels_count_Lab)
 
-        u, c = np.unique(cluster_labels_Lab, return_counts = True)
-        choosenCluster = u[c == c.max()]
-        print("choosenCluster : ", choosenCluster)
-        percentage = labels_count_Lab[choosenCluster[0]]/(labels_count_Lab[0]+labels_count_Lab[1]+labels_count_Lab[2])*100
-        clusterUse = 2
+    #     u, c = np.unique(cluster_labels_Lab, return_counts = True)
+    #     choosenCluster = u[c == c.max()]
+    #     print("choosenCluster : ", choosenCluster)
+    #     percentage = labels_count_Lab[choosenCluster[0]]/(labels_count_Lab[0]+labels_count_Lab[1]+labels_count_Lab[2])*100
+    #     clusterUse = 2
 
     print("percentage end : ", percentage)
     img_quant_Lab = np.reshape(np.array(kmeans_model_Lab.labels_, dtype=np.uint8),
