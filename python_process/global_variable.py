@@ -4,7 +4,7 @@ temp_list_area_lips = []
 temp_list_labels = []
 temp_list_choosen_cluster = []
 
-bool_preprocessing = False
+bool_preprocessing = True
 
 bool_paper = False
 

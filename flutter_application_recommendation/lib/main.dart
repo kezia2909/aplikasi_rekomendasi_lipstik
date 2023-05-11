@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';
 import 'package:flutter_application_recommendation/wrapper.dart';
 import 'package:provider/provider.dart';
+import 'package:is_first_run/is_first_run.dart';
 
 import 'firebase_options.dart';
 
@@ -13,11 +14,20 @@ var mapping_lists = [];
 var list_lipstik = [];
 var firstOpen = false;
 
+bool firstRun = false;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  print("start TESSS RUNNN");
+
+  firstRun = await IsFirstRun.isFirstCall();
+
+  print("TESSS RUNNN");
+  // print(firstRun);
 
   print("start run");
   runApp(const MyApp());

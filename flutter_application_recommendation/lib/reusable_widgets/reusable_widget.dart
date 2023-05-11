@@ -7,8 +7,36 @@ Image logoWidget(String imageName) {
     fit: BoxFit.fitWidth,
     width: 240,
     height: 240,
-    color: hexStringToColor("f9e8e6"),
+    color: colorTheme(colorHighlight),
   );
+}
+
+Image guideImageWidget(String imageName) {
+  return Image.asset(
+    imageName,
+    fit: BoxFit.fitWidth,
+    width: 100,
+    height: 100,
+    color: colorTheme(colorBlack),
+  );
+}
+
+Text guideTitleWidget(String title) {
+  return Text(title,
+      style: TextStyle(
+          color: colorTheme(colorBlack),
+          fontSize: 20,
+          fontWeight: FontWeight.bold),
+      textAlign: TextAlign.center);
+}
+
+Text guideDescriptionWidget(String title) {
+  return Text(title,
+      style: TextStyle(
+        color: colorTheme(colorBlack),
+        fontSize: 15,
+      ),
+      textAlign: TextAlign.center);
 }
 
 Text reusableTextTitle(String title) {

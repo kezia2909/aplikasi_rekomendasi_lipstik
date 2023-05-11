@@ -17,6 +17,7 @@ String colorDark = "dark";
 String colorBlack = "black";
 String colorWhite = "white";
 String colorRed = "red";
+String colorGreen = "green";
 
 // PINK VERSION
 // String hexShadow = "d3445d";
@@ -34,6 +35,7 @@ String hexAccent = "ad3131";
 String hexBlack = "1f1f1f";
 String hexWhite = "ffffff";
 String hexRed = "ff0000";
+String hexGreen = "056e10";
 
 colorTheme(String type) {
   if (type == colorShadow) {
@@ -52,5 +54,7 @@ colorTheme(String type) {
     return hexStringToColor(hexWhite);
   } else if (type == colorRed) {
     return hexStringToColor(hexRed);
+  } else if (type == colorGreen) {
+    return hexStringToColor(hexGreen);
   }
 }
