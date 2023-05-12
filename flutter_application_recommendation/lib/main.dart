@@ -51,6 +51,7 @@ void main() async {
         var tempdata = {
           'id': id,
           'kategori': hasil['kategori'],
+          'kode_lipstik': hasil['kode_lipstik'],
           'kode_warna': hasil['kode_warna'],
           'nama_lipstik': hasil['nama_lipstik']
         };

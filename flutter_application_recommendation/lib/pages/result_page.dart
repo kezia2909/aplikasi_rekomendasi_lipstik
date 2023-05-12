@@ -518,7 +518,9 @@ class _ResultPageState extends State<ResultPage> {
                       bufferLip.write(hexString.replaceFirst('#', ''));
                       return GestureDetector(
                         onTap: () {
-                          testChosenLipstik = element['nama_lipstik'];
+                          testChosenLipstik = element['kode_lipstik'] +
+                              " - " +
+                              element['nama_lipstik'];
                           currentIndex = index;
                           lipColor =
                               Color(int.parse(bufferLip.toString(), radix: 16));

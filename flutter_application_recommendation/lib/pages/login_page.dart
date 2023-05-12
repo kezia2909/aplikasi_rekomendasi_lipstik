@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/main.dart';
-import 'package:flutter_application_recommendation/pages/firstguide_page.dart';
 import 'package:flutter_application_recommendation/pages/registration_page.dart';
 import 'package:flutter_application_recommendation/reusable_widgets/reusable_widget.dart';
 import 'package:flutter_application_recommendation/services/auth_service.dart';

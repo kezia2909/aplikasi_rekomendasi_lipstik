@@ -88,7 +88,10 @@ void getLipstik(String kategoriKulit) {
     );
   });
   testLipstik = listLipstikFace.toString();
-  testChosenLipstik = listLipstikFace.first['nama_lipstik'];
+  // testChosenLipstik = listLipstikFace.first['nama_lipstik'];
+  testChosenLipstik = listLipstikFace.first['kode_lipstik'] +
+      " - " +
+      listLipstikFace.first['nama_lipstik'];
 
   String hexString = listLipstikFace.first['kode_warna'];
   final buffer = StringBuffer();

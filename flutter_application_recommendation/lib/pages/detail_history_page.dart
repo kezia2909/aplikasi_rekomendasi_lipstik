@@ -150,7 +150,11 @@ class _DetailHistoryPageState extends State<DetailHistoryPage> {
                       bufferLip.write(hexString.replaceFirst('#', ''));
                       return GestureDetector(
                         onTap: () {
-                          testChosenLipstik = element['nama_lipstik'];
+                          print(element);
+
+                          testChosenLipstik = element['kode_lipstik'] +
+                              " - " +
+                              element['nama_lipstik'];
                           currentIndex = index;
                           lipColor =
                               Color(int.parse(bufferLip.toString(), radix: 16));
