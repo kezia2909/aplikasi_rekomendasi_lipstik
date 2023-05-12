@@ -247,7 +247,7 @@ class _LoginPageState extends State<LoginPage> {
                               print("FIRST RUN");
                               print(firstRun);
 
-                              main();
+                              // main();
                               setState(() {});
 
                               // Navigator.push(
