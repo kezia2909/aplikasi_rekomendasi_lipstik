@@ -996,11 +996,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
 
-                    Text(
-                      user.isAnonymous
-                          ? "ANONIM : ${user.uid}"
-                          : "USER : ${user.uid}",
-                    ),
+                    // Text(
+                    //   user.isAnonymous
+                    //       ? "ANONIM : ${user.uid}"
+                    //       : "USER : ${user.uid}",
+                    // ),
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     //   children: [

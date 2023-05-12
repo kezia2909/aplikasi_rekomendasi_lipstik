@@ -381,6 +381,7 @@ class _HistoryPageState extends State<HistoryPage> {
                               String name = historyData['nameHistory'];
                               String url = historyData['faceUrl'];
                               String category = historyData['faceCategory'];
+                              var skin = category.split('_');
                               List<dynamic> area = historyData['faceArea'];
                               return Container(
                                 decoration: BoxDecoration(
@@ -426,7 +427,13 @@ class _HistoryPageState extends State<HistoryPage> {
                                                   fontSize: 22,
                                                   fontWeight: FontWeight.w500),
                                               textAlign: TextAlign.left),
-                                          Text(category,
+                                          Text(skin[0],
+                                              style: TextStyle(
+                                                  color: colorTheme(colorBlack),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w300),
+                                              textAlign: TextAlign.left),
+                                          Text(skin[1],
                                               style: TextStyle(
                                                   color: colorTheme(colorBlack),
                                                   fontSize: 18,
