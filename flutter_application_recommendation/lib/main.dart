@@ -105,7 +105,7 @@ class MyApp extends StatelessWidget {
       initialData: null,
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
+        title: 'Find My Color',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
