@@ -7,6 +7,7 @@ class LipsPainter extends CustomPainter {
   final List<dynamic> lipsCluster;
   final List<Rect> rects = [];
   final double sizeForScale;
+  final double sizeBorder;
 
   final List<dynamic> face;
   var scaleW;
@@ -21,6 +22,7 @@ class LipsPainter extends CustomPainter {
     required this.face,
     required this.color,
     required this.sizeForScale,
+    required this.sizeBorder,
   });
 
   @override
@@ -43,12 +45,12 @@ class LipsPainter extends CustomPainter {
     print(lips.length);
 
     for (var i = 0; i < lips.length; i++) {
-      final x = lips[i][0].toDouble() * scaleW;
-      final y = lips[i][1].toDouble() * scaleH;
-      final w = lips[i][2].toDouble() * scaleW;
-      final h = lips[i][3].toDouble() * scaleH;
+      final x = lips[i][0].toDouble() * scaleW - sizeBorder;
+      final y = lips[i][1].toDouble() * scaleH - sizeBorder;
+      final w = lips[i][2].toDouble() * scaleW - sizeBorder;
+      final h = lips[i][3].toDouble() * scaleH - sizeBorder;
       final rect = Rect.fromPoints(Offset(x, y), Offset(x + w, y + h));
-      // rects.add(rect);
+      rects.add(rect);
       // print("ADD RECTT");
       print(
           "detail : ${x}, ${y}, ${w}, ${h}, ${lips[i][2].toDouble()}, ${lips[i][3].toDouble()}");
@@ -63,7 +65,8 @@ class LipsPainter extends CustomPainter {
         for (var k = real_x; k < real_x + real_w; k++) {
           if (lipsLabel[i][temp_count] != lipsCluster[0]) {
             canvas.drawCircle(
-                Offset(k.toDouble() * scaleW, j.toDouble() * scaleH),
+                Offset(k.toDouble() * scaleW - sizeBorder,
+                    j.toDouble() * scaleH - sizeBorder),
                 1.0,
                 paint_new);
           }

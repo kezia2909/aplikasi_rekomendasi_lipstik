@@ -451,7 +451,8 @@ class _ResultPageState extends State<ResultPage> {
                                       lipsCluster: lipsCluster,
                                       face: faceArea,
                                       color: lipColor,
-                                      sizeForScale: sizeFrame),
+                                      sizeForScale: sizeFrame,
+                                      sizeBorder: 5.0),
                                 )
                               : CustomPaint(
                                   painter: FaceDetectorPainter(faceMLKit,
