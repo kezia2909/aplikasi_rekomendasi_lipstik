@@ -35,6 +35,8 @@ class _LoginPageState extends State<LoginPage> {
 
   late double sizeFrame;
   late double sizePadding;
+  late double sizePaddingTop;
+  late double sizePaddingSpesial;
   int tempIndex = 0;
 
   @override
@@ -60,6 +62,8 @@ class _LoginPageState extends State<LoginPage> {
         sizePadding = MediaQuery.of(context).size.width * 0.1;
       }
       sizeFrame = (MediaQuery.of(context).size.width - sizePadding * 2);
+      sizePaddingSpesial = sizePadding;
+      sizePaddingTop = sizePadding;
     } else {
       if (MediaQuery.of(context).size.height >= 700) {
         print("aaaaaa${MediaQuery.of(context).size.height}");
@@ -68,7 +72,9 @@ class _LoginPageState extends State<LoginPage> {
         print("bbbbbbbbbbb${MediaQuery.of(context).size.height}");
         sizeFrame = MediaQuery.of(context).size.height * 0.5;
       }
-      sizePadding = (MediaQuery.of(context).size.width - sizeFrame) / 2;
+      sizePaddingSpesial = (MediaQuery.of(context).size.width - sizeFrame) / 2;
+      sizePadding = MediaQuery.of(context).size.width * 0.25;
+      sizePaddingTop = MediaQuery.of(context).size.height * 0.1;
     }
     return firstRun
         ? Scaffold(
@@ -92,7 +98,8 @@ class _LoginPageState extends State<LoginPage> {
               decoration: BoxDecoration(color: colorTheme(colorHighlight)),
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.fromLTRB(sizePadding, 10, sizePadding, 0),
+                  padding: EdgeInsets.fromLTRB(
+                      sizePaddingSpesial, 10, sizePaddingSpesial, 0),
                   child: Column(
                     children: <Widget>[
                       CarouselSlider(
@@ -275,9 +282,12 @@ class _LoginPageState extends State<LoginPage> {
                 ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               ),
               child: Padding(
-                // padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
                 padding: EdgeInsets.fromLTRB(
-                    20, MediaQuery.of(context).size.height * 0.05, 20, 0),
+                    sizePadding, sizePaddingTop, sizePadding, 0),
+
+                // padding: EdgeInsets.fromLTRB(20, 20, 20, 0),
+                // padding: EdgeInsets.fromLTRB(
+                //     20, MediaQuery.of(context).size.height * 0.05, 20, 0),
                 child: Column(
                   children: [
                     logoWidget("assets/images/logo.png"),

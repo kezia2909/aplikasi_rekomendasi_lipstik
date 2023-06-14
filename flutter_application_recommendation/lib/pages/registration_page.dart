@@ -16,6 +16,11 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  // late double sizeFrame;
+  late double sizePadding;
+  late double sizePaddingTop;
+  late double sizePaddingSpesial;
+
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
   TextEditingController _firstnameTextController = TextEditingController();
@@ -47,7 +52,23 @@ class _RegistrationPageState extends State<RegistrationPage> {
 // START WIDGET
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width <
+        MediaQuery.of(context).size.height) {
+      if (MediaQuery.of(context).size.width * 0.1 >= 20) {
+        print("aaaaaa${MediaQuery.of(context).size.width}");
+        sizePadding = 20;
+        // sizePadding = MediaQuery.of(context).size.width * 0.1;
+      } else {
+        print("bbbbbbbbbbb${MediaQuery.of(context).size.width}");
+        sizePadding = MediaQuery.of(context).size.width * 0.1;
+        sizePaddingTop = sizePadding;
+      }
+    } else {
+      sizePadding = MediaQuery.of(context).size.width * 0.25;
+      sizePaddingTop = MediaQuery.of(context).size.width * 0.1;
+    }
     User? firebaseUser = Provider.of<User?>(context);
+
     return (firebaseUser == null)
         ? Scaffold(
             // extendBodyBehindAppBar: true,
@@ -70,7 +91,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
               child: Padding(
                 padding: EdgeInsets.fromLTRB(
-                    20, MediaQuery.of(context).size.height * 0.1, 20, 20),
+                    sizePadding, sizePaddingTop, sizePadding, 0),
                 child: Column(
                   children: [
                     Align(

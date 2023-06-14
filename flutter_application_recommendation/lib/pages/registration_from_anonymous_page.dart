@@ -28,6 +28,10 @@ class _RegistrationFromAnonymousPageState
 
   late User user = widget.firebaseUser;
 
+  late double sizePadding;
+  late double sizePaddingTop;
+  late double sizePaddingSpesial;
+
   late var credential;
   var snackBar = SnackBar(
     content: const Text('Yay! A SnackBar!'),
@@ -132,6 +136,31 @@ class _RegistrationFromAnonymousPageState
 // START WIDGET
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width <
+        MediaQuery.of(context).size.height) {
+      if (MediaQuery.of(context).size.width * 0.1 >= 40) {
+        print("aaaaaa${MediaQuery.of(context).size.width}");
+        sizePadding = 40;
+        // sizePadding = MediaQuery.of(context).size.width * 0.1;
+      } else {
+        print("bbbbbbbbbbb${MediaQuery.of(context).size.width}");
+        sizePadding = MediaQuery.of(context).size.width * 0.1;
+      }
+      // sizeFrame = (MediaQuery.of(context).size.width - sizePadding * 2);
+      sizePaddingSpesial = sizePadding;
+      sizePaddingTop = sizePadding;
+    } else {
+      if (MediaQuery.of(context).size.height >= 700) {
+        print("aaaaaa${MediaQuery.of(context).size.height}");
+        // sizeFrame = 350;
+      } else {
+        print("bbbbbbbbbbb${MediaQuery.of(context).size.height}");
+        // sizeFrame = MediaQuery.of(context).size.height * 0.5;
+      }
+      // sizePaddingSpesial = (MediaQuery.of(context).size.width - sizeFrame) / 2;
+      sizePadding = MediaQuery.of(context).size.width * 0.25;
+      sizePaddingTop = MediaQuery.of(context).size.height * 0.1;
+    }
     return Scaffold(
       // extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -158,8 +187,8 @@ class _RegistrationFromAnonymousPageState
         ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
         child: SingleChildScrollView(
             child: Padding(
-          padding: EdgeInsets.fromLTRB(
-              20, MediaQuery.of(context).size.height * 0, 20, 0),
+          padding:
+              EdgeInsets.fromLTRB(sizePadding, sizePaddingTop, sizePadding, 0),
           child: Column(children: <Widget>[
             const SizedBox(
               height: 30,
