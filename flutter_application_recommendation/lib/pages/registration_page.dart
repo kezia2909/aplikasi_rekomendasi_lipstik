@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/home_page.dart';
 import 'package:flutter_application_recommendation/pages/login_page.dart';
@@ -57,6 +58,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
       if (MediaQuery.of(context).size.width * 0.1 >= 20) {
         print("aaaaaa${MediaQuery.of(context).size.width}");
         sizePadding = 20;
+        sizePaddingTop = sizePadding;
+
         // sizePadding = MediaQuery.of(context).size.width * 0.1;
       } else {
         print("bbbbbbbbbbb${MediaQuery.of(context).size.width}");
@@ -152,12 +155,13 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     _emailTextController.text,
                                     _passwordTextController.text);
 
-                                var message = "Error Sign Up";
+                                var message =
+                                    "Error Sign Up, please try again, aaaaaaa";
                                 print("TEST ERROR");
                                 print(error);
                                 print(error.runtimeType.toString());
 
-                                switch (await error.toString()) {
+                                switch (error.toString()) {
                                   case "[firebase_auth/unknown] Given String is empty or null":
                                     print('ERORR ZERO');
                                     message = "Please input all data";
@@ -172,87 +176,67 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     message = "Password at least 6 characters";
                                     break;
                                 }
-                                snackBar = SnackBar(
-                                  content: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning,
-                                        color: colorTheme(colorWhite),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(message),
-                                    ],
-                                  ),
-                                  backgroundColor: colorTheme(colorRed),
-                                );
-
-                                if (error.runtimeType.toString() != "User") {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
+                                if (error.runtimeType.toString() != "User" &&
+                                    error.runtimeType.toString() !=
+                                        "minified:fS") {
+                                  print("BUKANNN USERRR");
+                                  print(error.runtimeType.toString());
+                                  message = error.runtimeType.toString();
+                                  print("AAAAAAaa");
+                                  snackBar = SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.warning,
+                                          color: colorTheme(colorWhite),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(message),
+                                      ],
+                                    ),
+                                    backgroundColor: colorTheme(colorRed),
+                                  );
                                 } else {
-                                  Navigator.pop(context);
+                                  print("BETULLLL USERRR");
+                                  print(error.runtimeType.toString());
+                                  print("AAAAAAaa");
+                                  message = "Signed up successfully";
+                                  snackBar = SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.check,
+                                          color: colorTheme(colorWhite),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(message),
+                                      ],
+                                    ),
+                                    backgroundColor: colorTheme(colorShadow),
+                                  );
                                 }
+                                // if (kIsWeb) {
+                                //   Navigator.pop(context);
+                                // }
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
                               }),
                               const SizedBox(
                                 height: 20,
                               ),
-                              // reusableButtonLog(
-                              //     context,
-                              //     "SKIP",
-                              //     hexStringToColor("db9196"),
-                              //     hexStringToColor("1b1c1e"), () async {
-                              //   await AuthServices.logInAnonymous();
-                              // }),
-                              // const SizedBox(
-                              //   height: 30,
-                              // ),
-                              // Align(
-                              //   alignment: Alignment.topLeft,
-                              //   child: Text(
-                              //     "Already have an account?",
-                              //     style: TextStyle(
-                              //       color: Colors.white.withOpacity(1.0),
-                              //     ),
-                              //   ),
-                              // ),
-                              // const SizedBox(
-                              //   height: 10,
-                              // ),
-                              // reusableButtonLog(
-                              //     context,
-                              //     "SIGN IN",
-                              //     hexStringToColor("db9196"),
-                              //     hexStringToColor("1b1c1e"), () {
-                              //   Navigator.push(
-                              //       context,
-                              //       MaterialPageRoute(
-                              //           builder: (context) => LoginPage()));
-                              // }),
                               reusableLogOption(
                                 context,
                                 "Already have an account?",
                                 "Sign In",
                                 () {
                                   Navigator.pop(context);
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //         builder: (context) => LoginPage()));
                                 },
                               ),
-                              // const SizedBox(
-                              //   height: 20,
-                              // ),
-                              // reusableLogOption(
-                              //   context,
-                              //   "Log in as",
-                              //   "Guest",
-                              //   () async {
-                              //     await AuthServices.logInAnonymous();
-                              //   },
-                              // )
                             ],
                           ),
                         ),

@@ -349,45 +349,49 @@ class _LoginPageState extends State<LoginPage> {
                                     break;
                                 }
 
-                                snackBar = SnackBar(
-                                  content: Row(
-                                    children: [
-                                      Icon(
-                                        Icons.warning,
-                                        color: colorTheme(colorWhite),
-                                      ),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Text(message),
-                                    ],
-                                  ),
-                                  backgroundColor: colorTheme(colorRed),
-                                );
-                                // if (error.runtimeType.toString() == "User") {
-                                //   message = "Successfully Sign In";
-                                //   snackBar = SnackBar(
-                                //     content: Row(
-                                //       children: [
-                                //         Icon(
-                                //           Icons.check_circle,
-                                //           color: Colors.white,
-                                //         ),
-                                //         SizedBox(
-                                //           width: 10,
-                                //         ),
-                                //         Text(message),
-                                //       ],
-                                //     ),
-                                //     backgroundColor: Colors.green,
-                                //   );
-                                // }
-
-                                // print(error.runtimeType);
                                 if (error.runtimeType.toString() != "User") {
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackBar);
-                                } else {}
+                                  print("BUKANNN USERRR");
+                                  print(error.runtimeType.toString());
+                                  print("AAAAAAaa");
+                                  snackBar = SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.warning,
+                                          color: colorTheme(colorWhite),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(message),
+                                      ],
+                                    ),
+                                    backgroundColor: colorTheme(colorRed),
+                                  );
+                                } else {
+                                  print("BETULLLL USERRR");
+                                  print(error.runtimeType.toString());
+                                  print("AAAAAAaa");
+                                  message = "Signed in successfully";
+                                  snackBar = SnackBar(
+                                    content: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.check,
+                                          color: colorTheme(colorWhite),
+                                        ),
+                                        const SizedBox(
+                                          width: 10,
+                                        ),
+                                        Text(message),
+                                      ],
+                                    ),
+                                    backgroundColor: colorTheme(colorShadow),
+                                  );
+                                }
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(snackBar);
                               }),
                               const SizedBox(
                                 height: 20,

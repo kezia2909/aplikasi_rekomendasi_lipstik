@@ -9,25 +9,25 @@ class DataSeederService {
       'kategori': "dark mauve",
       'nama_lipstik': "Witty",
       'kode_lipstik': "40",
-      'kode_warna': "90484c",
+      'kode_warna': "8d464c",
     });
     listLipstik.doc("2").set({
       'kategori': "pink",
       'nama_lipstik': "Coy",
       'kode_lipstik': "20",
-      'kode_warna': "c74a68",
+      'kode_warna': "c34963",
     });
     listLipstik.doc("3").set({
       'kategori': "blue-red",
       'nama_lipstik': "Wicked",
       'kode_lipstik': "50",
-      'kode_warna': "b80023",
+      'kode_warna': "b90025",
     });
     listLipstik.doc("4").set({
       'kategori': "wine red",
       'nama_lipstik': "Unrivaled",
       'kode_lipstik': "30",
-      'kode_warna': "880a2b",
+      'kode_warna': "870a2c",
     });
     listLipstik.doc("5").set({
       'kategori': "light coral",
@@ -39,7 +39,7 @@ class DataSeederService {
       'kategori': "peachy pink",
       'nama_lipstik': "Peachy",
       'kode_lipstik': "15",
-      'kode_warna': "c75457",
+      'kode_warna': "c35353",
     });
     listLipstik.doc("7").set({
       'kategori': "peachy warm",
@@ -57,19 +57,19 @@ class DataSeederService {
       'kategori': "rosy beige",
       'nama_lipstik': "Cheeky",
       'kode_lipstik': "35",
-      'kode_warna': "af5b59",
+      'kode_warna': "ad5959",
     });
     listLipstik.doc("10").set({
       'kategori': "pale pink",
       'nama_lipstik': "Charmed",
       'kode_lipstik': "100",
-      'kode_warna': "c96d6c",
+      'kode_warna': "c76e6a",
     });
     listLipstik.doc("11").set({
       'kategori': "terracotta",
       'nama_lipstik': "Extra",
       'kode_lipstik': "130",
-      'kode_warna': "973a2c",
+      'kode_warna': "963a2c",
     });
     listLipstik.doc("12").set({
       'kategori': "peachy nude",
@@ -87,25 +87,25 @@ class DataSeederService {
       'kategori': "warm nude",
       'nama_lipstik': "Keen",
       'kode_lipstik': "125",
-      'kode_warna': "ba453c",
+      'kode_warna': "ba453b",
     });
     listLipstik.doc("15").set({
       'kategori': "warm pink",
       'nama_lipstik': "Peppy",
       'kode_lipstik': "115",
-      'kode_warna': "aa464e",
+      'kode_warna': "a84b4d",
     });
     listLipstik.doc("16").set({
       'kategori': "nude brown",
       'nama_lipstik': "Punchy",
       'kode_lipstik': "120",
-      'kode_warna': "95594f",
+      'kode_warna': "955951",
     });
     listLipstik.doc("17").set({
       'kategori': "orange-red",
       'nama_lipstik': "Red Hot",
       'kode_lipstik': "25",
-      'kode_warna': "e1100f",
+      'kode_warna': "e21011",
     });
     listLipstik.doc("18").set({
       'kategori': "terracotta",

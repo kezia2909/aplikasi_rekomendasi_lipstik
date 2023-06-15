@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_recommendation/pages/admin_page.dart';
 import 'package:flutter_application_recommendation/pages/guidebook_page.dart';
@@ -8,6 +11,7 @@ import 'package:flutter_application_recommendation/pages/home_page.dart';
 // import 'package:flutter_application_recommendation/pages/home_page_try.dart';
 import 'package:flutter_application_recommendation/pages/login_page.dart';
 import 'package:flutter_application_recommendation/pages/profile_page.dart';
+import 'package:flutter_application_recommendation/pages/try_on_page.dart';
 import 'package:flutter_application_recommendation/utils/color_utils.dart';
 import 'package:provider/provider.dart';
 
@@ -27,7 +31,7 @@ class _BottomNavbarState extends State<BottomNavbar> {
 
   @override
   Widget build(BuildContext context) {
-    final userScreens = [
+    var userScreens = [
       HomePage(
           firebaseUser: user,
           ref: (int number) {
@@ -39,6 +43,23 @@ class _BottomNavbarState extends State<BottomNavbar> {
       const GuidebookPage(),
       ProfilePage(firebaseUser: user),
     ];
+
+    if (Platform.isAndroid) {
+      userScreens = [
+        HomePage(
+            firebaseUser: user,
+            ref: (int number) {
+              setState(() {
+                currentIndex = number;
+              });
+            }),
+        TryOnPage(),
+        HistoryPage(firebaseUser: user),
+        const GuidebookPage(),
+        ProfilePage(firebaseUser: user),
+      ];
+    }
+
     final anonymScreens = [
       HomePage(
           firebaseUser: user,
@@ -75,39 +96,74 @@ class _BottomNavbarState extends State<BottomNavbar> {
               backgroundColor: colorTheme(colorHighlight),
             ),
           )
-        : Scaffold(
-            body: IndexedStack(
-              index: currentIndex,
-              children: userScreens,
-            ),
-            bottomNavigationBar: BottomNavigationBar(
-              type: BottomNavigationBarType.fixed,
-              currentIndex: currentIndex,
-              onTap: (index) => setState(() => currentIndex = index),
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.home),
-                  label: 'home',
+        : kIsWeb
+            ? Scaffold(
+                body: IndexedStack(
+                  index: currentIndex,
+                  children: userScreens,
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.history),
-                  label: 'history',
+                bottomNavigationBar: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: currentIndex,
+                  onTap: (index) => setState(() => currentIndex = index),
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.history),
+                      label: 'history',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.book),
+                      label: 'guidebook',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      label: 'profile',
+                    ),
+                  ],
+                  unselectedItemColor: colorTheme(colorShadow),
+                  selectedItemColor: colorTheme(colorAccent),
+                  elevation: 0,
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.book),
-                  label: 'guidebook',
+              )
+            : Scaffold(
+                body: IndexedStack(
+                  index: currentIndex,
+                  children: userScreens,
                 ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'profile',
+                bottomNavigationBar: BottomNavigationBar(
+                  type: BottomNavigationBarType.fixed,
+                  currentIndex: currentIndex,
+                  onTap: (index) => setState(() => currentIndex = index),
+                  items: const [
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.home),
+                      label: 'home',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.color_lens),
+                      label: 'try-on',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.history),
+                      label: 'history',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.book),
+                      label: 'guidebook',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: Icon(Icons.person),
+                      label: 'profile',
+                    ),
+                  ],
+                  unselectedItemColor: colorTheme(colorShadow),
+                  selectedItemColor: colorTheme(colorAccent),
+                  elevation: 0,
                 ),
-              ],
-              unselectedItemColor: colorTheme(colorShadow),
-              selectedItemColor: colorTheme(colorAccent),
-              // backgroundColor: Colors.transparent,
-              // fixedColor: Colors.transparent,
-              elevation: 0,
-            ),
-          );
+              );
   }
 }

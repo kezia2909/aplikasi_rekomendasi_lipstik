@@ -9,12 +9,17 @@ import 'package:provider/provider.dart';
 import 'package:is_first_run/is_first_run.dart';
 
 import 'firebase_options.dart';
+import 'package:camera/camera.dart';
 
 var mapping_lists = [];
 var list_lipstik = [];
+
 var firstOpen = false;
 
 bool firstRun = false;
+late Color lipColorTryOn;
+
+List<CameraDescription> cameras = [];
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +35,8 @@ void main() async {
   // print(firstRun);
 
   print("start run");
+  cameras = await availableCameras();
+
   runApp(const MyApp());
   print("done run");
   firstOpen = true;
@@ -91,6 +98,12 @@ void main() async {
   print(list_lipstik);
   print("MAPPING");
   print(mapping_lists);
+
+  String hexString = list_lipstik.first['kode_warna'];
+  final buffer = StringBuffer();
+  if (hexString.length == 6 || hexString.length == 7) buffer.write('ff');
+  buffer.write(hexString.replaceFirst('#', ''));
+  lipColorTryOn = Color(int.parse(buffer.toString(), radix: 16));
 }
 
 class MyApp extends StatelessWidget {
