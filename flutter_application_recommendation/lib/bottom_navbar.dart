@@ -44,21 +44,21 @@ class _BottomNavbarState extends State<BottomNavbar> {
       ProfilePage(firebaseUser: user),
     ];
 
-    if (Platform.isAndroid) {
-      userScreens = [
-        HomePage(
-            firebaseUser: user,
-            ref: (int number) {
-              setState(() {
-                currentIndex = number;
-              });
-            }),
-        TryOnPage(),
-        HistoryPage(firebaseUser: user),
-        const GuidebookPage(),
-        ProfilePage(firebaseUser: user),
-      ];
-    }
+    // if (Platform.isAndroid) {
+    //   userScreens = [
+    //     HomePage(
+    //         firebaseUser: user,
+    //         ref: (int number) {
+    //           setState(() {
+    //             currentIndex = number;
+    //           });
+    //         }),
+    //     // TryOnPage(),
+    //     HistoryPage(firebaseUser: user),
+    //     const GuidebookPage(),
+    //     ProfilePage(firebaseUser: user),
+    //   ];
+    // }
 
     final anonymScreens = [
       HomePage(
@@ -143,10 +143,10 @@ class _BottomNavbarState extends State<BottomNavbar> {
                       icon: Icon(Icons.home),
                       label: 'home',
                     ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.color_lens),
-                      label: 'try-on',
-                    ),
+                    // BottomNavigationBarItem(
+                    //   icon: Icon(Icons.color_lens),
+                    //   label: 'try-on',
+                    // ),
                     BottomNavigationBarItem(
                       icon: Icon(Icons.history),
                       label: 'history',

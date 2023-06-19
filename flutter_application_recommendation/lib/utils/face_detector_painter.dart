@@ -54,16 +54,21 @@ class FaceDetectorPainter extends CustomPainter {
 
         // final faceContour3 = face.contours[type3];
         // final faceContour4 = face.contours[type4];
+
+        // membentuk upperLip
+        // path dimulai dari titik 0 upperLipTop
         path.moveTo(
           faceContour1!.points[0].x.toDouble() * scaleW - sizeBorder,
           faceContour1.points[0].y.toDouble() * scaleH - sizeBorder,
         );
+        // path bergerak ke kanan membentuk upperLipTop
         for (int i = 1; i <= 10; i++) {
           path.lineTo(
             faceContour1.points[i].x.toDouble() * scaleW - sizeBorder,
             faceContour1.points[i].y.toDouble() * scaleH - sizeBorder,
           );
         }
+        // path bergerak ke kiri untuk membentuk upperLipBottom
         for (int i = 8; i >= 0; i--) {
           path.lineTo(
             faceContour2!.points[i].x.toDouble() * scaleW - sizeBorder,
@@ -71,16 +76,20 @@ class FaceDetectorPainter extends CustomPainter {
           );
         }
 
+        // membentuk lowerLip
+        // path dari upperLip dilanjutkan dengan lowerLip, dimulai dari upperLipBottom bagian kiri
         path.moveTo(
           faceContour2!.points[0].x.toDouble() * scaleW - sizeBorder,
           faceContour2.points[0].y.toDouble() * scaleH - sizeBorder,
         );
+        // path bergerak ke kanan membentuk lowerLipTop
         for (int i = 8; i >= 0; i--) {
           path.lineTo(
             faceContour3!.points[i].x.toDouble() * scaleW - sizeBorder,
             faceContour3.points[i].y.toDouble() * scaleH - sizeBorder,
           );
         }
+        // path dilanjutkan menuju upperLipBottom dan upperLipTop sebelah kanan
         path.lineTo(
           faceContour2.points[8].x.toDouble() * scaleW - sizeBorder,
           faceContour2.points[8].y.toDouble() * scaleH - sizeBorder,
@@ -89,12 +98,14 @@ class FaceDetectorPainter extends CustomPainter {
           faceContour1.points[10].x.toDouble() * scaleW - sizeBorder,
           faceContour1.points[10].y.toDouble() * scaleH - sizeBorder,
         );
+        // path bergerak ke kiri membentuk lowerLipBottom
         for (int i = 0; i <= 8; i++) {
           path.lineTo(
             faceContour4!.points[i].x.toDouble() * scaleW - sizeBorder,
             faceContour4.points[i].y.toDouble() * scaleH - sizeBorder,
           );
         }
+        // path berakhir pada upperLipTop sebelah kiri(titik awal)
         path.lineTo(
           faceContour1.points[0].x.toDouble() * scaleW - sizeBorder,
           faceContour1.points[0].y.toDouble() * scaleH - sizeBorder,

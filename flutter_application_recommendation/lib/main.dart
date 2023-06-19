@@ -35,7 +35,7 @@ void main() async {
   // print(firstRun);
 
   print("start run");
-  cameras = await availableCameras();
+  // cameras = await availableCameras();
 
   runApp(const MyApp());
   print("done run");

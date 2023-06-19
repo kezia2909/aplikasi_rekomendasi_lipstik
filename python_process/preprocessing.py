@@ -6,7 +6,6 @@ from hsi2rgb import hsi2rgb
 from global_variable import bool_resize
 
 # %%%%% Section 2 : Conventional image enhancement method %%%%%
-
 def im2double(im):
     info = np.iinfo(im.dtype) # Get the data type of the input image
     return im.astype(np.float32) / info.max 
@@ -19,7 +18,7 @@ def preProcessing(fileName):
         oriImage = cv2.imread(str('./python_process/Images_Resize/'+fileName))
     else :
         oriImage = cv2.imread(str('./python_process/Images_Ori/'+fileName))
-        
+    
     image = oriImage
     # print("SIZE ORI : ", image.shape)
 

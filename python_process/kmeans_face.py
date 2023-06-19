@@ -204,13 +204,12 @@ def kmeansFace(fileName):
             skinColorCb.append(reshapedCrCb[index][1]+0)
             counter += 1
 
-    # print("AAAAAAAa")
     data = {'y': skinColorY,
             'cr': skinColorCr,
             'cb': skinColorCb}
     
     df = pd.DataFrame(data, columns=['y', 'cr', 'cb'])
-    # print(df)
+
     kmeans = KMeans(n_clusters=1).fit(df)
     centroids = kmeans.cluster_centers_
     inputCheck = [round(centroids[0][0]), round(centroids[0][1]), round(centroids[0][2])]

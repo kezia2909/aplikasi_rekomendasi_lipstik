@@ -5,6 +5,7 @@ from collections import Counter
 from global_variable import temp_list_area_lips
 from global_variable import temp_list_labels
 from global_variable import temp_list_choosen_cluster
+from global_variable import bool_cluster_CIELAB
 
 
 eyeCascade = cv2.CascadeClassifier("./python_process/haarcascade/haarcascade_eye.xml")
@@ -50,11 +51,6 @@ def detectLips(imageName):
                     checkBelowEye = False
 
             if(checkLeftEye == True and checkRightEye == True and checkBelowEye == True):
-                # temp = []
-                # temp.append(mouth_x_coordinate)
-                # temp.append(mouth_y_coordinate)
-                # temp.append(mouth_width)
-                # temp.append(mouth_height)
                 temp = [mouth_x_coordinate, mouth_y_coordinate, mouth_width, mouth_height]
                 lips.append(temp)
 
