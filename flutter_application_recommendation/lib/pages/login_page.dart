@@ -161,8 +161,8 @@ class _LoginPageState extends State<LoginPage> {
                                                           "Sufficient light"),
                                                       guideDescriptionWidget(
                                                           "No filter / flash"),
-                                                      guideDescriptionWidget(
-                                                          "No makeup"),
+                                                      // guideDescriptionWidget(
+                                                      //     "No makeup"),
                                                     ],
                                                   ),
                                                 ),
@@ -195,8 +195,8 @@ class _LoginPageState extends State<LoginPage> {
                                                           "Shadows"),
                                                       guideDescriptionWidget(
                                                           "Uneven light"),
-                                                      guideDescriptionWidget(
-                                                          ""),
+                                                      // guideDescriptionWidget(
+                                                      //     ""),
                                                     ],
                                                   ),
                                                 ),

@@ -344,9 +344,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(
                       height: 10,
                     ),
-                    reusableDataProfile(
-                        Icons.lock, "Password", "${snapshot.data!['password']}",
-                        () {
+                    reusableDataProfile(Icons.lock, "Password", "******", () {
                       textFieldEditController.text =
                           "${snapshot.data!['password']}";
                       modalEditData(context, "password");

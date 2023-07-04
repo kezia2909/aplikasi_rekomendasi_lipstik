@@ -126,8 +126,8 @@ class _GuidebookPageState extends State<GuidebookPage> {
                                                     "Sufficient light"),
                                                 guideDescriptionWidget(
                                                     "No filter / flash"),
-                                                guideDescriptionWidget(
-                                                    "No makeup"),
+                                                // guideDescriptionWidget(
+                                                //     "No makeup"),
                                               ],
                                             ),
                                           ),
@@ -157,7 +157,7 @@ class _GuidebookPageState extends State<GuidebookPage> {
                                                     "Shadows"),
                                                 guideDescriptionWidget(
                                                     "Uneven light"),
-                                                guideDescriptionWidget(""),
+                                                // guideDescriptionWidget(""),
                                               ],
                                             ),
                                           ),
